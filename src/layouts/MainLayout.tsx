@@ -9,14 +9,6 @@ type TProps = {
     children: React.ReactNode;
 };
 
-const MainLayoutStyled = styled(Layout)`
-    padding: 0 10%;
-
-    @media (max-width: 900px) {
-        padding: 0;
-    }
-`;
-
 const FooterItemTopStyled = styled.div`
     border-top: 1px solid rgba(0, 0, 0, 0.1);
     padding: 20px 0 5px;
@@ -51,7 +43,7 @@ const ListStyled = styled.ul`
 
 export default function MainLayout({ children }: TProps) {
     return (
-        <MainLayoutStyled>
+        <Layout>
             <Layout>{children}</Layout>
             <Footer>
                 <FooterItemTopStyled>
@@ -102,6 +94,6 @@ export default function MainLayout({ children }: TProps) {
                     <p>&#169; 2023 - Bản quyền thuộc về BaoPhan </p>
                 </FooterItemBottomStyled>
             </Footer>
-        </MainLayoutStyled>
+        </Layout>
     );
 }
