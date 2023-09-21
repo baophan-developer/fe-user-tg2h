@@ -1,22 +1,36 @@
 {
-  "name": "fe-user",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@types/node": "20.6.3",
-    "@types/react": "18.2.22",
-    "@types/react-dom": "18.2.7",
-    "eslint": "8.49.0",
-    "eslint-config-next": "13.5.2",
-    "next": "13.5.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "typescript": "5.2.2"
-  }
+    "name": "fe-user",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@types/node": "20.6.3",
+        "@types/react": "18.2.22",
+        "@types/react-dom": "18.2.7",
+        "antd": "^5.9.2",
+        "axios": "^1.5.0",
+        "eslint": "8.49.0",
+        "eslint-config-next": "13.5.2",
+        "lodash": "^4.17.21",
+        "moment": "^2.29.4",
+        "next": "13.5.2",
+        "pubsub-js": "^1.9.4",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "recoil": "^0.7.7",
+        "sass": "^1.68.0",
+        "styled-component": "^2.8.0",
+        "typescript": "5.2.2"
+    },
+    "devDependencies": {
+        "@ant-design/icons": "^5.2.6",
+        "@types/lodash": "^4.14.198",
+        "@types/pubsub-js": "^1.8.3",
+        "@types/styled-components": "^5.1.27"
+    }
 }
