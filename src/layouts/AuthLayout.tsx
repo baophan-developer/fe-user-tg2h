@@ -15,7 +15,11 @@ const HeaderStyled = styled(Header)`
 const LayoutStyled = styled(Layout)`
     display: grid;
     place-items: center;
-    padding: 40px;
+    padding: 60px;
+
+    @media (max-width: 450px) {
+        padding: 40px 0;
+    }
 `;
 
 const ContainerStyled = styled.div`
