@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
 import { message } from "antd";
@@ -21,8 +21,10 @@ const BottomStyled = styled.div`
 
 export default function Login() {
     const route = useRouter();
+    const [loading, setLoading] = useState<boolean>(false);
 
     const onFinish = async (value: any) => {
+        setLoading(true);
         try {
             const res = await request("post", API_ENDPOINT.AUTH.LOGIN, value);
             // save token
@@ -32,6 +34,7 @@ export default function Login() {
         } catch (error: any) {
             message.error(error.response.data.message, 1);
         }
+        setLoading(false);
     };
 
     return (
@@ -43,6 +46,7 @@ export default function Login() {
                 bottomForm={{
                     button: {
                         children: "Đăng nhập",
+                        loading: loading,
                         type: "primary",
                         style: { width: "100%" },
                         htmlType: "submit",
