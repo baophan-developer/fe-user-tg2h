@@ -64,6 +64,7 @@ export default function UserLayout({ children }: TProps) {
     const handleLogout = async () => {
         try {
             const res = await request<any>("post", API_ENDPOINT.AUTH.LOGOUT);
+            localStorage.removeItem("accessToken");
             message.success(res.data.message, 1);
             route.push(ROUTERS.LOGIN);
         } catch (error: any) {
