@@ -1,3 +1,4 @@
 import PrivateRoutes from "./PrivateRoutes";
+import FormCustom from "./FormCustom";
 
-export { PrivateRoutes };
+export { PrivateRoutes, FormCustom };

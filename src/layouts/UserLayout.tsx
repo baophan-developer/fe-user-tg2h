@@ -1,8 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { useRecoilState } from "recoil";
+import { useRouter } from "next/router";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { Layout, Input, Badge, Popover, Avatar, Button } from "antd";
+import { Layout, Input, Badge, Popover, Avatar, Button, message } from "antd";
+import request from "@/services/request";
+import UserAtom from "@/stores/UserStore";
 import { Logo } from "@/components/atoms";
+import { API_ENDPOINT } from "@/constants/apis";
+import ROUTERS from "@/constants/routers";
 
 type TProps = {
     children: React.ReactNode;
@@ -52,6 +58,31 @@ const ContentPopoverStyled = styled.div`
 `;
 
 export default function UserLayout({ children }: TProps) {
+    const [user, setUser] = useRecoilState(UserAtom);
+    const route = useRouter();
+
+    const handleLogout = async () => {
+        try {
+            const res = await request<any>("post", API_ENDPOINT.AUTH.LOGOUT);
+            message.success(res.data.message, 1);
+            route.push(ROUTERS.LOGIN);
+        } catch (error: any) {
+            message.error(error.response.data.message, 1);
+        }
+    };
+
+    const getUserInfo = async () => {
+        try {
+            const res = await request<any>("get", API_ENDPOINT.PROFILE.GET);
+            setUser(res.data.item);
+        } catch (error) {}
+    };
+
+    useEffect(() => {
+        getUserInfo();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <Layout>
             <HeaderStyled>
@@ -72,18 +103,16 @@ export default function UserLayout({ children }: TProps) {
                         content={
                             <ContentPopoverStyled>
                                 <Button type="text">Tài khoản của tôi</Button>
-                                <Button type="text">Đăng xuất</Button>
+                                <Button type="text" onClick={handleLogout}>
+                                    Đăng xuất
+                                </Button>
                             </ContentPopoverStyled>
                         }
                         trigger="hover"
                         placement="bottomRight"
                     >
-                        <Avatar
-                            size="large"
-                            src="https://images2.thanhnien.vn/Uploaded/thynhm/2020_09_24/chag5728_BQVQ.jpeg?width=500"
-                            alt="avatar"
-                        />
-                        <p>Phan Hoai Bao</p>
+                        <Avatar size="large" src={user.avatar} alt={user.name} />
+                        <p>{user.name}</p>
                     </UserBoxStyled>
                 </BoxAvatarStyled>
             </HeaderStyled>
