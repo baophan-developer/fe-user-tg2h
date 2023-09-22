@@ -57,6 +57,10 @@ const ContentPopoverStyled = styled.div`
     }
 `;
 
+const ContentStyled = styled(Content)`
+    padding: 1% 5%;
+`;
+
 export default function UserLayout({ children }: TProps) {
     const [user, setUser] = useRecoilState(UserAtom);
     const route = useRouter();
@@ -103,7 +107,12 @@ export default function UserLayout({ children }: TProps) {
                     <UserBoxStyled
                         content={
                             <ContentPopoverStyled>
-                                <Button type="text">Tài khoản của tôi</Button>
+                                <Button
+                                    type="text"
+                                    onClick={() => route.push(ROUTERS.ACCOUNT.HOME)}
+                                >
+                                    Tài khoản của tôi
+                                </Button>
                                 <Button type="text" onClick={handleLogout}>
                                     Đăng xuất
                                 </Button>
@@ -117,7 +126,7 @@ export default function UserLayout({ children }: TProps) {
                     </UserBoxStyled>
                 </BoxAvatarStyled>
             </HeaderStyled>
-            <Content>{children}</Content>
+            <ContentStyled>{children}</ContentStyled>
         </Layout>
     );
 }

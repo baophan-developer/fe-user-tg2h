@@ -8,6 +8,7 @@ import {
     getInputGender,
     getInputChooseDay,
 } from "./Input";
+import getItem from "./Item";
 
 export {
     getInputEmail,
@@ -18,4 +19,5 @@ export {
     getInputPhoneNumber,
     getInputGender,
     getInputChooseDay,
+    getItem,
 };
