@@ -1,8 +1,21 @@
 import {
     getInputEmail,
+    getInputName,
     getInputPassword,
     getInputConfirmPassword,
     getInputRememberMe,
+    getInputPhoneNumber,
+    getInputGender,
+    getInputChooseDay,
 } from "./Input";
 
-export { getInputEmail, getInputPassword, getInputConfirmPassword, getInputRememberMe };
+export {
+    getInputEmail,
+    getInputName,
+    getInputPassword,
+    getInputConfirmPassword,
+    getInputRememberMe,
+    getInputPhoneNumber,
+    getInputGender,
+    getInputChooseDay,
+};
