@@ -6,7 +6,6 @@ import { ShoppingCartOutlined } from "@ant-design/icons";
 import { Layout, Input, Badge, Popover, Avatar, Button, message } from "antd";
 import request from "@/services/request";
 import UserAtom from "@/stores/UserStore";
-import { Logo } from "@/components/atoms";
 import { API_ENDPOINT } from "@/constants/apis";
 import ROUTERS from "@/constants/routers";
 
@@ -21,6 +20,7 @@ const HeaderStyled = styled(Header)`
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    color: #fff;
 `;
 
 const SearchStyled = styled(Search)`
@@ -86,7 +86,7 @@ export default function UserLayout({ children }: TProps) {
     return (
         <Layout>
             <HeaderStyled>
-                <Logo />
+                <h2>TG2H</h2>
                 <SearchStyled
                     placeholder="Nhập trên sản phẩm cần tìm kiếm."
                     type="primary"
