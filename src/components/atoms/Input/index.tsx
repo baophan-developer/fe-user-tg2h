@@ -23,6 +23,27 @@ export const getInputPassword = (inputProps?: InputProps): FormItemProps => {
     };
 };
 
+export const getInputConfirmPassword = (inputProps?: InputProps): FormItemProps => {
+    return {
+        name: "confirm",
+        label: "Xác nhận mật khẩu",
+        dependencies: ["password"],
+        rules: [
+            { required: true, message: "Hãy xác nhận mật khẩu." },
+            ({ getFieldValue }) => ({
+                validator(_, value) {
+                    if (!value || getFieldValue("password") === value)
+                        return Promise.resolve();
+                    return Promise.reject(new Error("Mật khẩu không trùng khớp."));
+                },
+            }),
+        ],
+        children: (
+            <Input.Password allowClear {...inputProps} placeholder="Xác nhận mật khẩu" />
+        ),
+    };
+};
+
 export const getInputRememberMe = (checkboxProps?: CheckboxProps): FormItemProps => {
     return {
         name: "remember",

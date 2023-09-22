@@ -1,3 +1,8 @@
-import { getInputEmail, getInputPassword, getInputRememberMe } from "./Input";
+import {
+    getInputEmail,
+    getInputPassword,
+    getInputConfirmPassword,
+    getInputRememberMe,
+} from "./Input";
 
-export { getInputEmail, getInputPassword, getInputRememberMe };
+export { getInputEmail, getInputPassword, getInputConfirmPassword, getInputRememberMe };

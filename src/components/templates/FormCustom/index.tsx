@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { type FormProps, type FormItemProps, type ButtonProps, Form, Button } from "antd";
 
 type TProps = {
@@ -12,10 +13,15 @@ type TProps = {
     };
 };
 
+const HeadingStyled = styled.h2`
+    margin-bottom: 30px;
+    text-align: center;
+`;
+
 export default function FormCustom({ form, fields, title, bottomForm }: TProps) {
     return (
         <div>
-            <h2>{title}</h2>
+            <HeadingStyled>{title}</HeadingStyled>
             <Form {...form}>
                 {fields.map((item: FormItemProps, index) => (
                     <Form.Item key={index} {...item} />

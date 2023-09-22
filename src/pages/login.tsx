@@ -1,12 +1,23 @@
 import React from "react";
-import AuthLayout from "@/layouts/AuthLayout";
+import styled from "styled-components";
+import Link from "next/link";
+import { message } from "antd";
 import { useRouter } from "next/router";
+import AuthLayout from "@/layouts/AuthLayout";
 import { FormCustom } from "@/components/templates";
 import { getInputEmail, getInputPassword, getInputRememberMe } from "@/components/atoms";
-import { message } from "antd";
 import request from "@/services/request";
 import { API_ENDPOINT } from "@/constants/apis";
 import ROUTERS from "@/constants/routers";
+
+const BottomStyled = styled.div`
+    display: flex;
+    justify-content: space-between;
+
+    & a {
+        color: #000;
+    }
+`;
 
 export default function Login() {
     const route = useRouter();
@@ -38,6 +49,10 @@ export default function Login() {
                     },
                 }}
             />
+            <BottomStyled>
+                <Link href={ROUTERS.FORGOT_PASSWORD}>Quên mật khẩu?</Link>
+                <Link href={ROUTERS.REGISTER}>Bạn chưa có tài khoản?</Link>
+            </BottomStyled>
         </>
     );
 }
