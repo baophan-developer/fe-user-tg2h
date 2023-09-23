@@ -3,6 +3,7 @@ import PubSub from "pubsub-js";
 import dayjs from "dayjs";
 import styled from "styled-components";
 import { Form, UploadFile, message, Upload, Image, Button } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import { RcFile, UploadChangeParam } from "antd/es/upload";
 import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
@@ -17,9 +18,8 @@ import {
     getInputPhoneNumber,
 } from "@/components/atoms";
 import request from "@/services/request";
-import { API_ENDPOINT } from "@/constants/apis";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
-import { UploadOutlined } from "@ant-design/icons";
+import { API_ENDPOINT } from "@/constants/apis";
 import { ACCEPT_IMAGE_SIZE, IMAGE_TYPE } from "@/constants/image";
 
 const ContentStyled = styled.div`
