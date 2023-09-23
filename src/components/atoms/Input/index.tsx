@@ -9,6 +9,7 @@ import {
     DatePicker,
     DatePickerProps,
 } from "antd";
+import InputAddress from "../InputAddress";
 
 export const getInputEmail = (inputProps?: InputProps): FormItemProps => {
     return {
@@ -105,5 +106,35 @@ export const getInputChooseDay = (dateProps?: DatePickerProps): FormItemProps =>
         name: "birthday",
         label: "Ngày sinh",
         children: <DatePicker {...dateProps} />,
+    };
+};
+
+export const getInputAddressDetail = (): FormItemProps => {
+    return {
+        name: "addressDetail",
+        label: "Chọn địa chỉ",
+        rules: [
+            { required: true, message: "Chưa chọn thông tin địa chỉ." },
+            {
+                validator(_, value) {
+                    if (!value.districtId)
+                        return Promise.reject(new Error("Chưa chọn quận/huyện."));
+
+                    if (!value.wardId)
+                        return Promise.reject(new Error("Chưa chọn phường/xã."));
+
+                    return Promise.resolve();
+                },
+            },
+        ],
+        children: <InputAddress />,
+    };
+};
+
+export const getInputAddress = (inputProps?: InputProps): FormItemProps => {
+    return {
+        name: "address",
+        label: "Nhập địa chỉ chi tiết",
+        children: <Input {...inputProps} placeholder="Nhập địa chỉ chi tiết." />,
     };
 };

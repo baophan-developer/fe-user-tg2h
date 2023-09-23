@@ -3,10 +3,10 @@ export interface IProduct {
 }
 
 export interface IAddress {
-    provinceId: number;
-    districtId: number;
-    wardId: number;
-    address: string;
+    provinceId: number | null;
+    districtId: number | null;
+    wardId: number | null;
+    address?: string;
 }
 
 export interface IUser {
