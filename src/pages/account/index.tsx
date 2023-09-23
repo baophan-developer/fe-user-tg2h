@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import PubSub from "pubsub-js";
+import dayjs from "dayjs";
 import styled from "styled-components";
+import { Form, message } from "antd";
+import { useRecoilValue } from "recoil";
+import UserAtom from "@/stores/UserStore";
 import UserLayout from "@/layouts/UserLayout";
 import AccountLayout from "@/layouts/AccountLayout";
 import { FormCustom } from "@/components/templates";
@@ -11,14 +15,9 @@ import {
     getInputName,
     getInputPhoneNumber,
 } from "@/components/atoms";
-import { useRecoilValue } from "recoil";
-import UserAtom from "@/stores/UserStore";
-import { Form, message } from "antd";
-import moment from "moment";
 import request from "@/services/request";
 import { API_ENDPOINT } from "@/constants/apis";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
-import dayjs from "dayjs";
 
 const ContentStyled = styled.div`
     width: 100%;
