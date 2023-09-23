@@ -20,7 +20,7 @@ const HeadingStyled = styled.h2`
 
 export default function FormCustom({ form, fields, title, bottomForm }: TProps) {
     return (
-        <div>
+        <div style={{ width: "100%" }}>
             <HeadingStyled>{title}</HeadingStyled>
             <Form {...form}>
                 {fields.map((item: FormItemProps, index) => (

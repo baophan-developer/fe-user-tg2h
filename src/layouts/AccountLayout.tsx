@@ -1,11 +1,11 @@
 import React from "react";
+import styled from "styled-components";
 import { useRouter } from "next/router";
 import { Layout, Menu } from "antd";
 import { getItem } from "@/components/atoms";
 import ROUTERS from "@/constants/routers";
-import styled from "styled-components";
 
-const { Sider, Content, Header } = Layout;
+const { Sider, Content } = Layout;
 
 const LayoutStyled = styled(Layout)`
     padding: 20px;
@@ -18,11 +18,19 @@ const ContentStyled = styled(Content)`
     background-color: #fff;
 `;
 
+const TitleStyled = styled.h2`
+    font-weight: 300;
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+    margin-bottom: 10px;
+`;
+
 type TProps = {
     children: React.ReactNode;
+    title?: React.ReactNode;
 };
 
-export default function AccountLayout({ children }: TProps) {
+export default function AccountLayout({ children, title }: TProps) {
     const route = useRouter();
     const defaultKey = route.pathname;
 
@@ -51,7 +59,11 @@ export default function AccountLayout({ children }: TProps) {
                     style={{ height: "100%" }}
                 />
             </Sider>
-            <ContentStyled>{children}</ContentStyled>
+
+            <ContentStyled>
+                <TitleStyled>{title}</TitleStyled>
+                {children}
+            </ContentStyled>
         </LayoutStyled>
     );
 }

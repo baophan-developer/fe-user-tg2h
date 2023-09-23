@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import PubSub from "pubsub-js";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
@@ -8,6 +9,7 @@ import request from "@/services/request";
 import UserAtom from "@/stores/UserStore";
 import { API_ENDPOINT } from "@/constants/apis";
 import ROUTERS from "@/constants/routers";
+import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 
 type TProps = {
     children: React.ReactNode;
@@ -85,6 +87,10 @@ export default function UserLayout({ children }: TProps) {
 
     useEffect(() => {
         getUserInfo();
+        PubSub.subscribe(PUBSUB_SUBSCRIBE_NAME.GET_INFO, getUserInfo);
+        return () => {
+            PubSub.unsubscribe(PUBSUB_SUBSCRIBE_NAME.GET_INFO);
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
