@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import moment from "moment";
+import dayjs from "dayjs";
 import styled from "styled-components";
 import { Form, message } from "antd";
 import { FormCustom } from "@/components/templates";
@@ -26,7 +26,7 @@ const BottomStyled = styled.div`
 `;
 
 const disableDay: RangePickerProps["disabledDate"] = (current) => {
-    return current && current > moment().endOf("day");
+    return current && current > dayjs().endOf("day");
 };
 
 interface IRegisterUser {
@@ -52,7 +52,7 @@ export default function Register() {
                 name,
                 phone,
                 gender,
-                birthday,
+                birthday: new Date(dayjs(birthday).format("YYYY-MM-DD")),
             });
             message.success(res.data.message, 1);
             form.resetFields();
