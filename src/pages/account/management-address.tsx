@@ -6,17 +6,25 @@ import { useRecoilValue } from "recoil";
 import UserLayout from "@/layouts/UserLayout";
 import AccountLayout from "@/layouts/AccountLayout";
 import { FormCustom } from "@/components/templates";
-import { getInputAddress, getInputAddressDetail } from "@/components/atoms";
+import { getInputAddress, getInputStreet } from "@/components/atoms";
 import request from "@/services/request";
-import { API_ENDPOINT } from "@/constants/apis";
 import UserAtom from "@/stores/UserStore";
 import { IAddress } from "@/interfaces";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
+import { API_ENDPOINT } from "@/constants/apis";
 
 const ActionStyled = styled.div`
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 10px;
+`;
+
+const HeadingTwoStyled = styled.h2`
+    font-weight: 400;
+`;
+
+const HeadingThreeStyled = styled.p`
+    font-size: 16px;
+    font-weight: 400;
 `;
 
 export default function Address() {
@@ -30,8 +38,8 @@ export default function Address() {
         setLoading(true);
         try {
             const res = await request("put", API_ENDPOINT.PROFILE.UPDATE_ADDRESS, {
-                ...value.addressDetail,
-                address: value.address,
+                ...value.address,
+                street: value.street,
             });
             message.success(res.data.message, 1);
         } catch (error: any) {
@@ -69,22 +77,30 @@ export default function Address() {
                 >
                     <FormCustom
                         form={{ layout: "vertical", form: form, onFinish: onFinish }}
-                        fields={[getInputAddressDetail(), getInputAddress()]}
+                        fields={[getInputAddress(), getInputStreet()]}
                         bottomForm={{}}
                     />
                 </Modal>
             </ActionStyled>
             <List
+                header={<HeadingTwoStyled>Địa chỉ</HeadingTwoStyled>}
                 dataSource={addressData}
                 renderItem={(item) => (
-                    <List.Item actions={[<Button key={1}>Chỉnh sửa</Button>]}>
+                    <List.Item
+                        actions={[
+                            <Button key={1} type="default">
+                                Chỉnh sửa
+                            </Button>,
+                            <Button key={2} type="primary" danger>
+                                Xóa
+                            </Button>,
+                        ]}
+                    >
                         <List.Item.Meta
-                            title={item.provinceId}
-                            description={
-                                <div>
-                                    {item.address} - {item.wardId} - {item.districtId}
-                                </div>
+                            title={
+                                <HeadingThreeStyled>{item.address}</HeadingThreeStyled>
                             }
+                            description={item.street}
                         />
                     </List.Item>
                 )}

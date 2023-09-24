@@ -60,18 +60,19 @@ export default function InputAddress({ value, onChange }: IInputAddress) {
     });
 
     const triggerChange = (changeValue: IAddress) => {
-        const provinceId = provinceOptions.filter(
+        const province = provinceOptions.filter(
             (item) => item.value === changeValue.provinceId
         );
-        const districtId = districtOptions.filter(
+        const district = districtOptions.filter(
             (item) => item.value === changeValue.districtId
         );
-        const wardId = wardOptions.filter((item) => item.value === changeValue.wardId);
+        const ward = wardOptions.filter((item) => item.value === changeValue.wardId);
 
         onChange?.({
-            provinceId: provinceId[0]?.value,
-            districtId: districtId[0]?.value,
-            wardId: wardId[0]?.value,
+            provinceId: province[0]?.value,
+            districtId: district[0]?.value,
+            wardId: ward[0]?.value,
+            address: `${ward[0]?.label}, ${district[0]?.label}, ${province[0]?.label}`,
         });
     };
 
@@ -100,6 +101,7 @@ export default function InputAddress({ value, onChange }: IInputAddress) {
                     ["district_id", "district_name"]
                 );
                 setDistrictOptions(districtOptions);
+                setWardOptions([]);
             } catch (error: any) {}
         })();
     }, [provinceId]);
@@ -121,6 +123,7 @@ export default function InputAddress({ value, onChange }: IInputAddress) {
             <Select
                 style={{ width: "33%" }}
                 options={provinceOptions}
+                value={result.provinceId || value?.provinceId}
                 placeholder="Chọn tỉnh/thành phố"
                 onChange={(value) => {
                     setProvinceId(value);
@@ -133,6 +136,7 @@ export default function InputAddress({ value, onChange }: IInputAddress) {
             />
             <Select
                 style={{ width: "33%" }}
+                value={result.districtId || value?.districtId}
                 options={districtOptions}
                 placeholder="Chọn tỉnh/thành phố"
                 onChange={(value) => {
@@ -146,6 +150,7 @@ export default function InputAddress({ value, onChange }: IInputAddress) {
             />
             <Select
                 style={{ width: "33%" }}
+                value={result.wardId || value?.wardId}
                 options={wardOptions}
                 placeholder="Chọn tỉnh/thành phố"
                 onChange={(value) => {

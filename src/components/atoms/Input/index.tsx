@@ -109,9 +109,9 @@ export const getInputChooseDay = (dateProps?: DatePickerProps): FormItemProps =>
     };
 };
 
-export const getInputAddressDetail = (): FormItemProps => {
+export const getInputAddress = (): FormItemProps => {
     return {
-        name: "addressDetail",
+        name: "address",
         label: "Chọn địa chỉ",
         rules: [
             { required: true, message: "Chưa chọn thông tin địa chỉ." },
@@ -131,9 +131,9 @@ export const getInputAddressDetail = (): FormItemProps => {
     };
 };
 
-export const getInputAddress = (inputProps?: InputProps): FormItemProps => {
+export const getInputStreet = (inputProps?: InputProps): FormItemProps => {
     return {
-        name: "address",
+        name: "street",
         label: "Nhập địa chỉ chi tiết",
         children: <Input {...inputProps} placeholder="Nhập địa chỉ chi tiết." />,
     };

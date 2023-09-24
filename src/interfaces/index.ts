@@ -7,6 +7,7 @@ export interface IAddress {
     districtId: number | null;
     wardId: number | null;
     address?: string;
+    street?: string;
 }
 
 export interface IUser {
