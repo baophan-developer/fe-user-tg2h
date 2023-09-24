@@ -19,7 +19,7 @@ const ContentStyled = styled(Content)`
 `;
 
 const TitleStyled = styled.h2`
-    font-weight: 300;
+    font-weight: 400;
     padding-bottom: 5px;
     border-bottom: 1px solid rgba(5, 5, 5, 0.06);
     margin-bottom: 10px;
@@ -59,7 +59,6 @@ export default function AccountLayout({ children, title }: TProps) {
                     style={{ height: "100%" }}
                 />
             </Sider>
-
             <ContentStyled>
                 <TitleStyled>{title}</TitleStyled>
                 {children}
