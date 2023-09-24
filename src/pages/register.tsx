@@ -80,14 +80,16 @@ export default function Register() {
                     }),
                     getInputGender(),
                 ]}
-                bottomForm={{
-                    button: {
-                        type: "primary",
-                        loading: loading,
-                        htmlType: "submit",
-                        style: { width: "100%" },
-                        children: "Đăng ký",
-                    },
+                bottom={{
+                    buttons: [
+                        {
+                            type: "primary",
+                            loading: loading,
+                            htmlType: "submit",
+                            style: { width: "100%" },
+                            children: "Đăng ký",
+                        },
+                    ],
                 }}
             />
             <BottomStyled>

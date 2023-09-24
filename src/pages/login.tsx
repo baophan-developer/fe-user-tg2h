@@ -43,14 +43,16 @@ export default function Login() {
                 title="Đăng nhập"
                 form={{ layout: "vertical", onFinish: onFinish }}
                 fields={[getInputEmail(), getInputPassword(), getInputRememberMe()]}
-                bottomForm={{
-                    button: {
-                        children: "Đăng nhập",
-                        loading: loading,
-                        type: "primary",
-                        style: { width: "100%" },
-                        htmlType: "submit",
-                    },
+                bottom={{
+                    buttons: [
+                        {
+                            children: "Đăng nhập",
+                            loading: loading,
+                            type: "primary",
+                            style: { width: "100%" },
+                            htmlType: "submit",
+                        },
+                    ],
                 }}
             />
             <BottomStyled>

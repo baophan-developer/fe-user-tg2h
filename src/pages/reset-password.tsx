@@ -42,14 +42,16 @@ export default function ResetPassword() {
                 title="Đặt lại mật khẩu"
                 form={{ layout: "vertical", onFinish: onFinish, form: form }}
                 fields={[getInputPassword(), getInputConfirmPassword()]}
-                bottomForm={{
-                    button: {
-                        type: "primary",
-                        loading: loading,
-                        htmlType: "submit",
-                        style: { width: "100%" },
-                        children: "Xác nhận",
-                    },
+                bottom={{
+                    buttons: [
+                        {
+                            type: "primary",
+                            loading: loading,
+                            htmlType: "submit",
+                            style: { width: "100%" },
+                            children: "Xác nhận",
+                        },
+                    ],
                 }}
             />
             <BottomStyled>

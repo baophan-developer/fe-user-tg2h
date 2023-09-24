@@ -127,6 +127,10 @@ export default function Account() {
         setLoading(false);
     };
 
+    const handleResetForm = () => {
+        form.setFieldsValue({ ...user, birthday: dayjs(user.birthday) });
+    };
+
     useEffect(() => {
         form.setFieldsValue({ ...user, birthday: dayjs(user.birthday) });
         setImgUrl(user.avatar);
@@ -150,14 +154,22 @@ export default function Account() {
                     getInputChooseDay(),
                     getInputGender(),
                 ]}
-                bottomForm={{
+                bottom={{
                     item: { wrapperCol: { offset: 5 } },
-                    button: {
-                        htmlType: "submit",
-                        children: "Cập nhật",
-                        type: "primary",
-                        loading: loading,
-                    },
+                    buttons: [
+                        {
+                            htmlType: "submit",
+                            children: "Cập nhật",
+                            type: "primary",
+                            loading: loading,
+                        },
+                        {
+                            type: "default",
+                            children: "Hủy",
+                            style: { marginLeft: "5px" },
+                            onClick: handleResetForm,
+                        },
+                    ],
                 }}
             />
             <BoxAvatarStyled>
