@@ -37,14 +37,16 @@ export default function ForgotPassword() {
                 title="Quên mật khẩu"
                 form={{ layout: "vertical", onFinish: onFinish, form: form }}
                 fields={[getInputEmail()]}
-                bottomForm={{
-                    button: {
-                        type: "primary",
-                        loading: loading,
-                        htmlType: "submit",
-                        style: { width: "100%" },
-                        children: "Xác nhận",
-                    },
+                bottom={{
+                    buttons: [
+                        {
+                            type: "primary",
+                            loading: loading,
+                            htmlType: "submit",
+                            style: { width: "100%" },
+                            children: "Xác nhận",
+                        },
+                    ],
                 }}
             />
             <BottomStyled>
