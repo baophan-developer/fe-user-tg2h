@@ -10,6 +10,7 @@ import UserAtom from "@/stores/UserStore";
 import { API_ENDPOINT } from "@/constants/apis";
 import ROUTERS from "@/constants/routers";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
+import Link from "next/link";
 
 type TProps = {
     children: React.ReactNode;
@@ -97,7 +98,9 @@ export default function UserLayout({ children }: TProps) {
     return (
         <Layout>
             <HeaderStyled>
-                <h2>TG2H</h2>
+                <h2>
+                    <Link href={ROUTERS.HOME}>TG2H</Link>
+                </h2>
                 <SearchStyled
                     placeholder="Nhập trên sản phẩm cần tìm kiếm."
                     type="primary"
