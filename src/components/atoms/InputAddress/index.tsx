@@ -50,80 +50,99 @@ export default function InputAddress({ value, onChange }: IInputAddress) {
     const [districtOptions, setDistrictOptions] = useState<IOptions[]>([]);
     const [wardOptions, setWardOptions] = useState<IOptions[]>([]);
 
-    const [provinceId, setProvinceId] = useState<number>();
-    const [districtId, setDistrictId] = useState<number>();
+    const [provinceId, setProvinceId] = useState<number | null | undefined>(
+        value?.provinceId
+    );
+    const [districtId, setDistrictId] = useState<number | null | undefined>(
+        value?.districtId
+    );
 
     const [result, setResult] = useState<IAddress>({
-        provinceId: null,
-        districtId: null,
-        wardId: null,
+        provinceId: value?.provinceId,
+        districtId: value?.districtId,
+        wardId: value?.wardId,
     });
+
+    const [loading, setLoading] = useState<boolean>(false);
 
     const triggerChange = (changeValue: IAddress) => {
         const province = provinceOptions.filter(
-            (item) => item.value === changeValue.provinceId
-        );
-        const district = districtOptions.filter(
-            (item) => item.value === changeValue.districtId
-        );
-        const ward = wardOptions.filter((item) => item.value === changeValue.wardId);
+            (item: IOptions) => item.value === changeValue.provinceId
+        )[0]?.label;
 
-        onChange?.({
-            provinceId: province[0]?.value,
-            districtId: district[0]?.value,
-            wardId: ward[0]?.value,
-            address: `${ward[0]?.label}, ${district[0]?.label}, ${province[0]?.label}`,
-        });
+        const district = districtOptions.filter(
+            (item: IOptions) => item.value === changeValue.districtId
+        )[0]?.label;
+
+        const ward = wardOptions.filter(
+            (item: IOptions) => item.value === changeValue.wardId
+        )[0]?.label;
+
+        const obj = {
+            provinceId: changeValue.provinceId,
+            districtId: changeValue.districtId,
+            wardId: changeValue.wardId,
+            address: province ? `${ward}, ${district}, ${province}` : value?.address,
+        };
+        onChange?.({ ...obj });
+    };
+
+    const getProvinces = async () => {
+        setLoading(true);
+        try {
+            const provinceOptions = await createOptions(
+                API_ENDPOINT_PROVINCE_VIETNAM.LIST_PROVINCE,
+                ["province_id", "province_name"]
+            );
+            setProvinceOptions(provinceOptions);
+        } catch (error: any) {}
+        setLoading(false);
+    };
+
+    const getDistricts = async (provinceId: number | null | undefined) => {
+        try {
+            const districtOptions = await createOptions(
+                `${API_ENDPOINT_PROVINCE_VIETNAM.LIST_DISTRICT}/${provinceId}`,
+                ["district_id", "district_name"]
+            );
+            setDistrictOptions(districtOptions);
+        } catch (error: any) {}
+    };
+
+    const getWards = async (districtId: number | null | undefined) => {
+        try {
+            const wardOptions = await createOptions(
+                `${API_ENDPOINT_PROVINCE_VIETNAM.LIST_WARD}/${districtId}`,
+                ["ward_id", "ward_name"]
+            );
+            setWardOptions(wardOptions);
+        } catch (error: any) {}
     };
 
     useEffect(() => {
-        triggerChange(result);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [result]);
-
-    useEffect(() => {
-        (async () => {
-            try {
-                const provinceOptions = await createOptions(
-                    API_ENDPOINT_PROVINCE_VIETNAM.LIST_PROVINCE,
-                    ["province_id", "province_name"]
-                );
-                setProvinceOptions(provinceOptions);
-            } catch (error: any) {}
-        })();
+        getProvinces();
     }, []);
 
     useEffect(() => {
-        (async () => {
-            try {
-                const districtOptions = await createOptions(
-                    `${API_ENDPOINT_PROVINCE_VIETNAM.LIST_DISTRICT}/${provinceId}`,
-                    ["district_id", "district_name"]
-                );
-                setDistrictOptions(districtOptions);
-                setWardOptions([]);
-            } catch (error: any) {}
-        })();
+        getDistricts(provinceId);
+        setWardOptions([]);
     }, [provinceId]);
 
     useEffect(() => {
-        (async () => {
-            try {
-                const wardOptions = await createOptions(
-                    `${API_ENDPOINT_PROVINCE_VIETNAM.LIST_WARD}/${districtId}`,
-                    ["ward_id", "ward_name"]
-                );
-                setWardOptions(wardOptions);
-            } catch (error: any) {}
-        })();
+        getWards(districtId);
     }, [districtId]);
+
+    useEffect(() => {
+        triggerChange(result);
+    }, [result]);
 
     return (
         <GroupSelectStyled>
             <Select
-                style={{ width: "33%" }}
+                loading={loading}
+                style={{ width: "32%" }}
                 options={provinceOptions}
-                value={result.provinceId || value?.provinceId}
+                value={result.provinceId}
                 placeholder="Chọn tỉnh/thành phố"
                 onChange={(value) => {
                     setProvinceId(value);
@@ -135,8 +154,8 @@ export default function InputAddress({ value, onChange }: IInputAddress) {
                 }}
             />
             <Select
-                style={{ width: "33%" }}
-                value={result.districtId || value?.districtId}
+                style={{ width: "32%" }}
+                value={result.districtId}
                 options={districtOptions}
                 placeholder="Chọn tỉnh/thành phố"
                 onChange={(value) => {
@@ -149,8 +168,8 @@ export default function InputAddress({ value, onChange }: IInputAddress) {
                 }}
             />
             <Select
-                style={{ width: "33%" }}
-                value={result.wardId || value?.wardId}
+                style={{ width: "32%" }}
+                value={result.wardId}
                 options={wardOptions}
                 placeholder="Chọn tỉnh/thành phố"
                 onChange={(value) => {
