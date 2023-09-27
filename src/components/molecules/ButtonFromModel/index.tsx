@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, ButtonProps, Form, FormItemProps, Modal, message } from "antd";
 import { FormCustom } from "@/components/templates";
 import request, { TRequest } from "@/services/request";
@@ -18,7 +18,7 @@ type TProps = {
     fields?: FormItemProps[];
 };
 
-export default function ButtonModel({
+export default function ButtonFormModel({
     button,
     title,
     req,

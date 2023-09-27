@@ -8,7 +8,7 @@ import AccountLayout from "@/layouts/AccountLayout";
 import UserAtom from "@/stores/UserStore";
 import { IAddress } from "@/interfaces";
 import { getInputAddress, getInputStreet } from "@/components/atoms";
-import { ButtonFormModel } from "@/components/molecules";
+import { ButtonFormModel, ButtonModel } from "@/components/molecules";
 import { API_ENDPOINT } from "@/constants/apis";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 
@@ -76,6 +76,22 @@ export default function Address() {
                                 }}
                                 keyPubsub={PUBSUB_SUBSCRIBE_NAME.GET_INFO}
                             />,
+                            <ButtonModel
+                                key={2}
+                                title="Xóa địa chỉ"
+                                button={{
+                                    danger: true,
+                                    type: "primary",
+                                    children: "Xóa",
+                                }}
+                                req={{
+                                    method: "delete",
+                                    api: `${API_ENDPOINT.PROFILE.DELETE_ADDRESS}/${item._id}`,
+                                }}
+                                keyPubsub={PUBSUB_SUBSCRIBE_NAME.GET_INFO}
+                            >
+                                <div>Bạn có muốn xóa địa chỉ?</div>
+                            </ButtonModel>,
                         ]}
                     >
                         <List.Item.Meta
