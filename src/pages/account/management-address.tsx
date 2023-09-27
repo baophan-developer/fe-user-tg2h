@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Button, Form, List, Modal, message } from "antd";
+import { List } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useRecoilValue } from "recoil";
 import UserLayout from "@/layouts/UserLayout";
 import AccountLayout from "@/layouts/AccountLayout";
-import { FormCustom } from "@/components/templates";
-import { getInputAddress, getInputStreet } from "@/components/atoms";
-import request from "@/services/request";
 import UserAtom from "@/stores/UserStore";
 import { IAddress } from "@/interfaces";
-import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
+import { getInputAddress, getInputStreet } from "@/components/atoms";
+import { ButtonFormModel } from "@/components/molecules";
 import { API_ENDPOINT } from "@/constants/apis";
+import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 
 const ActionStyled = styled.div`
     display: flex;
@@ -29,27 +28,7 @@ const HeadingThreeStyled = styled.p`
 
 export default function Address() {
     const user = useRecoilValue(UserAtom);
-    const [form] = Form.useForm();
-    const [open, setOpen] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(false);
     const [addressData, setAddressData] = useState<IAddress[]>([]);
-
-    const onFinish = async (value: any) => {
-        setLoading(true);
-        try {
-            const res = await request("put", API_ENDPOINT.PROFILE.UPDATE_ADDRESS, {
-                ...value.address,
-                street: value.street,
-            });
-            message.success(res.data.message, 1);
-        } catch (error: any) {
-            message.error(error.response.data.message, 1);
-        }
-        form.resetFields();
-        setLoading(false);
-        setOpen(false);
-        PubSub.publishSync(PUBSUB_SUBSCRIBE_NAME.GET_INFO);
-    };
 
     useEffect(() => {
         setAddressData(user.address);
@@ -58,29 +37,13 @@ export default function Address() {
     return (
         <div>
             <ActionStyled>
-                <Button icon={<PlusOutlined />} onClick={() => setOpen(true)}>
-                    Thêm địa chỉ mới
-                </Button>
-                <Modal
+                <ButtonFormModel
                     title="Thêm địa chỉ mới"
-                    open={open}
-                    onCancel={() => {
-                        setOpen(false);
-                        form.resetFields();
-                    }}
-                    onOk={() => {
-                        form.submit();
-                    }}
-                    okText="Xác nhận"
-                    cancelText="Hủy"
-                    okButtonProps={{ loading: loading }}
-                >
-                    <FormCustom
-                        form={{ layout: "vertical", form: form, onFinish: onFinish }}
-                        fields={[getInputAddress(), getInputStreet()]}
-                        bottomForm={{}}
-                    />
-                </Modal>
+                    button={{ children: "Thêm địa chỉ mới", icon: <PlusOutlined /> }}
+                    fields={[getInputAddress(), getInputStreet()]}
+                    req={{ method: "post", api: API_ENDPOINT.PROFILE.CREATE_ADDRESS }}
+                    keyPubsub={PUBSUB_SUBSCRIBE_NAME.GET_INFO}
+                />
             </ActionStyled>
             <List
                 header={<HeadingTwoStyled>Địa chỉ</HeadingTwoStyled>}
@@ -88,12 +51,31 @@ export default function Address() {
                 renderItem={(item) => (
                     <List.Item
                         actions={[
-                            <Button key={1} type="default">
-                                Chỉnh sửa
-                            </Button>,
-                            <Button key={2} type="primary" danger>
-                                Xóa
-                            </Button>,
+                            <ButtonFormModel
+                                key={1}
+                                title="Cập nhật địa chỉ"
+                                button={{
+                                    children: "Chỉnh sửa",
+                                }}
+                                req={{
+                                    method: "put",
+                                    api: API_ENDPOINT.PROFILE.UPDATE_ADDRESS,
+                                }}
+                                fields={[getInputAddress(), getInputStreet()]}
+                                data={{
+                                    id: item._id,
+                                    initialValueForm: {
+                                        address: {
+                                            provinceId: item.provinceId,
+                                            districtId: item.districtId,
+                                            wardId: item.wardId,
+                                            address: item.address,
+                                        },
+                                        street: item.street,
+                                    },
+                                }}
+                                keyPubsub={PUBSUB_SUBSCRIBE_NAME.GET_INFO}
+                            />,
                         ]}
                     >
                         <List.Item.Meta

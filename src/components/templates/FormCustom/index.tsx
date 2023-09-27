@@ -8,7 +8,7 @@ type TProps = {
     fields: FormItemProps[];
     api?: string;
     title?: React.ReactNode;
-    bottom: {
+    bottom?: {
         buttons?: ButtonProps[];
         item?: FormItemProps;
     };

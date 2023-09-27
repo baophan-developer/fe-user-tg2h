@@ -13,7 +13,9 @@ export const API_ENDPOINT = {
         GET: "profile/",
         UPDATE_PROFILE: "profile/update-profile",
         UPDATE_AVATAR: "profile/update-avatar",
+        CREATE_ADDRESS: "profile/create-address",
         UPDATE_ADDRESS: "profile/update-address",
+        REMOVE_ADDRESS: "profile/remove-address",
     },
 };
 
