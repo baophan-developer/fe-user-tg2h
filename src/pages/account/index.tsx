@@ -186,7 +186,7 @@ export default function Account() {
                             width={200}
                             height={200}
                             preview={false}
-                            style={{ cursor: "pointer", objectFit: "contain" }}
+                            style={{ cursor: "pointer", objectFit: "cover" }}
                         />
                         <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
                     </UploadButtonStyled>
