@@ -31,28 +31,29 @@ export default function ButtonFormModel({
     const [loading, setLoading] = useState<boolean>(false);
 
     const onFinish = async (value: any) => {
-        setLoading(true);
-        try {
-            const newValue = handleDataWithAddress(value);
-            const oldValue = handleDataWithAddress(data?.initialValueForm);
-            const check = isEqual(newValue, oldValue);
-            if (check) {
-                message.info("Chưa nhập thông tin mới");
-                setLoading(false);
-                return;
-            }
-            const res = await request<any>(req.method, req.api, {
-                id: data?.id,
-                ...newValue,
-            });
-            message.success(res.data.message);
-        } catch (error: any) {
-            message.error(error.response.data.message);
-        }
-        keyPubsub && PubSub.publishSync(keyPubsub);
-        form.resetFields();
-        setLoading(false);
-        setOpen(false);
+        console.log(value);
+        // setLoading(true);
+        // try {
+        //     const newValue = handleDataWithAddress(value);
+        //     const oldValue = handleDataWithAddress(data?.initialValueForm);
+        //     const check = isEqual(newValue, oldValue);
+        //     if (check) {
+        //         message.info("Chưa nhập thông tin mới");
+        //         setLoading(false);
+        //         return;
+        //     }
+        //     const res = await request<any>(req.method, req.api, {
+        //         id: data?.id,
+        //         ...newValue,
+        //     });
+        //     message.success(res.data.message);
+        // } catch (error: any) {
+        //     message.error(error.response.data.message);
+        // }
+        // keyPubsub && PubSub.publishSync(keyPubsub);
+        // form.resetFields();
+        // setLoading(false);
+        // setOpen(false);
     };
 
     return (
@@ -66,7 +67,6 @@ export default function ButtonFormModel({
                 okButtonProps={{ loading: loading }}
                 onOk={() => {
                     form.submit();
-                    setOpen(false);
                 }}
                 onCancel={() => {
                     form.resetFields();

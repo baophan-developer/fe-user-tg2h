@@ -17,6 +17,22 @@ export const API_ENDPOINT = {
         UPDATE_ADDRESS: "profile/update-address",
         DELETE_ADDRESS: "profile/delete-address",
     },
+    PRODUCT: {
+        GET: "product/",
+        CREATE: "product/create",
+    },
+    SIZE_SCREEN: "size-screen/",
+    SCAN_FREQUENCY_SCREEN: "scan-frequency-screen/",
+    RESOLUTION_SCREEN: "resolution-screen/",
+    TYPE_RAM: "type-ram/",
+    CAPACITY_RAM: "capacity-ram/",
+    TYPE_ROM: "type-rom/",
+    CAPACITY_ROM: "capacity-rom/",
+    GPU: "gpu/",
+    CPU: "cpu/",
+    BRAND: "brand/",
+    CATEGORY: "category/",
+    OS: "os/",
 };
 
 export const BASE_URL_PROVINCE_VIETNAM = process.env.NEXT_PUBLIC_PROVINCE_VIETNAM_URL;

@@ -9,7 +9,26 @@ import {
     getInputChooseDay,
     getInputAddress,
     getInputStreet,
-} from "./Input";
+} from "./UsersInput";
+import {
+    getInputNameProduct,
+    getInputImagesProduct,
+    getInputDescProduct,
+    getInputPriceProduct,
+    getInputLengthProduct,
+    getInputHeightProduct,
+    getInputWidthProduct,
+    getInputWeightProduct,
+    getInputBetterCapacityProduct,
+    getInputScreenProduct,
+    getInputRamProduct,
+    getInputRomProduct,
+    getInputGpuProduct,
+    getInputCpuProduct,
+    getInputOsProduct,
+    getInputCategoryProduct,
+    getInputBrandProduct,
+} from "./ProductsInput";
 import getItem from "./Item";
 
 export {
@@ -24,4 +43,21 @@ export {
     getItem,
     getInputAddress,
     getInputStreet,
+    getInputNameProduct,
+    getInputImagesProduct,
+    getInputDescProduct,
+    getInputPriceProduct,
+    getInputLengthProduct,
+    getInputHeightProduct,
+    getInputWidthProduct,
+    getInputWeightProduct,
+    getInputBetterCapacityProduct,
+    getInputScreenProduct,
+    getInputRamProduct,
+    getInputRomProduct,
+    getInputGpuProduct,
+    getInputCpuProduct,
+    getInputOsProduct,
+    getInputCategoryProduct,
+    getInputBrandProduct,
 };

@@ -9,7 +9,7 @@ import {
     DatePicker,
     DatePickerProps,
 } from "antd";
-import InputAddress from "../InputAddress";
+import InputAddress from "../AddressInput";
 
 export const getInputEmail = (inputProps?: InputProps): FormItemProps => {
     return {
