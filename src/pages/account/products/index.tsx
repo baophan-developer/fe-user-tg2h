@@ -1,6 +1,5 @@
 import React from "react";
 import Link from "next/link";
-import styled from "styled-components";
 import { Image } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { handleDataProduct } from "@/utils/handle-data";
@@ -27,14 +26,11 @@ import {
     getInputCategoryProduct,
     getInputBrandProduct,
     getInputNewnessProduct,
+    PendingStyled,
 } from "@/components/atoms";
 import { API_ENDPOINT } from "@/constants/apis";
 import ROUTERS from "@/constants/routers";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
-
-const PendingStyled = styled.div<{ $approve?: boolean }>`
-    color: ${(props) => (props.$approve ? "#a0d911" : "#fa541c")};
-`;
 
 const columns: ColumnsType<IProduct> = [
     {

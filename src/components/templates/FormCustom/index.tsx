@@ -6,7 +6,6 @@ import { isEmpty } from "lodash";
 type TProps = {
     form?: FormProps;
     fields: FormItemProps[];
-    api?: string;
     title?: React.ReactNode;
     bottom?: {
         buttons?: ButtonProps[];

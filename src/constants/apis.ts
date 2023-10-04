@@ -18,7 +18,7 @@ export const API_ENDPOINT = {
         DELETE_ADDRESS: "profile/delete-address",
     },
     PRODUCT: {
-        GET: "product/",
+        GET: "product",
         CREATE: "product/create",
     },
     SIZE_SCREEN: "size-screen/",

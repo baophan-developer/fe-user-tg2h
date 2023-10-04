@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Select, SelectProps } from "antd";
+import { Select } from "antd";
 import request from "@/services/request";
 
 interface IOptions {
@@ -44,7 +44,7 @@ export default function SelectApi({ value, onChange, api, attItem }: TProps) {
             style={{ width: "100%" }}
             showSearch
             filterOption={filterOption}
-            value={value}
+            value={typeof value === "object" ? value?._id : value}
             options={options}
             onChange={(value) => trigger(value)}
         />

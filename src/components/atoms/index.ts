@@ -31,6 +31,7 @@ import {
     getInputNewnessProduct,
 } from "./ProductsInput";
 import getItem from "./Item";
+import PendingStyled from "./PendingStatus";
 
 export {
     getInputEmail,
@@ -62,4 +63,5 @@ export {
     getInputCategoryProduct,
     getInputBrandProduct,
     getInputNewnessProduct,
+    PendingStyled,
 };
