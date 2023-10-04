@@ -6,7 +6,7 @@ import { isEqual } from "lodash";
 
 type TProps = {
     button: ButtonProps;
-    title: string;
+    title: React.ReactNode;
     req: { api: string; method: TRequest };
     keyPubsub?: string;
     data?: {
@@ -52,6 +52,7 @@ export default function ButtonFormModel({
         } catch (error: any) {
             message.error(error.response?.data?.message);
             setLoading(false);
+            return;
         }
         keyPubsub && PubSub.publishSync(keyPubsub);
         form.resetFields();

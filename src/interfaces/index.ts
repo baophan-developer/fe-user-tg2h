@@ -1,7 +1,6 @@
-import { Blob, File } from "buffer";
-
 export interface IProduct {
-    id: string;
+    index: React.Key;
+    _id: string;
     name: string;
     images: any[];
     desc: string;
