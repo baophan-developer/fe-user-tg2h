@@ -3,25 +3,18 @@ import { Select, SelectProps } from "antd";
 import request from "@/services/request";
 
 interface IOptions {
-    value: string | number | undefined;
-    label: string | number | undefined;
+    label: React.ReactNode;
+    value?: string | number | null;
 }
 
 type TProps = {
     value?: any;
     onChange?: (value: any) => void;
     api: string;
-    selectProps?: SelectProps;
     attItem: string;
 };
 
-export default function SelectApi({
-    value,
-    onChange,
-    api,
-    selectProps,
-    attItem,
-}: TProps) {
+export default function SelectApi({ value, onChange, api, attItem }: TProps) {
     const [options, setOptions] = useState<IOptions[]>([]);
 
     const getData = async () => {
@@ -39,13 +32,18 @@ export default function SelectApi({
         onChange?.(value);
     };
 
+    const filterOption = (input: string, option?: IOptions): boolean =>
+        ((option?.label as string) ?? "").toLowerCase().includes(input.toLowerCase());
+
     useEffect(() => {
         getData();
     }, []);
 
     return (
         <Select
-            {...selectProps}
+            style={{ width: "100%" }}
+            showSearch
+            filterOption={filterOption}
             value={value}
             options={options}
             onChange={(value) => trigger(value)}

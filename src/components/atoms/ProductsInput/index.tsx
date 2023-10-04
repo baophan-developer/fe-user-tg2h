@@ -290,7 +290,7 @@ export const getInputScreenProduct = (): FormItemProps => {
     return {
         label: "Thông tin màn hình",
         children: (
-            <Space size="large">
+            <Space style={{ width: "100%" }} styles={{ item: { width: "33%" } }}>
                 <Form.Item
                     name="sizeScreen"
                     label="Kích cỡ màn hình"
@@ -328,7 +328,7 @@ export const getInputRamProduct = (): FormItemProps => {
     return {
         label: "Thông tin RAM",
         children: (
-            <Space>
+            <Space style={{ width: "100%" }} styles={{ item: { width: "50%" } }}>
                 <Form.Item
                     name="typeRam"
                     label="Loại ram"
@@ -352,7 +352,7 @@ export const getInputRomProduct = (): FormItemProps => {
     return {
         label: "Thông tin ROM",
         children: (
-            <Space>
+            <Space style={{ width: "100%" }} styles={{ item: { width: "50%" } }}>
                 <Form.Item
                     name="typeRom"
                     label="Loại rom"
