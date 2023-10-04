@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Button, ButtonProps, Form, FormItemProps, Modal, message } from "antd";
 import { FormCustom } from "@/components/templates";
 import request, { TRequest } from "@/services/request";
-import { handleDataWithAddress } from "@/utils/handle-data";
 import { isEqual } from "lodash";
 
 type TProps = {
@@ -16,6 +15,9 @@ type TProps = {
         initialValueForm?: any;
     };
     fields?: FormItemProps[];
+    width?: number | string;
+    usingFormData?: boolean;
+    funcHandleData: (value: any) => any;
 };
 
 export default function ButtonFormModel({
@@ -25,35 +27,36 @@ export default function ButtonFormModel({
     keyPubsub,
     fields = [],
     data,
+    width,
+    funcHandleData,
+    usingFormData,
 }: TProps) {
     const [form] = Form.useForm();
     const [open, setOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
 
     const onFinish = async (value: any) => {
-        console.log(value);
-        // setLoading(true);
-        // try {
-        //     const newValue = handleDataWithAddress(value);
-        //     const oldValue = handleDataWithAddress(data?.initialValueForm);
-        //     const check = isEqual(newValue, oldValue);
-        //     if (check) {
-        //         message.info("Chưa nhập thông tin mới");
-        //         setLoading(false);
-        //         return;
-        //     }
-        //     const res = await request<any>(req.method, req.api, {
-        //         id: data?.id,
-        //         ...newValue,
-        //     });
-        //     message.success(res.data.message);
-        // } catch (error: any) {
-        //     message.error(error.response.data.message);
-        // }
-        // keyPubsub && PubSub.publishSync(keyPubsub);
-        // form.resetFields();
-        // setLoading(false);
-        // setOpen(false);
+        setLoading(true);
+        try {
+            const newValue = funcHandleData(value);
+            const oldValue = funcHandleData(data?.initialValueForm);
+            const check = isEqual(newValue, oldValue);
+            if (check) {
+                message.info("Chưa nhập thông tin mới");
+                setLoading(false);
+                return;
+            }
+            const dataSend = usingFormData ? newValue : { id: data?.id, ...value };
+            const res = await request<any>(req.method, req.api, dataSend);
+            message.success(res.data.message);
+        } catch (error: any) {
+            message.error(error.response?.data?.message);
+            setLoading(false);
+        }
+        keyPubsub && PubSub.publishSync(keyPubsub);
+        form.resetFields();
+        setLoading(false);
+        setOpen(false);
     };
 
     return (
@@ -70,8 +73,10 @@ export default function ButtonFormModel({
                 }}
                 onCancel={() => {
                     form.resetFields();
+                    setLoading(false);
                     setOpen(false);
                 }}
+                width={width}
             >
                 <FormCustom
                     form={{

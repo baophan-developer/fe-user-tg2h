@@ -40,7 +40,7 @@ export const getInputImagesProduct = (): FormItemProps => {
             { required: true, message: "Hình ảnh sản phẩm là bắt buộc." },
             {
                 validator(_, value) {
-                    if (value.length > 5)
+                    if (value && value.length > 5)
                         return Promise.reject("Chỉ được phép tối đa 5 hình ảnh.");
                     return Promise.resolve();
                 },
@@ -243,7 +243,7 @@ export const getInputBetterCapacityProduct = (
             { required: true, message: "Dung lượng pin sản phẩm là bắt buộc." },
             {
                 validator(_, value) {
-                    if (value > 10)
+                    if (value > 1000)
                         return Promise.reject(
                             "Dung lượng pin sản phẩm không được vượt quá 1000wh"
                         );
@@ -264,8 +264,31 @@ export const getInputBetterCapacityProduct = (
     };
 };
 
+export const getInputNewnessProduct = (
+    inputNumberProps?: InputNumberProps
+): FormItemProps => {
+    return {
+        name: "newness",
+        label: "Nhập độ mới sản phẩm sản phẩm",
+        rules: [{ required: true, message: "Độ mới sản phẩm sản phẩm là bắt buộc." }],
+        children: (
+            <InputNumber
+                {...inputNumberProps}
+                min={70}
+                max={100}
+                type="number"
+                controls={false}
+                style={{ width: "100%" }}
+                placeholder="Nhập độ mới sản phẩm sản phẩm"
+                suffix={<SuffixStyled>%</SuffixStyled>}
+            />
+        ),
+    };
+};
+
 export const getInputScreenProduct = (): FormItemProps => {
     return {
+        label: "Thông tin màn hình",
         children: (
             <Space size="large">
                 <Form.Item
@@ -303,6 +326,7 @@ export const getInputScreenProduct = (): FormItemProps => {
 
 export const getInputRamProduct = (): FormItemProps => {
     return {
+        label: "Thông tin RAM",
         children: (
             <Space>
                 <Form.Item
@@ -326,6 +350,7 @@ export const getInputRamProduct = (): FormItemProps => {
 
 export const getInputRomProduct = (): FormItemProps => {
     return {
+        label: "Thông tin ROM",
         children: (
             <Space>
                 <Form.Item

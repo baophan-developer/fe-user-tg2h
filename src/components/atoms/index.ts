@@ -28,6 +28,7 @@ import {
     getInputOsProduct,
     getInputCategoryProduct,
     getInputBrandProduct,
+    getInputNewnessProduct,
 } from "./ProductsInput";
 import getItem from "./Item";
 
@@ -60,4 +61,5 @@ export {
     getInputOsProduct,
     getInputCategoryProduct,
     getInputBrandProduct,
+    getInputNewnessProduct,
 };

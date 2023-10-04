@@ -24,7 +24,9 @@ import {
     getInputOsProduct,
     getInputCategoryProduct,
     getInputBrandProduct,
+    getInputNewnessProduct,
 } from "@/components/atoms";
+import { handleDataProduct } from "@/utils/handle-data";
 
 const ActionStyled = styled.div`
     display: flex;
@@ -43,6 +45,7 @@ export default function Product() {
                         getInputNameProduct(),
                         getInputImagesProduct(),
                         getInputDescProduct(),
+                        getInputNewnessProduct(),
                         getInputPriceProduct(),
                         getInputLengthProduct(),
                         getInputHeightProduct(),
@@ -59,6 +62,9 @@ export default function Product() {
                         getInputBrandProduct(),
                     ]}
                     keyPubsub={PUBSUB_SUBSCRIBE_NAME.GET_PRODUCTS}
+                    width={"50%"}
+                    funcHandleData={handleDataProduct}
+                    usingFormData={true}
                 />
             </ActionStyled>
         </div>

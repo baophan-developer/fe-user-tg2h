@@ -44,6 +44,11 @@ export default function SelectApi({
     }, []);
 
     return (
-        <Select {...selectProps} options={options} onChange={(value) => trigger(value)} />
+        <Select
+            {...selectProps}
+            value={value}
+            options={options}
+            onChange={(value) => trigger(value)}
+        />
     );
 }
