@@ -38,6 +38,7 @@ export interface IAddress {
 }
 
 export interface IUser {
+    _id: string;
     email: string;
     name: string;
     birthday: Date;

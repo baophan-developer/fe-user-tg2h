@@ -2,9 +2,11 @@ import React from "react";
 import Link from "next/link";
 import { Image } from "antd";
 import type { ColumnsType } from "antd/es/table";
+import { useRecoilValue } from "recoil";
 import { handleDataProduct } from "@/utils/handle-data";
 import UserLayout from "@/layouts/UserLayout";
 import AccountLayout from "@/layouts/AccountLayout";
+import UserAtom from "@/stores/UserStore";
 import { IProduct } from "@/interfaces";
 import { ManagementView } from "@/components/templates";
 import {
@@ -39,6 +41,7 @@ const columns: ColumnsType<IProduct> = [
     },
     {
         title: "Tên sản phẩm",
+        sorter: true,
         render: (_, record) => {
             return (
                 <Link
@@ -64,6 +67,7 @@ const columns: ColumnsType<IProduct> = [
     },
     {
         title: "Giá thành",
+        sorter: true,
         render: (_, record) => (
             <>
                 {record.price.toLocaleString("vi", {
@@ -75,6 +79,7 @@ const columns: ColumnsType<IProduct> = [
     },
     {
         title: "Trạng thái",
+        sorter: true,
         render: (_, record) => (
             <PendingStyled $approve={record.approve}>
                 {record.approve ? "Đã duyệt" : "Đang chờ duyệt"}
@@ -84,6 +89,8 @@ const columns: ColumnsType<IProduct> = [
 ];
 
 export default function Product() {
+    const user = useRecoilValue(UserAtom);
+
     return (
         <div>
             <ManagementView
@@ -117,11 +124,16 @@ export default function Product() {
                     request: {
                         method: "post",
                         api: API_ENDPOINT.PRODUCT.GET,
-                        filter: {},
                     },
                 }}
                 pubsub={PUBSUB_SUBSCRIBE_NAME.GET_PRODUCTS}
                 columns={columns}
+                filters={{ owner: user?._id }}
+                attributeQuery={[
+                    { title: "Tên sản phẩm", value: "name" },
+                    { title: "Giá thành", value: "price" },
+                    { title: "Trạng thái", value: "approve" },
+                ]}
             />
         </div>
     );
