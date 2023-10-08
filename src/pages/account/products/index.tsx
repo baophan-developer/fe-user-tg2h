@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import { Image } from "antd";
-import type { ColumnsType } from "antd/es/table";
 import { useRecoilValue } from "recoil";
+import type { ColumnsType } from "antd/es/table";
 import { handleDataProduct } from "@/utils/handle-data";
 import UserLayout from "@/layouts/UserLayout";
 import AccountLayout from "@/layouts/AccountLayout";

@@ -100,7 +100,6 @@ export default function ManagementView({
 
     const getData = async () => {
         try {
-            console.log(query);
             const res = await request<any>(get.request.method, get.request.api, query);
             const dataSource = res.data.list.map((item: any, index: any) => ({
                 key: index + 1,
