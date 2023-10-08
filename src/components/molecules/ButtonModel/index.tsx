@@ -15,7 +15,6 @@ export default function ButtonModel({ title, button, children, req, keyPubsub }:
 
     const handleApi = async () => {
         try {
-            console.log(req.data);
             const res = await request<any>(req.method, req.api, req.data);
             keyPubsub && PubSub.publishSync(keyPubsub);
             message.success(res.data.message);

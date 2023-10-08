@@ -6,7 +6,8 @@ const ROUTERS = {
     RESET_PASSWORD: "/reset-password",
     ACCOUNT: {
         HOME: "/account",
-        MANAGEMENT_ADDRESS: "/account/management-address",
+        ADDRESS: "/account/address",
+        PRODUCT: "/account/products",
     },
 };
 

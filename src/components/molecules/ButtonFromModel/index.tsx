@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { Button, ButtonProps, Form, FormItemProps, Modal, message } from "antd";
 import { FormCustom } from "@/components/templates";
 import request, { TRequest } from "@/services/request";
-import { handleDataWithAddress } from "@/utils/handle-data";
 import { isEqual } from "lodash";
 
 type TProps = {
     button: ButtonProps;
-    title: string;
+    title: React.ReactNode;
     req: { api: string; method: TRequest };
     keyPubsub?: string;
     data?: {
@@ -16,6 +15,9 @@ type TProps = {
         initialValueForm?: any;
     };
     fields?: FormItemProps[];
+    width?: number | string;
+    usingFormData?: boolean;
+    funcHandleData: (value: any) => any;
 };
 
 export default function ButtonFormModel({
@@ -25,6 +27,9 @@ export default function ButtonFormModel({
     keyPubsub,
     fields = [],
     data,
+    width,
+    funcHandleData,
+    usingFormData,
 }: TProps) {
     const [form] = Form.useForm();
     const [open, setOpen] = useState<boolean>(false);
@@ -33,21 +38,21 @@ export default function ButtonFormModel({
     const onFinish = async (value: any) => {
         setLoading(true);
         try {
-            const newValue = handleDataWithAddress(value);
-            const oldValue = handleDataWithAddress(data?.initialValueForm);
+            const newValue = funcHandleData(value);
+            const oldValue = funcHandleData(data?.initialValueForm);
             const check = isEqual(newValue, oldValue);
             if (check) {
                 message.info("Chưa nhập thông tin mới");
                 setLoading(false);
                 return;
             }
-            const res = await request<any>(req.method, req.api, {
-                id: data?.id,
-                ...newValue,
-            });
+            const dataSend = usingFormData ? newValue : { id: data?.id, ...value };
+            const res = await request<any>(req.method, req.api, dataSend);
             message.success(res.data.message);
         } catch (error: any) {
-            message.error(error.response.data.message);
+            message.error(error.response?.data?.message);
+            setLoading(false);
+            return;
         }
         keyPubsub && PubSub.publishSync(keyPubsub);
         form.resetFields();
@@ -66,12 +71,13 @@ export default function ButtonFormModel({
                 okButtonProps={{ loading: loading }}
                 onOk={() => {
                     form.submit();
-                    setOpen(false);
                 }}
                 onCancel={() => {
                     form.resetFields();
+                    setLoading(false);
                     setOpen(false);
                 }}
+                width={width}
             >
                 <FormCustom
                     form={{

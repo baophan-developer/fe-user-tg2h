@@ -54,9 +54,14 @@ type TProps = {
     title?: React.ReactNode;
 };
 
+const items = [
+    getItem(ROUTERS.ACCOUNT.HOME, "Quản lý tài khoản"),
+    getItem(ROUTERS.ACCOUNT.ADDRESS, "Quản lý địa chỉ"),
+    getItem(ROUTERS.ACCOUNT.PRODUCT, "Quản lý sản phẩm"),
+];
 export default function AccountLayout({ children, title }: TProps) {
-    const route = useRouter();
-    const defaultKey = route.pathname;
+    const router = useRouter();
+    const defaultKey = router.pathname;
     const user = useRecoilValue(UserAtom);
 
     return (
@@ -72,25 +77,9 @@ export default function AccountLayout({ children, title }: TProps) {
                 <Sider style={{ backgroundColor: "#fff" }}>
                     <Menu
                         defaultSelectedKeys={[defaultKey]}
-                        items={[
-                            getItem(ROUTERS.ACCOUNT.HOME, "Quản lý tài khoản"),
-                            getItem(
-                                ROUTERS.ACCOUNT.MANAGEMENT_ADDRESS,
-                                "Quản lý địa chỉ"
-                            ),
-                        ]}
+                        items={items}
                         onClick={({ key }) => {
-                            switch (key) {
-                                case ROUTERS.ACCOUNT.HOME:
-                                    route.push(ROUTERS.ACCOUNT.HOME);
-                                    break;
-                                case ROUTERS.ACCOUNT.MANAGEMENT_ADDRESS:
-                                    route.push(ROUTERS.ACCOUNT.MANAGEMENT_ADDRESS);
-                                    break;
-                                default:
-                                    route.push(ROUTERS.HOME);
-                                    break;
-                            }
+                            router.push(key);
                         }}
                         style={{ height: "100%" }}
                     />

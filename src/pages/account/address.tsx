@@ -11,6 +11,7 @@ import { getInputAddress, getInputStreet } from "@/components/atoms";
 import { ButtonFormModel, ButtonModel } from "@/components/molecules";
 import { API_ENDPOINT } from "@/constants/apis";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
+import { handleDataWithAddress } from "@/utils/handle-data";
 
 const ActionStyled = styled.div`
     display: flex;
@@ -43,6 +44,7 @@ export default function Address() {
                     fields={[getInputAddress(), getInputStreet()]}
                     req={{ method: "post", api: API_ENDPOINT.PROFILE.CREATE_ADDRESS }}
                     keyPubsub={PUBSUB_SUBSCRIBE_NAME.GET_INFO}
+                    funcHandleData={handleDataWithAddress}
                 />
             </ActionStyled>
             <List
@@ -75,6 +77,7 @@ export default function Address() {
                                     },
                                 }}
                                 keyPubsub={PUBSUB_SUBSCRIBE_NAME.GET_INFO}
+                                funcHandleData={handleDataWithAddress}
                             />,
                             <ButtonModel
                                 key={2}
