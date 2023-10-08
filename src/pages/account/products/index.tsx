@@ -93,7 +93,7 @@ const columns: ColumnsType<IProduct> = [
             <PendingStyled $approve={record.status}>
                 {record.status
                     ? "Đang rao bán"
-                    : record.status
+                    : record.approve
                     ? "Ngừng bán"
                     : "Đang chờ duyệt"}
             </PendingStyled>
