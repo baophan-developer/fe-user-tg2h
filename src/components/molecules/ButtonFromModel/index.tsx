@@ -46,7 +46,7 @@ export default function ButtonFormModel({
                 setLoading(false);
                 return;
             }
-            const dataSend = usingFormData ? newValue : { id: data?.id, ...value };
+            const dataSend = usingFormData ? newValue : { id: data?.id, ...newValue };
             const res = await request<any>(req.method, req.api, dataSend);
             message.success(res.data.message);
         } catch (error: any) {
