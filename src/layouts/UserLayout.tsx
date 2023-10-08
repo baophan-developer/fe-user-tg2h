@@ -62,6 +62,10 @@ const ContentPopoverStyled = styled.div`
 
 const ContentStyled = styled(Content)`
     padding: 1% 5%;
+
+    @media only screen and (max-width: 500px) {
+        padding: 1% 0;
+    }
 `;
 
 export default function UserLayout({ children }: TProps) {
