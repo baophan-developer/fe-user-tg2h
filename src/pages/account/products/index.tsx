@@ -91,7 +91,11 @@ const columns: ColumnsType<IProduct> = [
         sorter: true,
         render: (_, record) => (
             <PendingStyled $approve={record.status}>
-                {record.status ? "Đang rao bán" : "Ngừng bán"}
+                {record.status
+                    ? "Đang rao bán"
+                    : record.status
+                    ? "Ngừng bán"
+                    : "Đang chờ duyệt"}
             </PendingStyled>
         ),
     },
