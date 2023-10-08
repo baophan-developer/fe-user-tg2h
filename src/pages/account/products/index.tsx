@@ -86,6 +86,15 @@ const columns: ColumnsType<IProduct> = [
             </PendingStyled>
         ),
     },
+    {
+        title: "Rao bán",
+        sorter: true,
+        render: (_, record) => (
+            <PendingStyled $approve={record.status}>
+                {record.status ? "Đang rao bán" : "Ngừng bán"}
+            </PendingStyled>
+        ),
+    },
 ];
 
 export default function Product() {
@@ -133,6 +142,7 @@ export default function Product() {
                     { title: "Tên sản phẩm", value: "name" },
                     { title: "Giá thành", value: "price" },
                     { title: "Trạng thái", value: "approve" },
+                    { title: "Rao bán", value: "status" },
                 ]}
             />
         </div>

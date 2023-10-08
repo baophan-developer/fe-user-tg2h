@@ -26,6 +26,7 @@ import {
     getInputBrandProduct,
     getInputNewnessProduct,
     PendingStyled,
+    getInputStatusProduct,
 } from "@/components/atoms";
 import { Form, message } from "antd";
 import { useRecoilValue } from "recoil";
@@ -114,6 +115,7 @@ export default function DetailProduct() {
                     onFinish: updateProduct,
                 }}
                 fields={[
+                    getInputStatusProduct(),
                     getInputNameProduct(),
                     getInputImagesProduct(),
                     getInputNewnessProduct(),

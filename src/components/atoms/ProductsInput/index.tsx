@@ -1,4 +1,13 @@
-import { Form, Input, InputNumber, InputNumberProps, Space, Upload } from "antd";
+import {
+    Form,
+    Input,
+    InputNumber,
+    InputNumberProps,
+    Select,
+    Space,
+    Switch,
+    Upload,
+} from "antd";
 import { type InputProps, type FormItemProps } from "antd";
 import { TextAreaProps } from "antd/es/input";
 import styled from "styled-components";
@@ -414,5 +423,16 @@ export const getInputBrandProduct = (): FormItemProps => {
         label: "Thương hiệu",
         rules: [{ required: true, message: "Thương hiệu là bắt buộc." }],
         children: <SelectApi api={API_ENDPOINT.BRAND} attItem="name" />,
+    };
+};
+
+export const getInputStatusProduct = (): FormItemProps => {
+    return {
+        name: "status",
+        label: "Trạng thái rao bán",
+        valuePropName: "checked",
+        children: (
+            <Switch checkedChildren={"Đang rao bán"} unCheckedChildren={"Ngừng bán"} />
+        ),
     };
 };

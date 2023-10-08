@@ -31,7 +31,7 @@ const handleDataProduct = (value: any) => {
         formData.append(key, newValue[key]);
     }
     formData.append("approve", "false");
-    formData.append("status", "true");
+    formData.append("status", "false");
     return formData;
 };
 
