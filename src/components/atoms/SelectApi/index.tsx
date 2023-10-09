@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Select } from "antd";
+import { Select, SelectProps } from "antd";
 import request from "@/services/request";
 
 interface IOptions {
@@ -12,9 +12,18 @@ type TProps = {
     onChange?: (value: any) => void;
     api: string;
     attItem: string;
+    mode?: SelectProps["mode"];
+    placeholder?: string;
 };
 
-export default function SelectApi({ value, onChange, api, attItem }: TProps) {
+export default function SelectApi({
+    value,
+    onChange,
+    api,
+    attItem,
+    mode,
+    placeholder,
+}: TProps) {
     const [options, setOptions] = useState<IOptions[]>([]);
 
     const getData = async () => {
@@ -47,6 +56,10 @@ export default function SelectApi({ value, onChange, api, attItem }: TProps) {
             value={typeof value === "object" ? value?._id : value}
             options={options}
             onChange={(value) => trigger(value)}
+            mode={mode}
+            placeholder={placeholder}
+            allowClear
+            maxTagCount={1}
         />
     );
 }

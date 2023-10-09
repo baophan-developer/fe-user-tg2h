@@ -1,105 +1,67 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { IProduct } from "@/interfaces";
-import { useRecoilValue } from "recoil";
-import { Button, Card, Col, Image, Layout, Pagination, PaginationProps, Row } from "antd";
-import request from "@/services/request";
-import UserAtom from "@/stores/UserStore";
+import { Card, Layout, Row } from "antd";
 import { API_ENDPOINT } from "@/constants/apis";
+import { ViewProducts } from "@/components/templates";
+import request from "@/services/request";
+import { useRouter } from "next/router";
 
-const { Meta } = Card;
-
-interface IQuery {
-    filters?: any;
-    sort?: any;
-    pagination: {
-        page: number;
-        limit: number;
-    };
-}
-
-const CardStyled = styled(Card)`
-    width: 240px;
-
-    @media only screen and (max-width: 500px) {
-        width: 200px;
-    }
+const HeadingStyled = styled.h2`
+    width: 100%;
+    padding: 10px;
+    font-weight: 400;
+    text-align: center;
 `;
 
-const PaginationStyled = styled.div`
-    margin-top: 20px;
+const CategoryStyled = styled.div`
+    width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
 `;
 
+interface ICategory {
+    _id: string;
+    name: string;
+}
+
 export default function Home() {
-    const user = useRecoilValue(UserAtom);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [products, setProducts] = useState<IProduct[]>([]);
-    const [total, setTotal] = useState<number>(10);
-    const [query, setQuery] = useState<IQuery>({
-        pagination: {
-            page: 0,
-            limit: 20,
-        },
-    });
+    const router = useRouter();
+    const [category, setCategory] = useState<ICategory[]>([]);
 
-    const getProducts = async () => {
-        setLoading(true);
+    const getCategory = async () => {
         try {
-            const res = await request<any>("post", API_ENDPOINT.PRODUCT.GET, query);
-            setProducts(res.data.list);
-            setTotal(res.data.total);
+            const res = await request<any>("get", API_ENDPOINT.CATEGORY);
+            setCategory(res.data.list);
         } catch (error) {}
-        setLoading(false);
-    };
-
-    const handleChangePagination: PaginationProps["onShowSizeChange"] = (
-        current,
-        pageSize
-    ) => {
-        setQuery((prev) => ({
-            ...prev,
-            pagination: { page: current - 1, limit: pageSize },
-        }));
     };
 
     useEffect(() => {
-        setQuery((prev) => ({ ...prev, filters: { owner: { $ne: user._id } } }));
-    }, [user._id]);
-
-    useEffect(() => {
-        getProducts();
-    }, [query]);
+        getCategory();
+    }, []);
 
     return (
         <Layout>
             <Layout>
-                <Row gutter={[8, 8]} style={{ justifyContent: "center" }}>
-                    {products.map((item, index) => (
-                        <Col key={index}>
-                            <CardStyled hoverable loading={loading}>
-                                <Image src={item.images[0]} preview={false} />
-                                <Meta
-                                    title={item.name}
-                                    description={item.price.toLocaleString("vi")}
-                                />
-                                <br />
-                                <Button style={{ width: "100%" }} type="primary">
-                                    Thêm vào giỏ hàng
-                                </Button>
-                            </CardStyled>
-                        </Col>
-                    ))}
-                </Row>
-                <PaginationStyled>
-                    <Pagination
-                        defaultCurrent={query.pagination.page + 1}
-                        defaultPageSize={query.pagination.limit}
-                        total={total}
-                        onChange={handleChangePagination}
-                    />
-                </PaginationStyled>
+                <CategoryStyled>
+                    <Card title="Danh mục Laptop" style={{ width: "90%" }}>
+                        {category.map((item, index) => (
+                            <Card.Grid
+                                key={index}
+                                style={{ cursor: "pointer" }}
+                                onClick={() =>
+                                    router.push(`/${item.name}?id=${item._id}`)
+                                }
+                            >
+                                {item.name}
+                            </Card.Grid>
+                        ))}
+                    </Card>
+                </CategoryStyled>
+                <HeadingStyled>GỢI Ý HÔM NAY</HeadingStyled>
+                <ViewProducts
+                    requestApi={{ method: "post", api: API_ENDPOINT.PRODUCT.GET }}
+                />
             </Layout>
         </Layout>
     );

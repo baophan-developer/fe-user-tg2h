@@ -28,6 +28,18 @@ export interface IProduct {
     status: boolean;
 }
 
+export interface IProductRender extends Omit<IProduct, "owner"> {
+    owner: {
+        _id: string;
+        name: string;
+        gender: boolean;
+        phone: string;
+        birthday: string;
+        avatar: string;
+        email: string;
+    };
+}
+
 export interface IAddress {
     _id?: string;
     provinceId: number | null | undefined;
