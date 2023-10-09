@@ -62,18 +62,22 @@ const ContentPopoverStyled = styled.div`
 
 const ContentStyled = styled(Content)`
     padding: 1% 5%;
+
+    @media only screen and (max-width: 500px) {
+        padding: 1% 0;
+    }
 `;
 
 export default function UserLayout({ children }: TProps) {
     const [user, setUser] = useRecoilState(UserAtom);
-    const route = useRouter();
+    const router = useRouter();
 
     const handleLogout = async () => {
         try {
             const res = await request<any>("post", API_ENDPOINT.AUTH.LOGOUT);
             localStorage.removeItem("accessToken");
             message.success(res.data.message, 1);
-            route.push(ROUTERS.LOGIN);
+            router.push(ROUTERS.LOGIN);
         } catch (error: any) {
             message.error(error.response.data.message, 1);
         }
@@ -106,6 +110,7 @@ export default function UserLayout({ children }: TProps) {
                     type="primary"
                     enterButton
                     allowClear
+                    onSearch={(value) => router.push(`products?search=${value}`)}
                 />
                 <BoxAvatarStyled>
                     <Badge count={10} size="small" overflowCount={99} showZero={false}>
@@ -118,7 +123,7 @@ export default function UserLayout({ children }: TProps) {
                             <ContentPopoverStyled>
                                 <Button
                                     type="text"
-                                    onClick={() => route.push(ROUTERS.ACCOUNT.HOME)}
+                                    onClick={() => router.push(ROUTERS.ACCOUNT.HOME)}
                                 >
                                     Tài khoản của tôi
                                 </Button>

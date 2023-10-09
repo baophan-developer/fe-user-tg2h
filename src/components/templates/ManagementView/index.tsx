@@ -137,6 +137,7 @@ export default function ManagementView({
                 />
             </ActionStyled>
             <Table
+                size="small"
                 columns={columns}
                 dataSource={data}
                 onChange={handleTableChange}
