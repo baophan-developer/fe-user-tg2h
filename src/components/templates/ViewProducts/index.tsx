@@ -5,6 +5,7 @@ import { useRecoilValue } from "recoil";
 import { Button, Card, Col, Image, Pagination, PaginationProps, Row } from "antd";
 import request, { TRequest } from "@/services/request";
 import UserAtom from "@/stores/UserStore";
+import { useRouter } from "next/router";
 
 const { Meta } = Card;
 
@@ -48,6 +49,7 @@ type TProps = {
 };
 
 export default function ViewProducts({ requestApi, filters, sort }: TProps) {
+    const router = useRouter();
     const user = useRecoilValue(UserAtom);
     const [loading, setLoading] = useState<boolean>(false);
     const [products, setProducts] = useState<IProductRender[]>([]);
@@ -100,7 +102,11 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
             <Row gutter={[8, 8]} style={{ justifyContent: "center" }}>
                 {products.map((item, index) => (
                     <Col key={index}>
-                        <CardStyled hoverable loading={loading}>
+                        <CardStyled
+                            hoverable
+                            loading={loading}
+                            onClick={() => router.push(`/products/${item._id}`)}
+                        >
                             <Image src={item.images[0]} preview={false} />
                             <Meta
                                 title={item.name}
