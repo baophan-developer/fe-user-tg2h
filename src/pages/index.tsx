@@ -50,7 +50,9 @@ export default function Home() {
                                 key={index}
                                 style={{ cursor: "pointer" }}
                                 onClick={() =>
-                                    router.push(`/${item.name}?id=${item._id}`)
+                                    router.push(
+                                        `products?category=${item._id}&title=${item.name}`
+                                    )
                                 }
                             >
                                 {item.name}

@@ -22,6 +22,16 @@ const PaginationStyled = styled.div`
     justify-content: center;
 `;
 
+const EmptyStyled = styled.div`
+    height: 50vh;
+    display: grid;
+    place-items: center;
+
+    & h1 {
+        font-weight: 400;
+    }
+`;
+
 interface IQuery {
     filters?: any;
     sort?: any;
@@ -43,6 +53,10 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
     const [products, setProducts] = useState<IProductRender[]>([]);
     const [total, setTotal] = useState<number>(20);
     const [query, setQuery] = useState<IQuery>({
+        filters: {
+            status: true,
+            approve: true,
+        },
         pagination: {
             page: 0,
             limit: 20,
@@ -74,7 +88,11 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
     }, [query]);
 
     useEffect(() => {
-        setQuery((prev) => ({ ...prev, filters: { ...filters }, sort: { ...sort } }));
+        setQuery((prev) => ({
+            ...prev,
+            filters: { status: true, approve: true, ...filters },
+            sort: { ...sort },
+        }));
     }, [filters, sort]);
 
     return (
@@ -99,6 +117,11 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
                         </CardStyled>
                     </Col>
                 ))}
+                {products.length === 0 && (
+                    <EmptyStyled>
+                        <h1>Không có sản phẩm nào tương tự</h1>
+                    </EmptyStyled>
+                )}
             </Row>
             <PaginationStyled>
                 <Pagination

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { Button, Layout, Select } from "antd";
+import { Layout, Select } from "antd";
 import { ViewProducts } from "@/components/templates";
 import { API_ENDPOINT } from "@/constants/apis";
 import styled from "styled-components";
@@ -51,7 +51,9 @@ export default function CategoryProduct() {
 
     return (
         <Layout>
-            <TitleStyled>{router.query["category-product"]}</TitleStyled>
+            <TitleStyled>
+                {router.query["title"] || `Tìm kiếm "${router.query["search"]}"`}
+            </TitleStyled>
             <FilterStyled>
                 <h2 style={{ width: "100px", fontWeight: 400 }}>Bộ lọc: </h2>
                 <ActionStyled>
@@ -131,7 +133,11 @@ export default function CategoryProduct() {
             </FilterStyled>
             <ViewProducts
                 requestApi={{ method: "post", api: API_ENDPOINT.PRODUCT.GET }}
-                filters={{ category: router.query.id, ...filters }}
+                filters={{
+                    category: router.query.category,
+                    name: { $regex: router.query.search || "", $options: "i" },
+                    ...filters,
+                }}
                 sort={sort}
             />
         </Layout>
