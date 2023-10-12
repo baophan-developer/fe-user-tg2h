@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import { IProduct } from "@/interfaces";
+import { IProduct, IProductRender } from "@/interfaces";
 import request from "@/services/request";
 import { API_ENDPOINT } from "@/constants/apis";
 import { Button, Carousel, Descriptions, Image, Rate } from "antd";
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import UserAtom from "@/stores/UserStore";
 
 const ProductBriefingStyled = styled.div`
     padding: 10px;
@@ -115,8 +117,9 @@ const BoxInformationStyled = styled.div`
 export default function DetailProduct() {
     const router = useRouter();
     const id = router.query.id;
+    const user = useRecoilValue(UserAtom);
     const carouselRef: any = React.createRef();
-    const [product, setProduct] = useState<IProduct>();
+    const [product, setProduct] = useState<IProductRender>();
 
     const getProduct = async (id: string) => {
         try {
@@ -159,7 +162,11 @@ export default function DetailProduct() {
                     </EvaluateStyled>
                     <h2>{product?.price.toLocaleString("vi")} vnđ</h2>
                     <h3>Độ mới {product?.newness} %</h3>
-                    <ButtonStyled icon={<AiOutlineShoppingCart />} type="primary">
+                    <ButtonStyled
+                        icon={<AiOutlineShoppingCart />}
+                        type="primary"
+                        disabled={product?.owner?._id === user._id}
+                    >
                         Thêm vào giỏ hàng
                     </ButtonStyled>
                 </BriefingInfoStyled>
