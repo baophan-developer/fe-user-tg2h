@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PubSub from "pubsub-js";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
@@ -11,6 +11,8 @@ import { API_ENDPOINT } from "@/constants/apis";
 import ROUTERS from "@/constants/routers";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import Link from "next/link";
+import CartAtom from "@/stores/CartStore";
+import { ICartItem } from "@/interfaces";
 
 type TProps = {
     children: React.ReactNode;
@@ -70,6 +72,7 @@ const ContentStyled = styled(Content)`
 
 export default function UserLayout({ children }: TProps) {
     const [user, setUser] = useRecoilState(UserAtom);
+    const [cart, setCart] = useRecoilState(CartAtom);
     const router = useRouter();
 
     const handleLogout = async () => {
@@ -90,13 +93,22 @@ export default function UserLayout({ children }: TProps) {
         } catch (error) {}
     };
 
+    const getCart = async () => {
+        try {
+            const res = await request<any>("get", API_ENDPOINT.CART.GET);
+            setCart({ list: res.data.item.list, total: res.data.item.total });
+        } catch (error) {}
+    };
+
     useEffect(() => {
         getUserInfo();
+        getCart();
         PubSub.subscribe(PUBSUB_SUBSCRIBE_NAME.GET_INFO, getUserInfo);
+        PubSub.subscribe(PUBSUB_SUBSCRIBE_NAME.GET_CART, getCart);
         return () => {
             PubSub.unsubscribe(PUBSUB_SUBSCRIBE_NAME.GET_INFO);
+            PubSub.unsubscribe(PUBSUB_SUBSCRIBE_NAME.GET_CART);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -113,8 +125,13 @@ export default function UserLayout({ children }: TProps) {
                     onSearch={(value) => router.push(`products?search=${value}`)}
                 />
                 <BoxAvatarStyled>
-                    <Badge count={10} size="small" overflowCount={99} showZero={false}>
-                        <ShoppingCartStyled>
+                    <Badge
+                        count={cart.total}
+                        size="small"
+                        overflowCount={99}
+                        showZero={false}
+                    >
+                        <ShoppingCartStyled onClick={() => router.push(ROUTERS.CART)}>
                             <ShoppingCartOutlined />
                         </ShoppingCartStyled>
                     </Badge>

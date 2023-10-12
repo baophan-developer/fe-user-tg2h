@@ -4,10 +4,11 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { IProduct, IProductRender } from "@/interfaces";
 import request from "@/services/request";
 import { API_ENDPOINT } from "@/constants/apis";
-import { Button, Carousel, Descriptions, Image, Rate } from "antd";
+import { Button, Carousel, Descriptions, Image, Rate, message } from "antd";
 import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
+import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 
 const ProductBriefingStyled = styled.div`
     padding: 10px;
@@ -128,6 +129,19 @@ export default function DetailProduct() {
         } catch (error) {}
     };
 
+    const handleAddToCart = async (ownerProducts: string, product: string) => {
+        try {
+            const res = await request<any>("post", API_ENDPOINT.CART.ADD_TO_CART, {
+                ownerProducts: ownerProducts,
+                product: product,
+            });
+            message.success(res.data.message, 1);
+            PubSub.publishSync(PUBSUB_SUBSCRIBE_NAME.GET_CART);
+        } catch (error: any) {
+            message.error(error.response.data.message);
+        }
+    };
+
     useEffect(() => {
         id && getProduct(id as string);
     }, [id]);
@@ -166,6 +180,12 @@ export default function DetailProduct() {
                         icon={<AiOutlineShoppingCart />}
                         type="primary"
                         disabled={product?.owner?._id === user._id}
+                        onClick={() =>
+                            handleAddToCart(
+                                product?.owner._id as string,
+                                product?._id as string
+                            )
+                        }
                     >
                         Thêm vào giỏ hàng
                     </ButtonStyled>

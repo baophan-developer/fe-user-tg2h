@@ -2,10 +2,21 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IProductRender } from "@/interfaces";
 import { useRecoilValue } from "recoil";
-import { Button, Card, Col, Image, Pagination, PaginationProps, Row } from "antd";
+import {
+    Button,
+    Card,
+    Col,
+    Image,
+    Pagination,
+    PaginationProps,
+    Row,
+    message,
+} from "antd";
 import request, { TRequest } from "@/services/request";
 import UserAtom from "@/stores/UserStore";
 import { useRouter } from "next/router";
+import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
+import { API_ENDPOINT } from "@/constants/apis";
 
 const { Meta } = Card;
 
@@ -85,6 +96,19 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
         }));
     };
 
+    const handleAddToCart = async (ownerProducts: string, product: string) => {
+        try {
+            const res = await request<any>("post", API_ENDPOINT.CART.ADD_TO_CART, {
+                ownerProducts: ownerProducts,
+                product: product,
+            });
+            message.success(res.data.message, 1);
+            PubSub.publishSync(PUBSUB_SUBSCRIBE_NAME.GET_CART);
+        } catch (error: any) {
+            message.error(error.response.data.message);
+        }
+    };
+
     useEffect(() => {
         getProducts();
     }, [query]);
@@ -102,21 +126,20 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
             <Row gutter={[8, 8]} style={{ justifyContent: "center" }}>
                 {products.map((item, index) => (
                     <Col key={index}>
-                        <CardStyled
-                            hoverable
-                            loading={loading}
-                            onClick={() => router.push(`/products/${item._id}`)}
-                        >
-                            <Image src={item.images[0]} preview={false} />
-                            <Meta
-                                title={item.name}
-                                description={item.price.toLocaleString("vi")}
-                            />
-                            <br />
+                        <CardStyled hoverable loading={loading}>
+                            <div onClick={() => router.push(`/products/${item._id}`)}>
+                                <Image src={item.images[0]} preview={false} />
+                                <Meta
+                                    title={item.name}
+                                    description={item.price.toLocaleString("vi")}
+                                />
+                                <br />
+                            </div>
                             <Button
                                 style={{ width: "100%" }}
                                 type="primary"
                                 disabled={item.owner?._id === user._id}
+                                onClick={() => handleAddToCart(item.owner._id, item._id)}
                             >
                                 Thêm vào giỏ hàng
                             </Button>

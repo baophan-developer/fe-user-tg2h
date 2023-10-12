@@ -1,3 +1,30 @@
+export interface ICartItemProduct {
+    product: {
+        _id: string;
+        name: string;
+        images: string[];
+        price: number;
+        newness: number;
+        owner: string;
+    };
+    quantity: number;
+}
+
+export interface ICartItem {
+    ownerCart: string;
+    ownerProducts: {
+        _id: string;
+        name: string;
+        avatar: string;
+    };
+    items: ICartItemProduct[];
+}
+
+export interface ICart {
+    list: ICartItem[];
+    total: number;
+}
+
 export interface IProduct {
     index: React.Key;
     _id: string;

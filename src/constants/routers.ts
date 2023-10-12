@@ -4,6 +4,7 @@ const ROUTERS = {
     REGISTER: "/register",
     FORGOT_PASSWORD: "/forgot-password",
     RESET_PASSWORD: "/reset-password",
+    CART: "/cart",
     ACCOUNT: {
         HOME: "/account",
         ADDRESS: "/account/address",

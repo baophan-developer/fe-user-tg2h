@@ -21,6 +21,12 @@ export const API_ENDPOINT = {
         GET: "product",
         CREATE: "product/create",
     },
+    CART: {
+        GET: "session-cart/",
+        ADD_TO_CART: "session-cart/add",
+        REMOVE_TO_CART: "session-cart/remove",
+        DECREASE_TO_CART: "session-cart/decrease",
+    },
     SIZE_SCREEN: "size-screen/",
     SCAN_FREQUENCY_SCREEN: "scan-frequency-screen/",
     RESOLUTION_SCREEN: "resolution-screen/",
