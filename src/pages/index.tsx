@@ -43,29 +43,27 @@ export default function Home() {
 
     return (
         <Layout>
-            <Layout>
-                <CategoryStyled>
-                    <Card title="Danh mục Laptop" style={{ width: "90%" }}>
-                        {category.map((item, index) => (
-                            <Card.Grid
-                                key={index}
-                                style={{ cursor: "pointer" }}
-                                onClick={() =>
-                                    router.push(
-                                        `${ROUTERS.PRODUCTS}?category=${item._id}&title=${item.name}`
-                                    )
-                                }
-                            >
-                                {item.name}
-                            </Card.Grid>
-                        ))}
-                    </Card>
-                </CategoryStyled>
-                <HeadingStyled>GỢI Ý HÔM NAY</HeadingStyled>
-                <ViewProducts
-                    requestApi={{ method: "post", api: API_ENDPOINT.PRODUCT.GET }}
-                />
-            </Layout>
+            <CategoryStyled>
+                <Card title="Danh mục Laptop" style={{ width: "90%" }}>
+                    {category.map((item, index) => (
+                        <Card.Grid
+                            key={index}
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                                router.push(
+                                    `${ROUTERS.PRODUCTS}?category=${item._id}&title=${item.name}`
+                                )
+                            }
+                        >
+                            {item.name}
+                        </Card.Grid>
+                    ))}
+                </Card>
+            </CategoryStyled>
+            <HeadingStyled>GỢI Ý HÔM NAY</HeadingStyled>
+            <ViewProducts
+                requestApi={{ method: "post", api: API_ENDPOINT.PRODUCT.GET }}
+            />
         </Layout>
     );
 }

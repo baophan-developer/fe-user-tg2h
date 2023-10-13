@@ -24,12 +24,20 @@ const { Search } = Input;
 const HeaderStyled = styled(Header)`
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
     color: #fff;
+
+    @media screen and (max-width: 500px) {
+        padding: 10px;
+    }
 `;
 
 const SearchStyled = styled(Search)`
     width: 50%;
+
+    @media screen and (max-width: 500px) {
+        width: 230px;
+    }
 `;
 
 const BoxAvatarStyled = styled.div`
@@ -38,6 +46,11 @@ const BoxAvatarStyled = styled.div`
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+
+    @media screen and (max-width: 500px) {
+        width: 90px;
+        justify-content: space-evenly;
+    }
 `;
 
 const ShoppingCartStyled = styled.div`
@@ -50,6 +63,12 @@ const UserBoxStyled = styled(Popover)`
     align-items: center;
     gap: 0 10px;
     color: white;
+
+    @media screen and (max-width: 500px) {
+        & p {
+            display: none;
+        }
+    }
 `;
 
 const ContentPopoverStyled = styled.div`
