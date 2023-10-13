@@ -27,6 +27,11 @@ export const API_ENDPOINT = {
         REMOVE_TO_CART: "session-cart/remove",
         DECREASE_TO_CART: "session-cart/decrease",
     },
+    ORDER: {
+        GET: "order/",
+        CREATE: "order/create",
+        CALCULATOR: "order/calculator-payment",
+    },
     SIZE_SCREEN: "size-screen/",
     SCAN_FREQUENCY_SCREEN: "scan-frequency-screen/",
     RESOLUTION_SCREEN: "resolution-screen/",

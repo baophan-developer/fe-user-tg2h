@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Image, Layout, Space, Table, message } from "antd";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import CartAtom from "@/stores/CartStore";
 import styled from "styled-components";
 import { ColumnsType } from "antd/es/table";
@@ -9,6 +9,9 @@ import { DeleteOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import request from "@/services/request";
 import { API_ENDPOINT } from "@/constants/apis";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
+import CheckoutAtom from "@/stores/CheckoutStore";
+import { useRouter } from "next/router";
+import ROUTERS from "@/constants/routers";
 
 const { Header } = Layout;
 
@@ -134,7 +137,9 @@ const columns: ColumnsType<ICartItemProduct> = [
 ];
 
 export default function Cart() {
+    const router = useRouter();
     const cart = useRecoilValue(CartAtom);
+    const [checkout, setCheckout] = useRecoilState(CheckoutAtom);
 
     return (
         <Layout>
@@ -164,7 +169,15 @@ export default function Cart() {
                             pagination={false}
                             footer={() => (
                                 <FooterStyled>
-                                    <Button type="primary">Mua hàng</Button>
+                                    <Button
+                                        type="primary"
+                                        onClick={() => {
+                                            setCheckout(item);
+                                            router.push(ROUTERS.CHECKOUT);
+                                        }}
+                                    >
+                                        Mua hàng
+                                    </Button>
                                 </FooterStyled>
                             )}
                         />

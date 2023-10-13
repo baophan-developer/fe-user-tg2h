@@ -10,6 +10,7 @@ const ROUTERS = {
         ADDRESS: "/account/address",
         PRODUCT: "/account/products",
     },
+    CHECKOUT: "/checkout",
 };
 
 export default ROUTERS;
