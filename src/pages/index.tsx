@@ -5,6 +5,7 @@ import { API_ENDPOINT } from "@/constants/apis";
 import { ViewProducts } from "@/components/templates";
 import request from "@/services/request";
 import { useRouter } from "next/router";
+import ROUTERS from "@/constants/routers";
 
 const HeadingStyled = styled.h2`
     width: 100%;
@@ -51,7 +52,7 @@ export default function Home() {
                                 style={{ cursor: "pointer" }}
                                 onClick={() =>
                                     router.push(
-                                        `products?category=${item._id}&title=${item.name}`
+                                        `${ROUTERS.PRODUCTS}?category=${item._id}&title=${item.name}`
                                     )
                                 }
                             >

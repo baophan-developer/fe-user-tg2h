@@ -122,7 +122,9 @@ export default function UserLayout({ children }: TProps) {
                     type="primary"
                     enterButton
                     allowClear
-                    onSearch={(value) => router.push(`products?search=${value}`)}
+                    onSearch={(value) =>
+                        router.push(`${ROUTERS.PRODUCTS}?search=${value}`)
+                    }
                 />
                 <BoxAvatarStyled>
                     <Badge
