@@ -69,6 +69,7 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
         filters: {
             status: true,
             approve: true,
+            ...filters,
         },
         pagination: {
             page: 0,
