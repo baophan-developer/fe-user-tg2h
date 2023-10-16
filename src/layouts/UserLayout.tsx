@@ -12,7 +12,6 @@ import ROUTERS from "@/constants/routers";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import Link from "next/link";
 import CartAtom from "@/stores/CartStore";
-import { ICartItem } from "@/interfaces";
 
 type TProps = {
     children: React.ReactNode;
@@ -22,6 +21,7 @@ const { Header, Content } = Layout;
 const { Search } = Input;
 
 const HeaderStyled = styled(Header)`
+    padding: 1% 5%;
     display: flex;
     align-items: center;
     justify-content: space-between;

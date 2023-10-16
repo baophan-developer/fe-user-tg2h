@@ -29,8 +29,11 @@ export const API_ENDPOINT = {
     },
     ORDER: {
         GET: "order/",
-        CREATE: "order/create",
+        CREATE: "order/create-order",
         CALCULATOR: "order/calculator-payment",
+    },
+    DISCOUNT: {
+        APPLY: "discount/use",
     },
     SIZE_SCREEN: "size-screen/",
     SCAN_FREQUENCY_SCREEN: "scan-frequency-screen/",
@@ -44,6 +47,8 @@ export const API_ENDPOINT = {
     BRAND: "brand/",
     CATEGORY: "category/",
     OS: "os/",
+    SHIPPING: "shipping/",
+    PAYMENT: "payment/",
 };
 
 export const BASE_URL_PROVINCE_VIETNAM = process.env.NEXT_PUBLIC_PROVINCE_VIETNAM_URL;

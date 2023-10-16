@@ -1,3 +1,4 @@
-import AddressModal from "./AddressModel";
+import AddressModal from "./AddressModal";
+import Choices from "./Choices";
 
-export { AddressModal };
+export { AddressModal, Choices };
