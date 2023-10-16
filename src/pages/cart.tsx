@@ -114,6 +114,7 @@ const columns: ColumnsType<ICartItemProduct> = [
     },
     {
         title: "Thao tác",
+        width: 100,
         render: (_, record) => (
             <div>
                 <Button

@@ -82,7 +82,7 @@ const ButtonStyled = styled(Button)`
     display: flex;
     align-items: center;
     position: absolute;
-    bottom: 100px;
+    bottom: 0;
     height: 38px;
     font-size: 16px;
 

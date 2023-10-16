@@ -17,6 +17,7 @@ import UserAtom from "@/stores/UserStore";
 import { useRouter } from "next/router";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import { API_ENDPOINT } from "@/constants/apis";
+import ROUTERS from "@/constants/routers";
 
 const { Meta } = Card;
 
@@ -69,6 +70,7 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
         filters: {
             status: true,
             approve: true,
+            ...filters,
         },
         pagination: {
             page: 0,
@@ -127,7 +129,11 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
                 {products.map((item, index) => (
                     <Col key={index}>
                         <CardStyled hoverable loading={loading}>
-                            <div onClick={() => router.push(`/products/${item._id}`)}>
+                            <div
+                                onClick={() =>
+                                    router.push(`/${ROUTERS.PRODUCTS}/${item._id}`)
+                                }
+                            >
                                 <Image src={item.images[0]} preview={false} />
                                 <Meta
                                     title={item.name}

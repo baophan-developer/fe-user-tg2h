@@ -12,7 +12,6 @@ import ROUTERS from "@/constants/routers";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import Link from "next/link";
 import CartAtom from "@/stores/CartStore";
-import { ICartItem } from "@/interfaces";
 
 type TProps = {
     children: React.ReactNode;
@@ -22,14 +21,23 @@ const { Header, Content } = Layout;
 const { Search } = Input;
 
 const HeaderStyled = styled(Header)`
+    padding: 1% 5%;
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
     color: #fff;
+
+    @media screen and (max-width: 500px) {
+        padding: 10px;
+    }
 `;
 
 const SearchStyled = styled(Search)`
     width: 50%;
+
+    @media screen and (max-width: 500px) {
+        width: 230px;
+    }
 `;
 
 const BoxAvatarStyled = styled.div`
@@ -38,6 +46,11 @@ const BoxAvatarStyled = styled.div`
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+
+    @media screen and (max-width: 500px) {
+        width: 90px;
+        justify-content: space-evenly;
+    }
 `;
 
 const ShoppingCartStyled = styled.div`
@@ -50,6 +63,12 @@ const UserBoxStyled = styled(Popover)`
     align-items: center;
     gap: 0 10px;
     color: white;
+
+    @media screen and (max-width: 500px) {
+        & p {
+            display: none;
+        }
+    }
 `;
 
 const ContentPopoverStyled = styled.div`
@@ -122,7 +141,9 @@ export default function UserLayout({ children }: TProps) {
                     type="primary"
                     enterButton
                     allowClear
-                    onSearch={(value) => router.push(`products?search=${value}`)}
+                    onSearch={(value) =>
+                        router.push(`${ROUTERS.PRODUCTS}?search=${value}`)
+                    }
                 />
                 <BoxAvatarStyled>
                     <Badge

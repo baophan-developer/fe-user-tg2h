@@ -6,11 +6,16 @@ export interface ICartItemProduct {
         price: number;
         newness: number;
         owner: string;
+        discount?: {
+            _id: string;
+            code: string;
+        };
     };
     quantity: number;
 }
 
 export interface ICartItem {
+    _id: string;
     ownerCart: string;
     ownerProducts: {
         _id: string;
@@ -53,6 +58,10 @@ export interface IProduct {
     category: { _id: string; name: string };
     approve: boolean;
     status: boolean;
+    discount: {
+        _id: string;
+        code: string;
+    };
 }
 
 export interface IProductRender extends Omit<IProduct, "owner"> {
