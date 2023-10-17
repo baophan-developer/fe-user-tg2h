@@ -240,6 +240,7 @@ export default function Checkout() {
                     statusPayment: false,
                     totalPayment: totalPayment,
                     deliveryAddress: address,
+                    pickupAddress: `${checkout.ownerProducts.address[0].street} - ${checkout.ownerProducts.address[0].address}`,
                 };
                 const res = await request<any>("post", API_ENDPOINT.ORDER.CREATE, order);
                 message.success(res.data.message);

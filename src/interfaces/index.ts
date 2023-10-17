@@ -21,6 +21,10 @@ export interface ICartItem {
         _id: string;
         name: string;
         avatar: string;
+        address: {
+            street: string;
+            address: string;
+        }[];
     };
     items: ICartItemProduct[];
 }
