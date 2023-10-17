@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { Avatar, Layout, Menu } from "antd";
@@ -8,7 +8,7 @@ import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
 import useChangeSizeWindow from "@/hooks/useChangeSizeWindow";
 
-const { Sider, Content } = Layout;
+const { Content } = Layout;
 
 const LayoutStyled = styled(Layout)`
     padding: 20px;

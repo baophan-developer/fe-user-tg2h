@@ -4,6 +4,7 @@ import { Select } from "antd";
 import { IAddress } from "@/interfaces";
 import { API_ENDPOINT_PROVINCE_VIETNAM } from "@/constants/apis";
 import requestProvinceVietnam from "@/services/request-province";
+import useChangeSizeWindow from "@/hooks/useChangeSizeWindow";
 
 const GroupSelectStyled = styled.span`
     width: 100%;
@@ -46,6 +47,8 @@ const createOptions = async (
 };
 
 export default function InputAddress({ value, onChange }: IInputAddress) {
+    const size = useChangeSizeWindow();
+
     const [provinceOptions, setProvinceOptions] = useState<IOptions[]>([]);
     const [districtOptions, setDistrictOptions] = useState<IOptions[]>([]);
     const [wardOptions, setWardOptions] = useState<IOptions[]>([]);
@@ -140,7 +143,7 @@ export default function InputAddress({ value, onChange }: IInputAddress) {
         <GroupSelectStyled>
             <Select
                 loading={loading}
-                style={{ width: "32%" }}
+                style={{ width: `${size.width < 500 ? "100%" : "32"}` }}
                 options={provinceOptions}
                 value={result.provinceId}
                 placeholder="Chọn tỉnh/thành phố"
@@ -154,7 +157,7 @@ export default function InputAddress({ value, onChange }: IInputAddress) {
                 }}
             />
             <Select
-                style={{ width: "32%" }}
+                style={{ width: `${size.width < 500 ? "100%" : "32"}` }}
                 value={result.districtId}
                 options={districtOptions}
                 placeholder="Chọn tỉnh/thành phố"
@@ -168,7 +171,7 @@ export default function InputAddress({ value, onChange }: IInputAddress) {
                 }}
             />
             <Select
-                style={{ width: "32%" }}
+                style={{ width: `${size.width < 500 ? "100%" : "32"}` }}
                 value={result.wardId}
                 options={wardOptions}
                 placeholder="Chọn tỉnh/thành phố"

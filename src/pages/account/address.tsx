@@ -27,6 +27,19 @@ const HeadingThreeStyled = styled.p`
     font-weight: 400;
 `;
 
+const ListItemStyled = styled(List.Item)`
+    @media only screen and (max-width: 500px) {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-end !important;
+
+        & .ant-list-item-meta {
+            width: 100%;
+        }
+    }
+`;
+
 export default function Address() {
     const user = useRecoilValue(UserAtom);
     const [addressData, setAddressData] = useState<IAddress[]>([]);
@@ -44,7 +57,7 @@ export default function Address() {
                 header={<HeadingTwoStyled>Địa chỉ</HeadingTwoStyled>}
                 dataSource={addressData}
                 renderItem={(item) => (
-                    <List.Item
+                    <ListItemStyled
                         actions={[
                             <ButtonFormModel
                                 key={1}
@@ -96,7 +109,7 @@ export default function Address() {
                             }
                             description={item.street}
                         />
-                    </List.Item>
+                    </ListItemStyled>
                 )}
             />
         </div>
