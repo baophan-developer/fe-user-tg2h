@@ -83,6 +83,7 @@ export interface IAddress {
     wardId: number | null | undefined;
     address?: string;
     street?: string;
+    main?: boolean;
 }
 
 export interface IUser {
