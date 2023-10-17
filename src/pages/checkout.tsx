@@ -162,6 +162,7 @@ interface IItemsForCalculator {
     discount: {
         _id: string;
         code: string;
+        percent: string;
     };
     quantity: number;
     price: number;
@@ -224,7 +225,7 @@ export default function Checkout() {
                     if (item.discount)
                         return {
                             product: item.product._id,
-                            discount: item.discount._id,
+                            discount: item.discount,
                             quantity: item.quantity,
                             price: item.price,
                         };
