@@ -21,11 +21,6 @@ const LayoutStyled = styled(Layout)`
     }
 `;
 
-const ContentStyled = styled(Content)`
-    padding: 10px;
-    background-color: #fff;
-`;
-
 const HeaderStyled = styled.div`
     width: 100%;
     display: flex;
@@ -66,10 +61,15 @@ const SiderStyled = styled.div<{ $left?: boolean }>`
     @media only screen and (max-width: 500px) {
         width: 100vw;
         position: absolute;
-        z-index: 2;
+        z-index: 999;
         height: 100%;
         left: ${(props) => (props.$left ? "0" : "-100vw")};
     }
+`;
+
+const ContentStyled = styled(Content)`
+    padding: 10px;
+    background-color: #fff;
 `;
 
 type TProps = {

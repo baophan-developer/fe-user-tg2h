@@ -38,6 +38,8 @@ const columns: ColumnsType<IProduct> = [
     {
         title: "STT",
         dataIndex: "key",
+        width: 50,
+        fixed: "left",
     },
     {
         title: "Tên sản phẩm",
@@ -52,6 +54,7 @@ const columns: ColumnsType<IProduct> = [
                 </Link>
             );
         },
+        ellipsis: true,
     },
     {
         title: "Hình ảnh sản phẩm",
@@ -76,6 +79,7 @@ const columns: ColumnsType<IProduct> = [
                 })}
             </>
         ),
+        width: 150,
     },
     {
         title: "Trạng thái",
@@ -85,6 +89,7 @@ const columns: ColumnsType<IProduct> = [
                 {record.approve ? "Đã duyệt" : "Đang chờ duyệt"}
             </PendingStyled>
         ),
+        width: 100,
     },
     {
         title: "Rao bán",
@@ -98,6 +103,8 @@ const columns: ColumnsType<IProduct> = [
                     : "Đang chờ duyệt"}
             </PendingStyled>
         ),
+        width: 120,
+        fixed: "right",
     },
 ];
 

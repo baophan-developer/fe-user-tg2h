@@ -6,11 +6,22 @@ import { ButtonFormModel } from "@/components/molecules";
 import request, { TRequest } from "@/services/request";
 import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
+import useChangeSizeWindow from "@/hooks/useChangeSizeWindow";
 
 const ActionStyled = styled.div`
     display: flex;
     justify-content: flex-end;
     margin-bottom: 10px;
+`;
+
+const ContainerStyled = styled.div<{ $width?: number }>`
+    @media only screen and (max-width: 1000px) {
+        width: ${(props) => props.$width && `${props.$width - 530}px`};
+    }
+
+    @media only screen and (max-width: 500px) {
+        width: 95vw;
+    }
 `;
 
 type TProps = {
@@ -47,6 +58,7 @@ export default function ManagementView({
     attributeQuery,
     filters,
 }: TProps) {
+    const size = useChangeSizeWindow();
     const user = useRecoilValue(UserAtom);
     const [data, setData] = useState([]);
     const [total, seTotal] = useState<number>(10);
@@ -102,7 +114,7 @@ export default function ManagementView({
         try {
             const res = await request<any>(get.request.method, get.request.api, query);
             const dataSource = res.data.list.map((item: any, index: any) => ({
-                key: index + 1,
+                key: `${index + 1}`,
                 ...item,
             }));
             seTotal(res.data.total);
@@ -123,7 +135,7 @@ export default function ManagementView({
     }, [filters]);
 
     return (
-        <div>
+        <ContainerStyled $width={size.width}>
             <ActionStyled>
                 <ButtonFormModel
                     title={create.title}
@@ -142,7 +154,8 @@ export default function ManagementView({
                 dataSource={data}
                 onChange={handleTableChange}
                 pagination={{ total: total }}
+                scroll={{ x: "max-content" }}
             />
-        </div>
+        </ContainerStyled>
     );
 }
