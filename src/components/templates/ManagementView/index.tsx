@@ -143,7 +143,7 @@ export default function ManagementView({
                     req={{ method: create.request.method, api: create.request.api }}
                     fields={create.fields}
                     keyPubsub={pubsub}
-                    width={"50%"}
+                    width={`${size.width < 1000 ? "100vw" : "50%"}`}
                     funcHandleData={create.func}
                     usingFormData={create.usingFormData}
                 />
