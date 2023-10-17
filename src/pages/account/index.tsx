@@ -21,10 +21,17 @@ import request from "@/services/request";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import { API_ENDPOINT } from "@/constants/apis";
 import { ACCEPT_IMAGE_SIZE, IMAGE_TYPE } from "@/constants/image";
+import useChangeSizeWindow from "@/hooks/useChangeSizeWindow";
 
 const ContentStyled = styled.div`
     width: 100%;
     display: flex;
+    padding: 20px;
+
+    @media only screen and (max-width: 500px) {
+        flex-direction: column-reverse;
+        align-items: center;
+    }
 `;
 
 const BoxAvatarStyled = styled.div`
@@ -54,6 +61,7 @@ export default function Account() {
     const [loading, setLoading] = useState<boolean>(false);
     const [file, setFile] = useState<UploadFile | Blob>();
     const [imgUrl, setImgUrl] = useState<string>();
+    const size = useChangeSizeWindow();
 
     const handleUploadAvatar = async () => {
         setLoading(true);
@@ -134,7 +142,6 @@ export default function Account() {
     useEffect(() => {
         form.setFieldsValue({ ...user, birthday: dayjs(user.birthday) });
         setImgUrl(user.avatar);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     return (
@@ -143,9 +150,10 @@ export default function Account() {
                 form={{
                     form: form,
                     onFinish: updateInfo,
-                    labelCol: { span: 5 },
-                    wrapperCol: { span: 16 },
+                    labelCol: { span: size.width < 900 ? 20 : 5 },
+                    wrapperCol: { span: size.width < 900 ? 20 : 16 },
                     style: { width: "100%" },
+                    layout: size.width < 900 ? "vertical" : "horizontal",
                 }}
                 fields={[
                     getInputEmail({ disabled: true }),
@@ -155,7 +163,7 @@ export default function Account() {
                     getInputGender(),
                 ]}
                 bottom={{
-                    item: { wrapperCol: { offset: 5 } },
+                    item: { wrapperCol: { offset: size.width < 500 ? 0 : 5 } },
                     buttons: [
                         {
                             htmlType: "submit",

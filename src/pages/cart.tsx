@@ -66,7 +66,6 @@ const handleActionCart = async (ownerProducts: string, product: string, api: str
 const columns: ColumnsType<ICartItemProduct> = [
     {
         title: "Sản phẩm",
-        width: 600,
         render: (_, record) => (
             <div>
                 <Image preview={false} src={record.product.images[0]} width={50} />{" "}
@@ -111,6 +110,7 @@ const columns: ColumnsType<ICartItemProduct> = [
                 </Button>
             </Space.Compact>
         ),
+        width: 120,
     },
     {
         title: "Thao tác",
@@ -151,6 +151,7 @@ export default function Cart() {
                 {cart.list.map((item, index) => (
                     <WhiteStyled>
                         <Table
+                            scroll={{ x: "max-content" }}
                             key={index}
                             title={() => (
                                 <div>

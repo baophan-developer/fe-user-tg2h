@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { Avatar, Layout, Menu } from "antd";
@@ -8,7 +8,7 @@ import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
 import useChangeSizeWindow from "@/hooks/useChangeSizeWindow";
 
-const { Sider, Content } = Layout;
+const { Content } = Layout;
 
 const LayoutStyled = styled(Layout)`
     padding: 20px;
@@ -19,11 +19,6 @@ const LayoutStyled = styled(Layout)`
     @media only screen and (max-width: 500px) {
         padding: 0;
     }
-`;
-
-const ContentStyled = styled(Content)`
-    padding: 10px;
-    background-color: #fff;
 `;
 
 const HeaderStyled = styled.div`
@@ -66,10 +61,15 @@ const SiderStyled = styled.div<{ $left?: boolean }>`
     @media only screen and (max-width: 500px) {
         width: 100vw;
         position: absolute;
-        z-index: 2;
+        z-index: 999;
         height: 100%;
         left: ${(props) => (props.$left ? "0" : "-100vw")};
     }
+`;
+
+const ContentStyled = styled(Content)`
+    padding: 10px;
+    background-color: #fff;
 `;
 
 type TProps = {
