@@ -162,6 +162,7 @@ interface IItemsForCalculator {
     discount: {
         _id: string;
         code: string;
+        percent: string;
     };
     quantity: number;
     price: number;
@@ -224,7 +225,7 @@ export default function Checkout() {
                     if (item.discount)
                         return {
                             product: item.product._id,
-                            discount: item.discount._id,
+                            discount: item.discount,
                             quantity: item.quantity,
                             price: item.price,
                         };
@@ -239,6 +240,7 @@ export default function Checkout() {
                     statusPayment: false,
                     totalPayment: totalPayment,
                     deliveryAddress: address,
+                    pickupAddress: `${checkout.ownerProducts.address[0].street} - ${checkout.ownerProducts.address[0].address}`,
                 };
                 const res = await request<any>("post", API_ENDPOINT.ORDER.CREATE, order);
                 message.success(res.data.message);

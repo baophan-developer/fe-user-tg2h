@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { List } from "antd";
+import { Button, List, message } from "antd";
 import { useRecoilValue } from "recoil";
 import UserLayout from "@/layouts/UserLayout";
 import AccountLayout from "@/layouts/AccountLayout";
@@ -12,6 +12,7 @@ import { API_ENDPOINT } from "@/constants/apis";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import { handleDataWithAddress } from "@/utils/handle-data";
 import { AddressModal } from "@/components/organisms";
+import request from "@/services/request";
 
 const ActionStyled = styled.div`
     display: flex;
@@ -44,6 +45,18 @@ export default function Address() {
     const user = useRecoilValue(UserAtom);
     const [addressData, setAddressData] = useState<IAddress[]>([]);
 
+    const handleChooseAddressIsMain = async (id: string) => {
+        try {
+            const res = await request<any>("post", API_ENDPOINT.PROFILE.CHOOSE_ADDRESS, {
+                addressId: id,
+            });
+            message.success(res.data.message);
+            PubSub.publishSync(PUBSUB_SUBSCRIBE_NAME.GET_INFO);
+        } catch (error: any) {
+            message.error(error.response.data.message);
+        }
+    };
+
     useEffect(() => {
         setAddressData(user.address);
     }, [user]);
@@ -59,11 +72,20 @@ export default function Address() {
                 renderItem={(item) => (
                     <ListItemStyled
                         actions={[
+                            <Button
+                                disabled={item.main}
+                                onClick={() =>
+                                    handleChooseAddressIsMain(item._id as string)
+                                }
+                            >
+                                Chọn làm địa chỉ chính
+                            </Button>,
                             <ButtonFormModel
                                 key={1}
                                 title="Cập nhật địa chỉ"
                                 button={{
                                     children: "Chỉnh sửa",
+                                    type: "primary",
                                 }}
                                 req={{
                                     method: "put",

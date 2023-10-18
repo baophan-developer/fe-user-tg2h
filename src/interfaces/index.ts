@@ -21,6 +21,10 @@ export interface ICartItem {
         _id: string;
         name: string;
         avatar: string;
+        address: {
+            street: string;
+            address: string;
+        }[];
     };
     items: ICartItemProduct[];
 }
@@ -58,9 +62,14 @@ export interface IProduct {
     category: { _id: string; name: string };
     approve: boolean;
     status: boolean;
-    discount: {
+    discount?: {
         _id: string;
         code: string;
+        amount: number;
+        percent: number;
+        start: Date;
+        end: Date;
+        status: boolean;
     };
 }
 
@@ -83,6 +92,7 @@ export interface IAddress {
     wardId: number | null | undefined;
     address?: string;
     street?: string;
+    main?: boolean;
 }
 
 export interface IUser {

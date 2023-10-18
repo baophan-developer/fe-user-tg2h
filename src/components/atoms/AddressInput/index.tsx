@@ -143,7 +143,7 @@ export default function InputAddress({ value, onChange }: IInputAddress) {
         <GroupSelectStyled>
             <Select
                 loading={loading}
-                style={{ width: `${size.width < 500 ? "100%" : "32"}` }}
+                style={{ width: `${size.width < 500 ? "100%" : "32%"}` }}
                 options={provinceOptions}
                 value={result.provinceId}
                 placeholder="Chọn tỉnh/thành phố"
@@ -157,7 +157,7 @@ export default function InputAddress({ value, onChange }: IInputAddress) {
                 }}
             />
             <Select
-                style={{ width: `${size.width < 500 ? "100%" : "32"}` }}
+                style={{ width: `${size.width < 500 ? "100%" : "32%"}` }}
                 value={result.districtId}
                 options={districtOptions}
                 placeholder="Chọn tỉnh/thành phố"
@@ -171,7 +171,7 @@ export default function InputAddress({ value, onChange }: IInputAddress) {
                 }}
             />
             <Select
-                style={{ width: `${size.width < 500 ? "100%" : "32"}` }}
+                style={{ width: `${size.width < 500 ? "100%" : "32%"}` }}
                 value={result.wardId}
                 options={wardOptions}
                 placeholder="Chọn tỉnh/thành phố"

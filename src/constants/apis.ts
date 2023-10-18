@@ -16,6 +16,7 @@ export const API_ENDPOINT = {
         CREATE_ADDRESS: "profile/create-address",
         UPDATE_ADDRESS: "profile/update-address",
         DELETE_ADDRESS: "profile/delete-address",
+        CHOOSE_ADDRESS: "profile/choose-address-is-main",
     },
     PRODUCT: {
         GET: "product",
@@ -33,7 +34,9 @@ export const API_ENDPOINT = {
         CALCULATOR: "order/calculator-payment",
     },
     DISCOUNT: {
+        MAIN: "discount/",
         APPLY: "discount/use",
+        REMOVE: "discount/remove",
     },
     SIZE_SCREEN: "size-screen/",
     SCAN_FREQUENCY_SCREEN: "scan-frequency-screen/",

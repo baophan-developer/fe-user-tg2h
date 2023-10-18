@@ -9,6 +9,7 @@ type TProps = {
     title: React.ReactNode;
     req: { api: string; method: TRequest };
     keyPubsub?: string;
+    dataPubsub?: any;
     data?: {
         /** id use for update data */
         id?: any;
@@ -25,6 +26,7 @@ export default function ButtonFormModel({
     title,
     req,
     keyPubsub,
+    dataPubsub,
     fields = [],
     data,
     width,
@@ -54,7 +56,7 @@ export default function ButtonFormModel({
             setLoading(false);
             return;
         }
-        keyPubsub && PubSub.publishSync(keyPubsub);
+        keyPubsub && PubSub.publishSync(keyPubsub, dataPubsub);
         form.resetFields();
         setLoading(false);
         setOpen(false);
