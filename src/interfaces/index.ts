@@ -62,9 +62,14 @@ export interface IProduct {
     category: { _id: string; name: string };
     approve: boolean;
     status: boolean;
-    discount: {
+    discount?: {
         _id: string;
         code: string;
+        amount: number;
+        percent: number;
+        start: Date;
+        end: Date;
+        status: boolean;
     };
 }
 

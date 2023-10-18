@@ -78,7 +78,7 @@ export const getInputDescProduct = (textAreaProps?: TextAreaProps): FormItemProp
     };
 };
 
-const SuffixStyled = styled.div`
+export const SuffixStyled = styled.div`
     color: grey;
     padding-left: 7px;
     border-left: 1px solid #eee;

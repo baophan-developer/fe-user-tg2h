@@ -33,6 +33,12 @@ import {
 } from "./ProductsInput";
 import getItem from "./Item";
 import PendingStyled from "./PendingStatus";
+import {
+    getInputAmountDiscount,
+    getInputCodeDiscount,
+    getInputPercentDiscount,
+    getInputRangeDateDiscount,
+} from "./DiscountInput";
 
 export {
     getInputEmail,
@@ -66,4 +72,8 @@ export {
     getInputNewnessProduct,
     getInputStatusProduct,
     PendingStyled,
+    getInputAmountDiscount,
+    getInputCodeDiscount,
+    getInputPercentDiscount,
+    getInputRangeDateDiscount,
 };

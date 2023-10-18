@@ -34,6 +34,7 @@ export const API_ENDPOINT = {
         CALCULATOR: "order/calculator-payment",
     },
     DISCOUNT: {
+        MAIN: "discount/",
         APPLY: "discount/use",
     },
     SIZE_SCREEN: "size-screen/",
