@@ -36,6 +36,7 @@ export const API_ENDPOINT = {
     DISCOUNT: {
         MAIN: "discount/",
         APPLY: "discount/use",
+        REMOVE: "discount/remove",
     },
     SIZE_SCREEN: "size-screen/",
     SCAN_FREQUENCY_SCREEN: "scan-frequency-screen/",

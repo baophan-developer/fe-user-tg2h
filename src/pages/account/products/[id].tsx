@@ -28,13 +28,19 @@ import {
     PendingStyled,
     getInputStatusProduct,
 } from "@/components/atoms";
-import { Descriptions, Form, message } from "antd";
+import { Button, Descriptions, Form, message } from "antd";
 import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
 import { isEmpty } from "lodash";
 import dayjs from "dayjs";
 import { DiscountComponent } from "@/components/organisms";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
+import styled from "styled-components";
+
+const DiscountActionStyled = styled.div`
+    display: flex;
+    gap: 10px;
+`;
 
 export default function DetailProduct() {
     const router = useRouter();
@@ -90,6 +96,19 @@ export default function DetailProduct() {
             message.error(error.response.data.message, 1);
         }
         setLoading(false);
+    };
+
+    const removeDiscount = async () => {
+        try {
+            const res = await request<any>("post", API_ENDPOINT.DISCOUNT.REMOVE, {
+                productId: data?._id,
+                discountId: data?.discount?._id,
+            });
+            message.success(res.data.message);
+            getProduct("", id as string);
+        } catch (error: any) {
+            message.error(error.responsive.data.message);
+        }
     };
 
     useEffect(() => {
@@ -218,22 +237,27 @@ export default function DetailProduct() {
                     />
                 )}
                 {data?.discount && (
-                    <DiscountComponent
-                        key="2"
-                        title="Cập nhật thông tin mã giảm giá"
-                        button="Cập nhật"
-                        method="put"
-                        defaultValue={{
-                            ...data.discount,
-                            "range-picker": [
-                                dayjs(data.discount.start),
-                                dayjs(data.discount.end),
-                            ],
-                        }}
-                        discountId={data.discount._id}
-                        productId={data._id as string}
-                        pubsub={PUBSUB_SUBSCRIBE_NAME.GET_DETAIL_PRODUCT}
-                    />
+                    <DiscountActionStyled>
+                        <DiscountComponent
+                            key="2"
+                            title="Cập nhật thông tin mã giảm giá"
+                            button="Cập nhật"
+                            method="put"
+                            defaultValue={{
+                                ...data.discount,
+                                "range-picker": [
+                                    dayjs(data.discount.start),
+                                    dayjs(data.discount.end),
+                                ],
+                            }}
+                            discountId={data.discount._id}
+                            productId={data._id as string}
+                            pubsub={PUBSUB_SUBSCRIBE_NAME.GET_DETAIL_PRODUCT}
+                        />
+                        <Button danger type="primary" onClick={() => removeDiscount()}>
+                            Xóa
+                        </Button>
+                    </DiscountActionStyled>
                 )}
             </div>
         </div>
