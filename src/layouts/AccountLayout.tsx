@@ -81,6 +81,8 @@ const items = [
     getItem(ROUTERS.ACCOUNT.HOME, "Quản lý tài khoản"),
     getItem(ROUTERS.ACCOUNT.ADDRESS, "Quản lý địa chỉ"),
     getItem(ROUTERS.ACCOUNT.PRODUCT, "Quản lý sản phẩm"),
+    getItem(ROUTERS.ACCOUNT.ORDER_BUY, "Quản lý đơn mua"),
+    getItem(ROUTERS.ACCOUNT.ORDER_REQUEST, "Quản lý đơn bán"),
 ];
 export default function AccountLayout({ children, title }: TProps) {
     const router = useRouter();

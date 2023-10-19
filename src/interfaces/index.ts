@@ -1,3 +1,28 @@
+export interface IOrder {
+    _id: string;
+    owner: IUser;
+    seller: IUser;
+    items: {
+        product: IProduct;
+        discount: { name: string; percent: number };
+        quantity: number;
+        price: number;
+    }[];
+    payment: {
+        name: string;
+    };
+    shipping: {
+        name: string;
+    };
+    pickupAddress: string;
+    deliverAddress: string;
+    statusOrder: string;
+    statusPayment: boolean;
+    statusShipping: string;
+    totalPayment: number;
+    reasonCancel: string;
+}
+
 export interface ICartItemProduct {
     product: {
         _id: string;
