@@ -62,7 +62,7 @@ const columns: ColumnsType<IProduct> = [
             return (
                 <>
                     {record.images.map((item, index) => (
-                        <Image width={50} key={index} src={item} />
+                        <Image preview={false} width={50} key={index} src={item} />
                     ))}
                 </>
             );

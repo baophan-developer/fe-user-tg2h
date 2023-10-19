@@ -9,6 +9,8 @@ const ROUTERS = {
         HOME: "/account",
         ADDRESS: "/account/address",
         PRODUCT: "/account/products",
+        ORDER_BUY: "/account/orders-buy",
+        ORDER_REQUEST: "/account/order-request",
     },
     CHECKOUT: "/checkout",
     PRODUCTS: "/products",
