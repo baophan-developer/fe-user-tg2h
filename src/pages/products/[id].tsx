@@ -1,14 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import { IProduct, IProductRender } from "@/interfaces";
+import { IComment, IProductRender } from "@/interfaces";
 import request from "@/services/request";
 import { API_ENDPOINT } from "@/constants/apis";
-import { Button, Carousel, Descriptions, Image, Rate, message } from "antd";
+import {
+    Avatar,
+    Button,
+    Carousel,
+    Descriptions,
+    Form,
+    Image,
+    Input,
+    List,
+    Rate,
+    message,
+} from "antd";
 import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
+import { DeleteOutlined } from "@ant-design/icons";
+import { getLayoutDescriptionProduct } from "@/configs/product.config";
+
+const { TextArea } = Input;
 
 const ProductBriefingStyled = styled.div`
     padding: 10px;
@@ -115,16 +130,37 @@ const BoxInformationStyled = styled.div`
     }
 `;
 
+const CommentStyled = styled.div`
+    display: flex;
+    justify-content: space-between;
+`;
+
+const DeleteCommentStyled = styled.div`
+    cursor: pointer;
+`;
+
+interface IQuery {
+    filter?: any;
+    pagination?: any;
+}
+
 export default function DetailProduct() {
     const router = useRouter();
-    const id = router.query.id;
+    const productId = router.query.id;
     const user = useRecoilValue(UserAtom);
     const carouselRef: any = React.createRef();
     const [product, setProduct] = useState<IProductRender>();
+    const [comments, setComments] = useState<IComment[]>([]);
+    const [query, setQuery] = useState<IQuery>({ pagination: { limit: 10 } });
+    const [total, setTotal] = useState<number>(0);
+    const [form] = Form.useForm();
 
-    const getProduct = async (id: string) => {
+    const getProduct = async () => {
         try {
-            const res = await request<any>("get", `${API_ENDPOINT.PRODUCT.GET}/${id}`);
+            const res = await request<any>(
+                "get",
+                `${API_ENDPOINT.PRODUCT.GET}/${productId}`
+            );
             setProduct(res.data.item);
         } catch (error) {}
     };
@@ -142,9 +178,53 @@ export default function DetailProduct() {
         }
     };
 
+    const getComment = async () => {
+        try {
+            const res = await request<any>("post", API_ENDPOINT.COMMENTS.MAIN, query);
+            setComments(res.data.comments);
+            setTotal(res.data.total);
+            getProduct();
+        } catch (error) {}
+    };
+
+    const addComment = async (value: any) => {
+        try {
+            const res = await request("post", API_ENDPOINT.COMMENTS.ADD, {
+                ...value,
+                product: productId,
+            });
+            form.resetFields();
+            message.success(res.data.message);
+            getComment();
+        } catch (error: any) {
+            message.error(error.response.data.message);
+        }
+    };
+
+    const handleDeleteComment = async (commentId: string) => {
+        try {
+            const res = await request<any>(
+                "delete",
+                `${API_ENDPOINT.COMMENTS.MAIN}/?id=${commentId}&productId=${productId}`
+            );
+            message.success(res.data.message);
+            getComment();
+        } catch (error: any) {
+            message.error(error.response.data.message);
+        }
+    };
+
     useEffect(() => {
-        id && getProduct(id as string);
-    }, [id]);
+        productId && getProduct();
+        setQuery((prev) => ({
+            ...prev,
+            filter: { ...prev?.filter, product: productId },
+        }));
+    }, [productId]);
+
+    useEffect(() => {
+        getComment();
+    }, [query]);
 
     return (
         <div>
@@ -170,9 +250,14 @@ export default function DetailProduct() {
                 <BriefingInfoStyled>
                     <h2>{product?.name}</h2>
                     <EvaluateStyled>
-                        <Rate value={5} disabled style={{ fontSize: "16px" }} />
-                        <div>Lượt đánh giá 1.787</div>
-                        <div>Lượt mua 1.888</div>
+                        <Rate
+                            value={product?.rating}
+                            disabled
+                            style={{ fontSize: "16px" }}
+                            allowHalf
+                        />
+                        <div>Lượt đánh giá {product?.reviews}</div>
+                        <div>Lượt mua {product?.sold}</div>
                     </EvaluateStyled>
                     <h2>{product?.price.toLocaleString("vi")} vnđ</h2>
                     <h3>Độ mới {product?.newness} %</h3>
@@ -195,86 +280,77 @@ export default function DetailProduct() {
                 <h3>Thông tin chi tiết sản phẩm</h3>
                 <Descriptions
                     bordered
-                    items={[
-                        {
-                            key: "1",
-                            label: "Thương hiệu",
-                            children: product?.brand.name,
-                        },
-                        {
-                            key: "2",
-                            label: "Loại sản phẩm",
-                            children: product?.category.name,
-                        },
-                        {
-                            key: "3",
-                            label: "Hệ điều hành",
-                            children: product?.os.name,
-                        },
-                        {
-                            key: "4",
-                            label: "Chip xử lý",
-                            children: product?.cpu.name,
-                        },
-                        {
-                            key: "5",
-                            label: "Chip xử lý đồ họa",
-                            children: product?.gpu.name,
-                        },
-                        {
-                            key: "6",
-                            label: "Công nghệ Ram",
-                            children: product?.typeRam.name,
-                        },
-                        {
-                            key: "7",
-                            label: "Dung lượng Ram",
-                            children: product?.capacityRam.capacity,
-                        },
-                        {
-                            key: "8",
-                            label: "Công nghệ ổ nhớ",
-                            children: product?.typeRom.name,
-                        },
-                        {
-                            key: "9",
-                            label: "Dung lượng ổ nhớ",
-                            children: product?.capacityRom.capacity,
-                        },
-                        {
-                            key: "6",
-                            label: "Dung lượng pin",
-                            children: `${product?.betterCapacity} WH`,
-                        },
-                        {
-                            key: "10",
-                            label: "Thông tin màn hình",
-                            children: (
-                                <div>
-                                    Kích thước: {product?.sizeScreen.size} <br />
-                                    Độ phân giải: {product?.resolutionScreen.name} <br />
-                                    Tần số quét: {product?.scanFrequency.scanFrequency}
-                                </div>
-                            ),
-                        },
-                        {
-                            key: "10",
-                            label: "Thông tin kích thước sản phẩm",
-                            children: (
-                                <div>
-                                    Chiều dài: {product?.length} mm <br />
-                                    Chiều rộng: {product?.width} mm <br />
-                                    Độ dày: {product?.height} mm <br />
-                                    Cân nặng: {product?.weight} kg
-                                </div>
-                            ),
-                        },
-                    ]}
+                    items={product && getLayoutDescriptionProduct(product)}
                 />
                 <h3>Mô tả sản phẩm</h3>
                 <p>{product?.desc}</p>
             </BoxInformationStyled>
-            <BoxInformationStyled>Position for comments</BoxInformationStyled>
+            <BoxInformationStyled>
+                <div>
+                    <Form layout="vertical" onFinish={addComment} form={form}>
+                        <Form.Item name="content" label={<Avatar src={user.avatar} />}>
+                            <TextArea
+                                showCount
+                                maxLength={1000}
+                                style={{ height: 120, resize: "none" }}
+                                placeholder="Đánh giá"
+                            />
+                        </Form.Item>
+                        <Form.Item name="rating">
+                            <Rate />
+                        </Form.Item>
+                        <Form.Item>
+                            <Button htmlType="submit" type="primary">
+                                Gửi
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                </div>
+                <List
+                    dataSource={comments}
+                    pagination={{
+                        total: total,
+                        size: "small",
+                        onChange(page) {
+                            setQuery((prev) => ({
+                                ...prev,
+                                pagination: { ...prev?.pagination, page: page - 1 },
+                            }));
+                        },
+                    }}
+                    renderItem={(item) => (
+                        <List.Item>
+                            <List.Item.Meta
+                                avatar={<Avatar src={item.user.avatar} />}
+                                title={
+                                    <CommentStyled>
+                                        <div>{item.user.name}</div>
+                                        <div>
+                                            {item.user._id === user._id && (
+                                                <DeleteCommentStyled
+                                                    onClick={() =>
+                                                        handleDeleteComment(item._id)
+                                                    }
+                                                >
+                                                    <DeleteOutlined />
+                                                </DeleteCommentStyled>
+                                            )}
+                                        </div>
+                                    </CommentStyled>
+                                }
+                                description={
+                                    <Rate
+                                        style={{ fontSize: "14px" }}
+                                        disabled
+                                        defaultValue={item.rating}
+                                    />
+                                }
+                            />
+                            {item.content}
+                        </List.Item>
+                    )}
+                />
+            </BoxInformationStyled>
         </div>
     );
 }

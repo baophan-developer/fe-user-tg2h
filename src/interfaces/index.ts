@@ -1,3 +1,15 @@
+export interface IComment {
+    _id: string;
+    user: {
+        _id: string;
+        name: string;
+        avatar: string;
+    };
+    product: string;
+    rating: number;
+    content: string;
+}
+
 export interface IOrder {
     _id: string;
     owner: IUser;
@@ -96,6 +108,9 @@ export interface IProduct {
         end: Date;
         status: boolean;
     };
+    reviews: number;
+    rating: number;
+    sold: number;
 }
 
 export interface IProductRender extends Omit<IProduct, "owner"> {

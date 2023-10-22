@@ -40,6 +40,10 @@ export const API_ENDPOINT = {
         APPLY: "discount/use",
         REMOVE: "discount/remove",
     },
+    COMMENTS: {
+        MAIN: "comment/",
+        ADD: "comment/add",
+    },
     SIZE_SCREEN: "size-screen/",
     SCAN_FREQUENCY_SCREEN: "scan-frequency-screen/",
     RESOLUTION_SCREEN: "resolution-screen/",
