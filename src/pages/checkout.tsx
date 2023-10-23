@@ -25,6 +25,7 @@ import { useRouter } from "next/router";
 import ROUTERS from "@/constants/routers";
 import CartAtom from "@/stores/CartStore";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
+import { createPayment } from "@/services/payment";
 
 const { Header } = Layout;
 const { Search } = Input;
@@ -183,8 +184,8 @@ export default function Checkout() {
     const [defaultAddress, setDefaultAddress] = useState<number>(0);
 
     // shipping and payment
-    const shipping = useRef<{ value: { _id: string } }>();
-    const payment = useRef<{ value: { _id: string } }>();
+    const shipping = useRef<{ value: { _id: string; name: string } }>();
+    const payment = useRef<{ value: { _id: string; name: string } }>();
 
     const calculatorOrder = async (items: any) => {
         try {
@@ -196,7 +197,7 @@ export default function Checkout() {
         } catch (error) {}
     };
 
-    const handleApplyDiscount = async (code: string, product: IProduct) => {
+    const handleApplyDiscount = async (code: string) => {
         try {
             const res = await request<any>("post", API_ENDPOINT.DISCOUNT.APPLY, {
                 code: code,
@@ -242,6 +243,10 @@ export default function Checkout() {
                     deliveryAddress: address,
                     pickupAddress: `${checkout.ownerProducts.address[0].street} - ${checkout.ownerProducts.address[0].address}`,
                 };
+                if (payment.current.value.name === "VNPAY") {
+                    localStorage.setItem("order", JSON.stringify(order));
+                    return createPayment(totalPayment);
+                }
                 const res = await request<any>("post", API_ENDPOINT.ORDER.CREATE, order);
                 message.success(res.data.message);
                 PubSub.publishSync(PUBSUB_SUBSCRIBE_NAME.GET_CART);
@@ -349,7 +354,7 @@ export default function Checkout() {
                                             enterButton="Áp dụng"
                                             allowClear
                                             onSearch={(value) =>
-                                                handleApplyDiscount(value, item.product)
+                                                handleApplyDiscount(value)
                                             }
                                         />
                                     )}
