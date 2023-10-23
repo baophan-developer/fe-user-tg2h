@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Image, Layout, Space, Table, message } from "antd";
+import { Button, Image, Layout, Result, Space, Table, message } from "antd";
 import { useRecoilState, useRecoilValue } from "recoil";
 import CartAtom from "@/stores/CartStore";
 import styled from "styled-components";
@@ -148,43 +148,56 @@ export default function Cart() {
                 <h2>GIỎ HÀNG CỦA BẠN</h2>
             </HeaderStyled>
             <LayoutStyled>
-                {cart.list.map((item, index) => (
-                    <WhiteStyled>
-                        <Table
-                            scroll={{ x: "max-content" }}
-                            key={index}
-                            title={() => (
-                                <div>
-                                    <Image
-                                        preview={false}
-                                        width={50}
-                                        src={item.ownerProducts.avatar}
-                                    />{" "}
-                                    {item.ownerProducts.name}
-                                </div>
-                            )}
-                            columns={columns}
-                            dataSource={item?.items.map((item, index) => ({
-                                key: index,
-                                ...item,
-                            }))}
-                            pagination={false}
-                            footer={() => (
-                                <FooterStyled>
-                                    <Button
-                                        type="primary"
-                                        onClick={() => {
-                                            setCheckout(item);
-                                            router.push(ROUTERS.CHECKOUT);
-                                        }}
-                                    >
-                                        Mua hàng
-                                    </Button>
-                                </FooterStyled>
-                            )}
-                        />
-                    </WhiteStyled>
-                ))}
+                {cart.list.length === 0 ? (
+                    <Result
+                        style={{ backgroundColor: "white" }}
+                        status="404"
+                        title="Giỏ hàng rỗng"
+                        extra={
+                            <Button onClick={() => router.push(ROUTERS.HOME)}>
+                                Quay về trang chủ
+                            </Button>
+                        }
+                    />
+                ) : (
+                    cart.list.map((item, index) => (
+                        <WhiteStyled>
+                            <Table
+                                scroll={{ x: "max-content" }}
+                                key={index}
+                                title={() => (
+                                    <div>
+                                        <Image
+                                            preview={false}
+                                            width={50}
+                                            src={item.ownerProducts.avatar}
+                                        />{" "}
+                                        {item.ownerProducts.name}
+                                    </div>
+                                )}
+                                columns={columns}
+                                dataSource={item?.items.map((item, index) => ({
+                                    key: index,
+                                    ...item,
+                                }))}
+                                pagination={false}
+                                footer={() => (
+                                    <FooterStyled>
+                                        <Button
+                                            type="primary"
+                                            onClick={() => {
+                                                setCheckout(item);
+                                                router.push(ROUTERS.CHECKOUT);
+                                            }}
+                                        >
+                                            Mua hàng
+                                        </Button>
+                                    </FooterStyled>
+                                )}
+                            />
+                        </WhiteStyled>
+                    ))
+                )}
             </LayoutStyled>
         </Layout>
     );
