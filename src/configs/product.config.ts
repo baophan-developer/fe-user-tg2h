@@ -104,5 +104,11 @@ export const getLayoutDescriptionProduct = (product: IProductRender) => {
             children: ` ${product?.weight} kg`,
             span: 3,
         },
+        {
+            key: "17",
+            label: "Độ mới",
+            children: ` ${product?.newness} %`,
+            span: 3,
+        },
     ];
 };

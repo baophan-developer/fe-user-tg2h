@@ -17,6 +17,8 @@ export const API_ENDPOINT = {
         UPDATE_ADDRESS: "profile/update-address",
         DELETE_ADDRESS: "profile/delete-address",
         CHOOSE_ADDRESS: "profile/choose-address-is-main",
+        ADD_PRODUCT_TO_FAVORITES: "profile/add-favorites",
+        REMOVE_PRODUCT_TO_FAVORITES: "profile/remove-favorites",
     },
     PRODUCT: {
         GET: "product",
