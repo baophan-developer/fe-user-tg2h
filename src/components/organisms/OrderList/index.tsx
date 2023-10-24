@@ -7,8 +7,10 @@ import useChangeSizeWindow from "@/hooks/useChangeSizeWindow";
 import { FaTruck } from "react-icons/fa";
 import request from "@/services/request";
 import { API_ENDPOINT } from "@/constants/apis";
-import { ButtonFormModel } from "@/components/molecules";
+import { ButtonFormModel, ButtonModel } from "@/components/molecules";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
+import { useRecoilValue } from "recoil";
+import UserAtom from "@/stores/UserStore";
 
 const { TextArea } = Input;
 
@@ -101,6 +103,7 @@ type TProps = {
 
 const OrderList = ({ orders = [], isAccept, isSeller }: TProps) => {
     const size = useChangeSizeWindow();
+    const user = useRecoilValue(UserAtom);
     const [open, setOpen] = useState<boolean>(false);
 
     const acceptOrder = async (orderId: string) => {
@@ -148,11 +151,13 @@ const OrderList = ({ orders = [], isAccept, isSeller }: TProps) => {
                                             ? "Đã thanh toán"
                                             : "Chưa thanh toán"}
                                     </p>
+                                    <i>Trạng thái hoàn tiền:</i>
+                                    <p>{order.refund ? "Đã hoàn tiền" : "Không"}</p>
                                     {order.statusOrder === EOrder.CANCEL && (
-                                        <>
+                                        <span>
                                             <i>Lý do hủy đơn:</i>
                                             <p>{order.reasonCancel}</p>
-                                        </>
+                                        </span>
                                     )}
                                 </span>
                                 <div>
@@ -177,7 +182,10 @@ const OrderList = ({ orders = [], isAccept, isSeller }: TProps) => {
                                                 api: API_ENDPOINT.ORDER.CANCEL,
                                             }}
                                             title="Bạn có muốn hủy đơn"
-                                            data={{ id: order._id }}
+                                            data={{
+                                                id: order._id,
+                                                idUserRequest: user._id,
+                                            }}
                                             fields={[
                                                 {
                                                     name: "reasonCancel",
@@ -190,6 +198,28 @@ const OrderList = ({ orders = [], isAccept, isSeller }: TProps) => {
                                             keyPubsub={PUBSUB_SUBSCRIBE_NAME.GET_ORDER}
                                         />
                                     )}
+                                    {!order.refund &&
+                                        order.statusOrder === EOrder.REQUEST_REFUND &&
+                                        user._id === order.seller._id && (
+                                            <ButtonModel
+                                                button={{
+                                                    type: "primary",
+                                                    children: "Hoàn tiền",
+                                                }}
+                                                req={{
+                                                    method: "post",
+                                                    api: API_ENDPOINT.ORDER.REFUND,
+                                                    data: {
+                                                        orderId: order._id,
+                                                    },
+                                                }}
+                                                title="Hoàn tiền"
+                                                children="Hoàn tiền cho đơn hàng yêu cầu hủy đơn."
+                                                keyPubsub={
+                                                    PUBSUB_SUBSCRIBE_NAME.GET_ORDER
+                                                }
+                                            />
+                                        )}
                                     {isAccept && (
                                         <div>
                                             <Button

@@ -89,6 +89,11 @@ export default function OrdersView({ filter, isAccept, isSeller }: TProps) {
                     label: "Đã hủy",
                     children: <OrderList orders={orders} isSeller={isSeller} />,
                 },
+                {
+                    key: EOrder.REQUEST_REFUND,
+                    label: "Yêu cầu hoàn tiền",
+                    children: <OrderList orders={orders} isSeller={isSeller} />,
+                },
             ]}
             onChange={(arg) => {
                 setQuery((prev) => ({
