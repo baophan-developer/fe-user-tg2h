@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { IComment, IProductRender } from "@/interfaces";
 import request from "@/services/request";
 import { API_ENDPOINT } from "@/constants/apis";
@@ -14,13 +15,14 @@ import {
     Input,
     List,
     Rate,
+    Tooltip,
     message,
 } from "antd";
 import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, HeartOutlined } from "@ant-design/icons";
 import { getLayoutDescriptionProduct } from "@/configs/product.config";
 
 const { TextArea } = Input;
@@ -90,6 +92,7 @@ const EvaluateStyled = styled.div`
     @media only screen and (max-width: 500px) {
         flex-direction: column;
         align-items: flex-start;
+        line-height: 30px;
     }
 `;
 
@@ -130,6 +133,11 @@ const BoxInformationStyled = styled.div`
     }
 `;
 
+const IConHeartStyled = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
 const CommentStyled = styled.div`
     display: flex;
     justify-content: space-between;
@@ -146,7 +154,7 @@ interface IQuery {
 
 export default function DetailProduct() {
     const router = useRouter();
-    const productId = router.query.id;
+    const productId = router.query.id as string;
     const user = useRecoilValue(UserAtom);
     const carouselRef: any = React.createRef();
     const [product, setProduct] = useState<IProductRender>();
@@ -154,6 +162,8 @@ export default function DetailProduct() {
     const [query, setQuery] = useState<IQuery>({ pagination: { limit: 10 } });
     const [total, setTotal] = useState<number>(0);
     const [form] = Form.useForm();
+
+    const [checkFavorites, setCheckFavorites] = useState<boolean>(false);
 
     const getProduct = async () => {
         try {
@@ -214,6 +224,18 @@ export default function DetailProduct() {
         }
     };
 
+    const handleAddOrRemoveProductToFavorites = async (api: string) => {
+        try {
+            const res = await request<any>("put", api, {
+                product: productId,
+            });
+            message.success(res.data.message);
+            PubSub.publishSync(PUBSUB_SUBSCRIBE_NAME.GET_INFO);
+        } catch (error: any) {
+            message.error(error.response.data.message);
+        }
+    };
+
     useEffect(() => {
         productId && getProduct();
         setQuery((prev) => ({
@@ -225,6 +247,19 @@ export default function DetailProduct() {
     useEffect(() => {
         getComment();
     }, [query]);
+
+    useEffect(() => {
+        if (user) {
+            const findProductInFavorites = user?.favorites?.findIndex(
+                (item) => item._id === productId
+            );
+            if (findProductInFavorites !== -1 && findProductInFavorites !== undefined) {
+                setCheckFavorites(true);
+            } else {
+                setCheckFavorites(false);
+            }
+        }
+    }, [user]);
 
     return (
         <div>
@@ -250,17 +285,50 @@ export default function DetailProduct() {
                 <BriefingInfoStyled>
                     <h2>{product?.name}</h2>
                     <EvaluateStyled>
-                        <Rate
-                            value={product?.rating}
-                            disabled
-                            style={{ fontSize: "16px" }}
-                            allowHalf
-                        />
+                        <div>
+                            <Rate
+                                value={product?.rating}
+                                disabled
+                                style={{ fontSize: "16px" }}
+                                allowHalf
+                            />
+                        </div>
                         <div>Lượt đánh giá {product?.reviews}</div>
                         <div>Lượt mua {product?.sold}</div>
+                        <div>
+                            {user._id !== product?.owner._id && (
+                                <Tooltip
+                                    title={`${
+                                        checkFavorites
+                                            ? "Xóa khỏi yêu thích"
+                                            : "Thêm vào yêu thích"
+                                    }`}
+                                >
+                                    <IConHeartStyled
+                                        style={{ color: "red", cursor: "pointer" }}
+                                        onClick={() => {
+                                            checkFavorites
+                                                ? handleAddOrRemoveProductToFavorites(
+                                                      API_ENDPOINT.PROFILE
+                                                          .REMOVE_PRODUCT_TO_FAVORITES
+                                                  )
+                                                : handleAddOrRemoveProductToFavorites(
+                                                      API_ENDPOINT.PROFILE
+                                                          .ADD_PRODUCT_TO_FAVORITES
+                                                  );
+                                        }}
+                                    >
+                                        {checkFavorites ? (
+                                            <AiFillHeart />
+                                        ) : (
+                                            <AiOutlineHeart />
+                                        )}
+                                    </IConHeartStyled>
+                                </Tooltip>
+                            )}
+                        </div>
                     </EvaluateStyled>
                     <h2>{product?.price.toLocaleString("vi")} vnđ</h2>
-                    <h3>Độ mới {product?.newness} %</h3>
                     <ButtonStyled
                         icon={<AiOutlineShoppingCart />}
                         type="primary"
@@ -306,6 +374,7 @@ export default function DetailProduct() {
                         </Form.Item>
                     </Form>
                 </div>
+                {/* Comments */}
                 <List
                     dataSource={comments}
                     pagination={{

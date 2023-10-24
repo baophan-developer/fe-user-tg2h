@@ -11,6 +11,7 @@ const ROUTERS = {
         PRODUCT: "/account/products",
         ORDER_BUY: "/account/orders-buy",
         ORDER_REQUEST: "/account/order-request",
+        FAVORITES: "/account/favorites",
     },
     CHECKOUT: "/checkout",
     PRODUCTS: "/products",
