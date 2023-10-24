@@ -33,6 +33,7 @@ export interface IOrder {
     statusShipping: string;
     totalPayment: number;
     reasonCancel: string;
+    refund: boolean;
 }
 
 export interface ICartItemProduct {
