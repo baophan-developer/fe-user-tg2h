@@ -296,34 +296,36 @@ export default function DetailProduct() {
                         <div>Lượt đánh giá {product?.reviews}</div>
                         <div>Lượt mua {product?.sold}</div>
                         <div>
-                            <Tooltip
-                                title={`${
-                                    checkFavorites
-                                        ? "Xóa khỏi yêu thích"
-                                        : "Thêm vào yêu thích"
-                                }`}
-                            >
-                                <IConHeartStyled
-                                    style={{ color: "red", cursor: "pointer" }}
-                                    onClick={() => {
+                            {user._id !== product?.owner._id && (
+                                <Tooltip
+                                    title={`${
                                         checkFavorites
-                                            ? handleAddOrRemoveProductToFavorites(
-                                                  API_ENDPOINT.PROFILE
-                                                      .REMOVE_PRODUCT_TO_FAVORITES
-                                              )
-                                            : handleAddOrRemoveProductToFavorites(
-                                                  API_ENDPOINT.PROFILE
-                                                      .ADD_PRODUCT_TO_FAVORITES
-                                              );
-                                    }}
+                                            ? "Xóa khỏi yêu thích"
+                                            : "Thêm vào yêu thích"
+                                    }`}
                                 >
-                                    {checkFavorites ? (
-                                        <AiFillHeart />
-                                    ) : (
-                                        <AiOutlineHeart />
-                                    )}
-                                </IConHeartStyled>
-                            </Tooltip>
+                                    <IConHeartStyled
+                                        style={{ color: "red", cursor: "pointer" }}
+                                        onClick={() => {
+                                            checkFavorites
+                                                ? handleAddOrRemoveProductToFavorites(
+                                                      API_ENDPOINT.PROFILE
+                                                          .REMOVE_PRODUCT_TO_FAVORITES
+                                                  )
+                                                : handleAddOrRemoveProductToFavorites(
+                                                      API_ENDPOINT.PROFILE
+                                                          .ADD_PRODUCT_TO_FAVORITES
+                                                  );
+                                        }}
+                                    >
+                                        {checkFavorites ? (
+                                            <AiFillHeart />
+                                        ) : (
+                                            <AiOutlineHeart />
+                                        )}
+                                    </IConHeartStyled>
+                                </Tooltip>
+                            )}
                         </div>
                     </EvaluateStyled>
                     <h2>{product?.price.toLocaleString("vi")} vnđ</h2>
