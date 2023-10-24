@@ -38,6 +38,10 @@ const ListItemStyled = styled(List.Item)`
         & .ant-list-item-meta {
             width: 100%;
         }
+
+        & .ant-list-item-action {
+            margin-inline-start: 0 !important;
+        }
     }
 `;
 
