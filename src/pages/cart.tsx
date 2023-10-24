@@ -161,7 +161,7 @@ export default function Cart() {
                     />
                 ) : (
                     cart.list.map((item, index) => (
-                        <WhiteStyled>
+                        <WhiteStyled key={index}>
                             <Table
                                 scroll={{ x: "max-content" }}
                                 key={index}
