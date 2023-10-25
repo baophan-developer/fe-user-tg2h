@@ -18,7 +18,7 @@ const getColumns = (width: number) => {
 };
 
 const getWidthImage = (width: number) => {
-    return width < 500 ? 150 : 200;
+    return width < 500 ? 150 : 170;
 };
 
 export default function Favorites() {
