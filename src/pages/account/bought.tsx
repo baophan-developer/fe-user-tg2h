@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import UserLayout from "@/layouts/UserLayout";
-import AccountLayout from "@/layouts/AccountLayout";
 import { Card, Image, List } from "antd";
 import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
-import { IProduct } from "@/interfaces";
-import { useRouter } from "next/router";
-import ROUTERS from "@/constants/routers";
+import UserLayout from "@/layouts/UserLayout";
+import AccountLayout from "@/layouts/AccountLayout";
+import request from "@/services/request";
+import { API_ENDPOINT } from "@/constants/apis";
 import useChangeSizeWindow from "@/hooks/useChangeSizeWindow";
+import ROUTERS from "@/constants/routers";
+import { useRouter } from "next/router";
+import { IProduct } from "@/interfaces";
 
 const { Meta } = Card;
 
@@ -21,20 +23,31 @@ const getWidthImage = (width: number) => {
     return width < 500 ? 150 : 200;
 };
 
-export default function Favorites() {
+export default function Bought() {
     const user = useRecoilValue(UserAtom);
     const size = useChangeSizeWindow();
     const router = useRouter();
-    const [favorites, setFavorites] = useState<IProduct[]>([]);
+    const [bought, setBought] = useState<IProduct[]>([]);
+
+    const getBought = async () => {
+        try {
+            const res = await request<any>("post", API_ENDPOINT.BOUGHT, {
+                filters: {
+                    owner: user._id,
+                },
+            });
+            setBought(res.data.item.products);
+        } catch (error) {}
+    };
 
     useEffect(() => {
-        user.favorites?.length > 0 && setFavorites(user.favorites);
+        user && getBought();
     }, [user]);
 
     return (
         <List
             grid={{ gutter: 4, column: getColumns(size.width) }}
-            dataSource={favorites}
+            dataSource={bought}
             renderItem={(item) => (
                 <List.Item>
                     <Card>
@@ -59,10 +72,10 @@ export default function Favorites() {
     );
 }
 
-Favorites.getLayout = function getLayout(page: React.ReactElement) {
+Bought.getLayout = function getLayout(page: React.ReactElement) {
     return (
         <UserLayout>
-            <AccountLayout title="Sản phẩm yêu thích">{page}</AccountLayout>
+            <AccountLayout title="Các sản phẩm đã mua">{page}</AccountLayout>
         </UserLayout>
     );
 };
