@@ -149,6 +149,7 @@ export default function ManagementView({
                 />
             </ActionStyled>
             <Table
+                locale={{ emptyText: "Không có sản phẩm nào ở đây" }}
                 size="small"
                 columns={columns}
                 dataSource={data}

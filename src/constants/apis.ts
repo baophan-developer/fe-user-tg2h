@@ -47,6 +47,7 @@ export const API_ENDPOINT = {
         MAIN: "comment/",
         ADD: "comment/add",
     },
+    BOUGHT: "bought/",
     SIZE_SCREEN: "size-screen/",
     SCAN_FREQUENCY_SCREEN: "scan-frequency-screen/",
     RESOLUTION_SCREEN: "resolution-screen/",

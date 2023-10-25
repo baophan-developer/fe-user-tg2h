@@ -121,6 +121,7 @@ const OrderList = ({ orders = [], isAccept, isSeller }: TProps) => {
 
     return (
         <List
+            locale={{ emptyText: "Không có đơn hàng nào" }}
             style={{ width: "100%" }}
             dataSource={orders}
             renderItem={(order) => (

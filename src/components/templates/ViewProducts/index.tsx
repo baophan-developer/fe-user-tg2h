@@ -131,7 +131,7 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
                         <CardStyled hoverable loading={loading}>
                             <div
                                 onClick={() =>
-                                    router.push(`/${ROUTERS.PRODUCTS}/${item._id}`)
+                                    router.push(`${ROUTERS.PRODUCTS}/${item._id}`)
                                 }
                             >
                                 <Image src={item.images[0]} preview={false} />
