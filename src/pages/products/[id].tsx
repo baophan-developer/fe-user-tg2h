@@ -376,6 +376,7 @@ export default function DetailProduct() {
                 </div>
                 {/* Comments */}
                 <List
+                    locale={{ emptyText: "Không có đánh giá nào ở đây." }}
                     dataSource={comments}
                     pagination={{
                         total: total,

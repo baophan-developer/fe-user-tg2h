@@ -33,6 +33,7 @@ export default function Favorites() {
 
     return (
         <List
+            locale={{ emptyText: "Không có sản phẩm nào ở đây" }}
             grid={{ gutter: 4, column: getColumns(size.width) }}
             dataSource={favorites}
             renderItem={(item) => (
