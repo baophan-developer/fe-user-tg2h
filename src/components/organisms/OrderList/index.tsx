@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { Button, Image, Input, List, Modal, message } from "antd";
 import { IOrder } from "@/interfaces";
 import { EOrder, EStatusShipping } from "@/enums/order-enums";
@@ -96,15 +96,33 @@ const ItemPriceStyled = styled.div`
 `;
 
 type TProps = {
-    orders: IOrder[];
     isAccept?: boolean;
     isSeller?: boolean;
+    pagination?: {
+        total?: number;
+    };
+    filter?: any;
 };
 
-const OrderList = ({ orders = [], isAccept, isSeller }: TProps) => {
+interface IListOrder extends IOrder {
+    key: React.Key;
+}
+
+interface IQuery {
+    filter?: any;
+    sort?: any;
+}
+
+const OrderList = ({ filter, isAccept, isSeller }: TProps) => {
     const size = useChangeSizeWindow();
     const user = useRecoilValue(UserAtom);
     const [open, setOpen] = useState<boolean>(false);
+    const [total, setTotal] = useState<number>(0);
+
+    const [orders, setOrders] = useState<IListOrder[]>([]);
+    const [query, setQuery] = useState<IQuery>({
+        filter: { ...filter },
+    });
 
     const acceptOrder = async (orderId: string) => {
         try {
@@ -112,15 +130,45 @@ const OrderList = ({ orders = [], isAccept, isSeller }: TProps) => {
                 orderId,
             });
             message.success(res.data.message);
-            PubSub.publishSync(PUBSUB_SUBSCRIBE_NAME.GET_ORDER);
+            getOrder();
             setOpen(!open);
         } catch (error: any) {
             message.error(error.response.data.message);
         }
     };
 
+    const getOrder = async () => {
+        try {
+            const res = await request<any>("post", API_ENDPOINT.ORDER.GET, query);
+            const data = res.data.list.map((item: any, index: number) => ({
+                key: index + 1,
+                ...item,
+            }));
+            setOrders(data);
+            setTotal(res.data.total);
+        } catch (error: any) {}
+    };
+
+    useEffect(() => {
+        setQuery((prev) => ({ ...prev, filter: { ...prev.filter, ...filter } }));
+    }, [filter]);
+
+    useEffect(() => {
+        if (query.filter?.owner) getOrder();
+        if (query.filter?.seller) getOrder();
+    }, [query]);
+
     return (
         <List
+            pagination={{
+                total: total,
+                size: "small",
+                onChange: (page) =>
+                    setQuery((prev) => ({
+                        ...prev,
+                        pagination: { page: page - 1, limit: 10 },
+                    })),
+            }}
             locale={{ emptyText: "Không có đơn hàng nào" }}
             style={{ width: "100%" }}
             dataSource={orders}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 import styled from "styled-components";
 import { Button, Col, DatePicker, Row, Tabs, TimeRangePickerProps } from "antd";
@@ -100,11 +100,13 @@ export default function Statistics() {
     const [orders, setOrders] = useState([]);
     const [query, setQuery] = useState<IQuery>();
     const [defaultDate, setDefaultDate] = useState<IDefaultDate>();
+    const [totalList, setTotalList] = useState<number>(10);
 
     const getOrders = async () => {
         try {
             const res = await request<any>("post", API_ENDPOINT.ORDER.GET, query);
             setOrders(res.data.list);
+            setTotalList(res.data.total);
         } catch (error) {}
     };
 
@@ -206,14 +208,19 @@ export default function Statistics() {
                         {
                             key: "chua_thanh_toan",
                             label: "Chưa thanh toán",
-                            children: <OrderList orders={orders} isSeller />,
+                            children: (
+                                <OrderList isSeller pagination={{ total: totalList }} />
+                            ),
                         },
                         {
                             key: "da_thanh_toan",
                             label: "Đã thanh toán",
                             children: (
                                 <div>
-                                    <OrderList orders={orders} isSeller />
+                                    <OrderList
+                                        isSeller
+                                        pagination={{ total: totalList }}
+                                    />
                                 </div>
                             ),
                         },
