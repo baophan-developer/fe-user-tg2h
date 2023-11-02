@@ -17,7 +17,7 @@ const { TextArea } = Input;
 const HeaderListStyled = styled.div`
     display: flex;
     justify-content: space-between;
-    font-size: 16px;
+    font-size: 14px;
 `;
 
 const handleColorStatusOrder = (statusShipping?: string) => {
@@ -61,7 +61,7 @@ const FooterItemStyled = styled.div`
         display: flex;
         flex-direction: column;
         gap: 20px;
-        font-size: 16px;
+        font-size: 14px;
 
         & span {
             display: flex;
@@ -70,7 +70,7 @@ const FooterItemStyled = styled.div`
 
             & p {
                 color: red;
-                font-size: 22px;
+                font-size: 20px;
             }
         }
     }

@@ -20,3 +20,41 @@ a {
         color: #fff;
     }
 }
+
+// Custom fix responsive for mobile date range picker
+p.ant-picker-panels > *:first-child button.ant-picker-header-next-btn {
+    visibility: visible !important;
+}
+
+.ant-picker-panels > *:first-child button.ant-picker-header-super-next-btn {
+    visibility: visible !important;
+}
+
+.ant-picker-panel-container,
+.ant-picker-footer {
+    width: 400px !important;
+}
+
+.ant-picker-footer-extra > div {
+    flex-wrap: wrap !important;
+}
+
+.ant-picker-active-bar {
+    display: none;
+}
+
+.ant-picker-cell-in-view.ant-picker-cell-range-start .ant-picker-cell-inner {
+    background-color: green !important;
+    border-top-left-radius: 32px !important;
+    border-bottom-left-radius: 32px !important;
+}
+
+.ant-picker-cell-in-view.ant-picker-cell-range-end .ant-picker-cell-inner {
+    background-color: green !important;
+    border-top-right-radius: 32px !important ;
+    border-bottom-right-radius: 32px !important;
+}
+
+.ant-picker-cell-in-view.ant-picker-cell-in-range::before {
+    background-color: purple;
+}

@@ -13,6 +13,7 @@ const ROUTERS = {
         ORDER_REQUEST: "/account/order-request",
         FAVORITES: "/account/favorites",
         BOUGHT: "/account/bought",
+        STATISTICS: "/account/statistics",
     },
     CHECKOUT: "/checkout",
     PRODUCTS: "/products",

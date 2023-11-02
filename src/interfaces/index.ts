@@ -10,16 +10,18 @@ export interface IComment {
     content: string;
 }
 
+export interface IItemOrder {
+    product: IProduct;
+    discount: { name: string; percent: number };
+    quantity: number;
+    price: number;
+}
+
 export interface IOrder {
     _id: string;
     owner: IUser;
     seller: IUser;
-    items: {
-        product: IProduct;
-        discount: { name: string; percent: number };
-        quantity: number;
-        price: number;
-    }[];
+    items: IItemOrder[];
     payment: {
         name: string;
     };
@@ -27,13 +29,15 @@ export interface IOrder {
         name: string;
     };
     pickupAddress: string;
-    deliverAddress: string;
+    deliveryAddress: string;
     statusOrder: string;
     statusPayment: boolean;
     statusShipping: string;
     totalPayment: number;
     reasonCancel: string;
     refund: boolean;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface ICartItemProduct {
