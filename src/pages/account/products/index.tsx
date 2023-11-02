@@ -92,6 +92,11 @@ const columns: ColumnsType<IProduct> = [
         width: 100,
     },
     {
+        title: "Đã bán",
+        dataIndex: "sold",
+        sorter: true,
+    },
+    {
         title: "Rao bán",
         sorter: true,
         render: (_, record) => (
@@ -154,6 +159,7 @@ export default function Product() {
                     { title: "Giá thành", value: "price" },
                     { title: "Trạng thái", value: "approve" },
                     { title: "Rao bán", value: "status" },
+                    { title: "Đã bán", value: "sold" },
                 ]}
             />
         </div>

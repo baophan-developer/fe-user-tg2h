@@ -180,7 +180,7 @@ export default function Statistics() {
                                         "YYYY-MM-DD"
                                     )} 00:00`;
                                     const end = dayjs(value[1]).format(
-                                        "YYYY-MM-DD HH:mm"
+                                        "YYYY-MM-DD 23:59"
                                     );
                                     setQuery((prev) => ({
                                         ...prev,
