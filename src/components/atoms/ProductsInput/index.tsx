@@ -295,6 +295,23 @@ export const getInputNewnessProduct = (
     };
 };
 
+export const getInputQuantityProduct = (): FormItemProps => {
+    return {
+        name: "quantity",
+        label: "Số lượng trong kho",
+        rules: [{ required: true, message: "Số lượng sản phẩm trong kho là bắt buộc." }],
+        children: (
+            <InputNumber
+                min={0}
+                type="number"
+                controls={false}
+                placeholder="Nhập số lượng sản phẩm trong kho"
+                style={{ width: "100%" }}
+            />
+        ),
+    };
+};
+
 export const getInputScreenProduct = (): FormItemProps => {
     return {
         label: "Thông tin màn hình",

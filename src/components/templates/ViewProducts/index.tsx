@@ -137,18 +137,15 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
                                 <Image src={item.images[0]} preview={false} />
                                 <Meta
                                     title={item.name}
-                                    description={item.price.toLocaleString("vi")}
+                                    description={
+                                        <div>
+                                            {item.price.toLocaleString("vi")} đ - Đã bán{" "}
+                                            {item.sold}
+                                        </div>
+                                    }
                                 />
                                 <br />
                             </div>
-                            <Button
-                                style={{ width: "100%" }}
-                                type="primary"
-                                disabled={item.owner?._id === user._id}
-                                onClick={() => handleAddToCart(item.owner._id, item._id)}
-                            >
-                                Thêm vào giỏ hàng
-                            </Button>
                         </CardStyled>
                     </Col>
                 ))}

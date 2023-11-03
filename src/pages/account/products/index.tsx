@@ -29,6 +29,7 @@ import {
     getInputBrandProduct,
     getInputNewnessProduct,
     PendingStyled,
+    getInputQuantityProduct,
 } from "@/components/atoms";
 import { API_ENDPOINT } from "@/constants/apis";
 import ROUTERS from "@/constants/routers";
@@ -92,6 +93,11 @@ const columns: ColumnsType<IProduct> = [
         width: 100,
     },
     {
+        title: "Kho",
+        dataIndex: "quantity",
+        sorter: true,
+    },
+    {
         title: "Đã bán",
         dataIndex: "sold",
         sorter: true,
@@ -142,6 +148,7 @@ export default function Product() {
                         getInputOsProduct(),
                         getInputCategoryProduct(),
                         getInputBrandProduct(),
+                        getInputQuantityProduct(),
                     ],
                     usingFormData: true,
                 }}
@@ -160,6 +167,7 @@ export default function Product() {
                     { title: "Trạng thái", value: "approve" },
                     { title: "Rao bán", value: "status" },
                     { title: "Đã bán", value: "sold" },
+                    { title: "Kho", value: "quantity" },
                 ]}
             />
         </div>

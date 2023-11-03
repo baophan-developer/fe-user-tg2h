@@ -173,6 +173,7 @@ export default function Statistics() {
                     <h2>Chi tiết</h2>
                     <div>
                         <RangePicker
+                            placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
                             format="YYYY/MM/DD"
                             presets={rangePresets}
                             onChange={(value) => {

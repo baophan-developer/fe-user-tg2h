@@ -116,6 +116,7 @@ export interface IProduct {
     reviews: number;
     rating: number;
     sold: number;
+    quantity: number;
 }
 
 export interface IProductRender extends Omit<IProduct, "owner"> {

@@ -27,6 +27,7 @@ import {
     getInputNewnessProduct,
     PendingStyled,
     getInputStatusProduct,
+    getInputQuantityProduct,
 } from "@/components/atoms";
 import { Button, Descriptions, Form, message } from "antd";
 import { useRecoilValue } from "recoil";
@@ -160,6 +161,7 @@ export default function DetailProduct() {
                     getInputOsProduct(),
                     getInputCategoryProduct(),
                     getInputBrandProduct(),
+                    getInputQuantityProduct(),
                 ]}
                 bottom={{
                     buttons: [
