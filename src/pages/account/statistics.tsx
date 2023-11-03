@@ -97,23 +97,27 @@ const rangePresets: TimeRangePickerProps["presets"] = [
 export default function Statistics() {
     const user = useRecoilValue(UserAtom);
     const [revenue, setRevenue] = useState<IRevenue>();
+    /** orders for export to excel file */
     const [orders, setOrders] = useState([]);
     const [query, setQuery] = useState<IQuery>();
-    const [defaultDate, setDefaultDate] = useState<IDefaultDate>();
-    const [totalList, setTotalList] = useState<number>(10);
 
     const getOrders = async () => {
         try {
-            const res = await request<any>("post", API_ENDPOINT.ORDER.GET, query);
+            const res = await request<any>("post", API_ENDPOINT.ORDER.GET, {
+                ...query,
+                pagination: {
+                    page: 0,
+                    limit: 100,
+                },
+            });
             setOrders(res.data.list);
-            setTotalList(res.data.total);
         } catch (error) {}
     };
 
     const getDataRevenue = async (start: string, end: string) => {
         try {
             const res = await request<any>("post", API_ENDPOINT.FINANCE, {
-                filter: { start, end },
+                filter: { updatedAt: { $gte: start, $lte: end } },
             });
             setRevenue(res.data);
         } catch (error: any) {}
@@ -121,9 +125,8 @@ export default function Statistics() {
 
     useEffect(() => {
         const today = new Date();
-        const startDay = `${dayjs(today).format("YYYY-MM-DD")} 00:00`;
+        const startDay = `${today.getFullYear()}-${today.getMonth() + 1}-01 00:00`;
         const endDay = `${dayjs(today).format("YYYY-MM-DD")} 23:59`;
-        setDefaultDate({ start: startDay, end: endDay });
         getDataRevenue(startDay, endDay);
         setQuery({
             filter: {
@@ -171,10 +174,6 @@ export default function Statistics() {
                     <div>
                         <RangePicker
                             format="YYYY/MM/DD"
-                            defaultValue={[
-                                dayjs(defaultDate?.start),
-                                dayjs(defaultDate?.end),
-                            ]}
                             presets={rangePresets}
                             onChange={(value) => {
                                 if (value) {
@@ -209,7 +208,11 @@ export default function Statistics() {
                             key: "chua_thanh_toan",
                             label: "Chưa thanh toán",
                             children: (
-                                <OrderList isSeller pagination={{ total: totalList }} />
+                                <OrderList
+                                    filter={{ ...query?.filter }}
+                                    isSeller
+                                    isStatistical
+                                />
                             ),
                         },
                         {
@@ -218,8 +221,9 @@ export default function Statistics() {
                             children: (
                                 <div>
                                     <OrderList
+                                        filter={{ ...query?.filter }}
                                         isSeller
-                                        pagination={{ total: totalList }}
+                                        isStatistical
                                     />
                                 </div>
                             ),

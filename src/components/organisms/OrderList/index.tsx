@@ -98,6 +98,7 @@ const ItemPriceStyled = styled.div`
 type TProps = {
     isAccept?: boolean;
     isSeller?: boolean;
+    isStatistical?: boolean;
     pagination?: {
         total?: number;
     };
@@ -113,7 +114,7 @@ interface IQuery {
     sort?: any;
 }
 
-const OrderList = ({ filter, isAccept, isSeller }: TProps) => {
+const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
     const size = useChangeSizeWindow();
     const user = useRecoilValue(UserAtom);
     const [open, setOpen] = useState<boolean>(false);
@@ -154,8 +155,7 @@ const OrderList = ({ filter, isAccept, isSeller }: TProps) => {
     }, [filter]);
 
     useEffect(() => {
-        if (query.filter?.owner) getOrder();
-        if (query.filter?.seller) getOrder();
+        if (query.filter) getOrder();
     }, [query]);
 
     return (
@@ -214,39 +214,42 @@ const OrderList = ({ filter, isAccept, isSeller }: TProps) => {
                                         Thành tiền:
                                         <p> {order.totalPayment.toLocaleString("vi")}</p>
                                     </span>
-                                    {order.statusOrder === EOrder.ORDERED && (
-                                        <ButtonFormModel
-                                            button={{
-                                                children: "Hủy",
-                                                danger: true,
-                                                type: "primary",
-                                                style: {
-                                                    display: "flex",
-                                                    justifyContent: "center",
-                                                },
-                                            }}
-                                            funcHandleData={(value) => value}
-                                            req={{
-                                                method: "post",
-                                                api: API_ENDPOINT.ORDER.CANCEL,
-                                            }}
-                                            title="Bạn có muốn hủy đơn"
-                                            data={{
-                                                id: order._id,
-                                                idUserRequest: user._id,
-                                            }}
-                                            fields={[
-                                                {
-                                                    name: "reasonCancel",
-                                                    label: "Lý do hủy đơn",
-                                                    children: (
-                                                        <TextArea placeholder="Nhập lý do hủy đơn." />
-                                                    ),
-                                                },
-                                            ]}
-                                            keyPubsub={PUBSUB_SUBSCRIBE_NAME.GET_ORDER}
-                                        />
-                                    )}
+                                    {order.statusOrder === EOrder.ORDERED &&
+                                        !isStatistical && (
+                                            <ButtonFormModel
+                                                button={{
+                                                    children: "Hủy",
+                                                    danger: true,
+                                                    type: "primary",
+                                                    style: {
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                    },
+                                                }}
+                                                funcHandleData={(value) => value}
+                                                req={{
+                                                    method: "post",
+                                                    api: API_ENDPOINT.ORDER.CANCEL,
+                                                }}
+                                                title="Bạn có muốn hủy đơn"
+                                                data={{
+                                                    id: order._id,
+                                                    idUserRequest: user._id,
+                                                }}
+                                                fields={[
+                                                    {
+                                                        name: "reasonCancel",
+                                                        label: "Lý do hủy đơn",
+                                                        children: (
+                                                            <TextArea placeholder="Nhập lý do hủy đơn." />
+                                                        ),
+                                                    },
+                                                ]}
+                                                keyPubsub={
+                                                    PUBSUB_SUBSCRIBE_NAME.GET_ORDER
+                                                }
+                                            />
+                                        )}
                                     {!order.refund &&
                                         order.statusOrder === EOrder.REQUEST_REFUND &&
                                         user._id === order.seller._id && (
