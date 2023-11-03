@@ -19,6 +19,7 @@ export interface IItemOrder {
 
 export interface IOrder {
     _id: string;
+    code: string;
     owner: IUser;
     seller: IUser;
     items: IItemOrder[];
@@ -38,6 +39,7 @@ export interface IOrder {
     refund: boolean;
     createdAt: string;
     updatedAt: string;
+    dayReceiveOrder: Date;
 }
 
 export interface ICartItemProduct {

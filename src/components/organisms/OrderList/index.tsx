@@ -11,6 +11,7 @@ import { ButtonFormModel, ButtonModel } from "@/components/molecules";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
+import dayjs from "dayjs";
 
 const { TextArea } = Input;
 
@@ -179,34 +180,56 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                         header={
                             <HeaderListStyled>
                                 <div>
-                                    {size.width > 500 &&
-                                        `${isSeller ? "Người mua:" : "Người bán:"}`}{" "}
-                                    {isSeller ? order.owner.name : order.seller.name}
+                                    <div>Mã đơn hàng: {order.code}</div>
+                                    <div>
+                                        {size.width > 500 &&
+                                            `${
+                                                isSeller ? "Người mua:" : "Người bán:"
+                                            }`}{" "}
+                                        {isSeller ? order.owner.name : order.seller.name}
+                                    </div>
                                 </div>
-                                <HeaderItemStyled $statusShipping={order.statusShipping}>
-                                    <p>
-                                        <FaTruck /> {order.statusShipping}
-                                    </p>
-                                    |<p>{order.statusOrder}</p>
-                                </HeaderItemStyled>
+                                <div>
+                                    <HeaderItemStyled
+                                        $statusShipping={order.statusShipping}
+                                    >
+                                        <p>
+                                            <FaTruck /> {order.statusShipping}
+                                        </p>
+                                        |<p>{order.statusOrder}</p>
+                                    </HeaderItemStyled>
+                                </div>
                             </HeaderListStyled>
                         }
                         footer={
                             <FooterItemStyled>
                                 <span>
-                                    <i>Trạng thái thanh toán: </i>
                                     <p>
+                                        Ngày đặt hàng:{" "}
+                                        {dayjs(order.createdAt).format(
+                                            "HH:mm DD-MM-YYYY"
+                                        )}
+                                    </p>
+                                    {order.dayReceiveOrder && (
+                                        <p>
+                                            Ngày nhận hàng:{" "}
+                                            {dayjs(order.dayReceiveOrder).format(
+                                                "HH:mm DD-MM-YYYY"
+                                            )}
+                                        </p>
+                                    )}
+                                    <p>
+                                        Trạng thái thanh toán:{" "}
                                         {order.statusPayment
                                             ? "Đã thanh toán"
-                                            : "Chưa thanh toán"}
+                                            : "Chưa thanh toán"}{" "}
                                     </p>
-                                    <i>Trạng thái hoàn tiền:</i>
-                                    <p>{order.refund ? "Đã hoàn tiền" : "Không"}</p>
+                                    <p>
+                                        Trạng thái hoàn tiền:{" "}
+                                        {order.refund ? "Đã hoàn tiền" : "Không"}
+                                    </p>
                                     {order.statusOrder === EOrder.CANCEL && (
-                                        <span>
-                                            <i>Lý do hủy đơn:</i>
-                                            <p>{order.reasonCancel}</p>
-                                        </span>
+                                        <p>Lý do hủy đơn: {order.reasonCancel}</p>
                                     )}
                                 </span>
                                 <div>
