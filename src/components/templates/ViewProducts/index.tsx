@@ -62,7 +62,6 @@ type TProps = {
 
 export default function ViewProducts({ requestApi, filters, sort }: TProps) {
     const router = useRouter();
-    const user = useRecoilValue(UserAtom);
     const [loading, setLoading] = useState<boolean>(false);
     const [products, setProducts] = useState<IProductRender[]>([]);
     const [total, setTotal] = useState<number>(20);
@@ -96,19 +95,6 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
             ...prev,
             pagination: { page: current - 1, limit: pageSize },
         }));
-    };
-
-    const handleAddToCart = async (ownerProducts: string, product: string) => {
-        try {
-            const res = await request<any>("post", API_ENDPOINT.CART.ADD_TO_CART, {
-                ownerProducts: ownerProducts,
-                product: product,
-            });
-            message.success(res.data.message, 1);
-            PubSub.publishSync(PUBSUB_SUBSCRIBE_NAME.GET_CART);
-        } catch (error: any) {
-            message.error(error.response.data.message);
-        }
     };
 
     useEffect(() => {

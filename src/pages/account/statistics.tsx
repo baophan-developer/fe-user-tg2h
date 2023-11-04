@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
 import styled from "styled-components";
-import { Button, Col, DatePicker, Row, Tabs, TimeRangePickerProps } from "antd";
+import { Button, Col, DatePicker, Input, Row, Tabs, TimeRangePickerProps } from "antd";
 import UserLayout from "@/layouts/UserLayout";
 import AccountLayout from "@/layouts/AccountLayout";
 import request from "@/services/request";
@@ -54,9 +54,16 @@ const ActionOrderStyled = styled.div`
         gap: 10px;
     }
 
-    @media only screen and (max-width: 500px) {
+    @media only screen and (max-width: 1000px) {
         flex-direction: column;
         gap: 20px;
+    }
+`;
+
+const ActionItemStyled = styled.div`
+    display: flex;
+    @media only screen and (max-width: 500px) {
+        flex-direction: column;
     }
 `;
 
@@ -74,15 +81,11 @@ interface IQuery {
         updatedAt?: { $gte: string; $lte: string };
         statusPayment?: boolean;
         statusOrder?: { $in: string[] };
+        code?: { $regex: any };
     };
 }
 
-interface IDefaultDate {
-    start: Date | string;
-    end: Date | string;
-}
-
-const formatDate = "YYYY-MM-DD HH:mm";
+const { Search } = Input;
 
 const rangePresets: TimeRangePickerProps["presets"] = [
     {
@@ -171,36 +174,52 @@ export default function Statistics() {
             <DetailStyled>
                 <ActionOrderStyled>
                     <h2>Chi tiết</h2>
-                    <div>
-                        <RangePicker
-                            placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
-                            format="YYYY/MM/DD"
-                            presets={rangePresets}
-                            onChange={(value) => {
-                                if (value) {
-                                    const start = `${dayjs(value[0]).format(
-                                        "YYYY-MM-DD"
-                                    )} 00:00`;
-                                    const end = dayjs(value[1]).format(
-                                        "YYYY-MM-DD 23:59"
-                                    );
+                    <ActionItemStyled>
+                        <div>
+                            <Search
+                                placeholder="Nhập mã đơn hàng"
+                                onSearch={(value) =>
                                     setQuery((prev) => ({
                                         ...prev,
                                         filter: {
                                             ...prev?.filter,
-                                            updatedAt: {
-                                                $gte: start,
-                                                $lte: end,
-                                            },
+                                            code: { $regex: value || "" },
                                         },
-                                    }));
+                                    }))
                                 }
-                            }}
-                        />
-                        <Button onClick={() => handleExportDataToExcel(orders)}>
-                            Xuất
-                        </Button>
-                    </div>
+                            />
+                        </div>
+                        <div>
+                            <RangePicker
+                                placeholder={["Ngày bắt đầu", "Ngày kết thúc"]}
+                                format="YYYY/MM/DD"
+                                presets={rangePresets}
+                                onChange={(value) => {
+                                    if (value) {
+                                        const start = `${dayjs(value[0]).format(
+                                            "YYYY-MM-DD"
+                                        )} 00:00`;
+                                        const end = dayjs(value[1]).format(
+                                            "YYYY-MM-DD 23:59"
+                                        );
+                                        setQuery((prev) => ({
+                                            ...prev,
+                                            filter: {
+                                                ...prev?.filter,
+                                                updatedAt: {
+                                                    $gte: start,
+                                                    $lte: end,
+                                                },
+                                            },
+                                        }));
+                                    }
+                                }}
+                            />
+                            <Button onClick={() => handleExportDataToExcel(orders)}>
+                                Xuất
+                            </Button>
+                        </div>
+                    </ActionItemStyled>
                 </ActionOrderStyled>
                 <Tabs
                     defaultActiveKey="chua_thanh_toan"

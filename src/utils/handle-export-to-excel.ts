@@ -19,6 +19,7 @@ const handleExportDataToExcel = (apiData: IOrder[]) => {
 
         return {
             STT: index + 1,
+            "Mã đơn hàng": item.code,
             "Người mua": item.owner.name,
             "Phương thức thanh toán": item.payment.name,
             "Phương thức vận chuyển": item.shipping.name,
@@ -52,6 +53,7 @@ const handleExportDataToExcel = (apiData: IOrder[]) => {
         ...newData,
         {
             STT: "Tổng",
+            "Mã đơn hàng": "",
             "Người mua": "",
             "Phương thức thanh toán": "",
             "Phương thức vận chuyển": "",
@@ -73,15 +75,16 @@ const handleExportDataToExcel = (apiData: IOrder[]) => {
     ws["!cols"][1] = { wch: 15 };
     ws["!cols"][2] = { wch: 25 };
     ws["!cols"][3] = { wch: 25 };
-    ws["!cols"][4] = { wch: 40 };
+    ws["!cols"][4] = { wch: 25 };
     ws["!cols"][5] = { wch: 40 };
     ws["!cols"][6] = { wch: 40 };
-    ws["!cols"][7] = { wch: 25 };
-    ws["!cols"][8] = { wch: 20 };
+    ws["!cols"][7] = { wch: 40 };
+    ws["!cols"][8] = { wch: 22 };
     ws["!cols"][9] = { wch: 20 };
     ws["!cols"][10] = { wch: 20 };
     ws["!cols"][11] = { wch: 20 };
-    ws["!cols"][12] = { wch: 15 };
+    ws["!cols"][12] = { wch: 25 };
+    ws["!cols"][13] = { wch: 20 };
 
     // set height row
     ws["!rows"] = [];
@@ -90,7 +93,7 @@ const handleExportDataToExcel = (apiData: IOrder[]) => {
     }
 
     // style for header
-    const cols = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"];
+    const cols = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N"];
     for (let i = 0; i < cols.length; i++) {
         ws[cols[i] + 1].s = {
             font: {
