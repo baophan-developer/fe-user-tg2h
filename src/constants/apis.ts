@@ -23,6 +23,7 @@ export const API_ENDPOINT = {
     PRODUCT: {
         GET: "product",
         CREATE: "product/create",
+        RECOMMENDATION: "/recommendation",
     },
     CART: {
         GET: "session-cart/",
