@@ -1,22 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IProductRender } from "@/interfaces";
-import { useRecoilValue } from "recoil";
-import {
-    Button,
-    Card,
-    Col,
-    Image,
-    Pagination,
-    PaginationProps,
-    Row,
-    message,
-} from "antd";
+import { Card, Col, Image, Pagination, PaginationProps, Row } from "antd";
 import request, { TRequest } from "@/services/request";
-import UserAtom from "@/stores/UserStore";
 import { useRouter } from "next/router";
-import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
-import { API_ENDPOINT } from "@/constants/apis";
 import ROUTERS from "@/constants/routers";
 
 const { Meta } = Card;
