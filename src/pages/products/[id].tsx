@@ -28,11 +28,11 @@ import { getLayoutDescriptionProduct } from "@/configs/product.config";
 const { TextArea } = Input;
 
 const ProductBriefingStyled = styled.div`
-    padding: 10px;
+    padding: 20px;
     display: flex;
     gap: 0 40px;
     background-color: #fff;
-    justify-content: center;
+    justify-content: space-evenly;
 
     @media only screen and (max-width: 500px) {
         flex-direction: column;
@@ -123,7 +123,7 @@ const BoxInformationStyled = styled.div`
         margin-top: 10px;
         margin-bottom: 10px;
         padding: 5px 10px;
-        background-color: antiquewhite;
+        background-color: rgba(0, 0, 0, 0.02);
         font-weight: 400;
     }
 
@@ -352,7 +352,7 @@ export default function DetailProduct() {
             <BoxInformationStyled>
                 <h3>Thông tin chi tiết sản phẩm</h3>
                 <Descriptions
-                    bordered
+                    // bordered
                     items={product && getLayoutDescriptionProduct(product)}
                 />
                 <h3>Mô tả sản phẩm</h3>
