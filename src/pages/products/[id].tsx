@@ -24,6 +24,7 @@ import UserAtom from "@/stores/UserStore";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import { DeleteOutlined, HeartOutlined } from "@ant-design/icons";
 import { getLayoutDescriptionProduct } from "@/configs/product.config";
+import ROUTERS from "@/constants/routers";
 
 const { TextArea } = Input;
 
@@ -144,6 +145,12 @@ const CommentStyled = styled.div`
 
 const DeleteCommentStyled = styled.div`
     cursor: pointer;
+`;
+
+const BoxShopStyled = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `;
 
 interface IQuery {
@@ -349,6 +356,25 @@ export default function DetailProduct() {
                     </BottomStyled>
                 </BriefingInfoStyled>
             </ProductBriefingStyled>
+            <BoxInformationStyled>
+                <BoxShopStyled>
+                    <div>
+                        <Avatar src={product?.owner.avatar} alt={product?.owner.name} />{" "}
+                        {product?.owner.name}
+                    </div>
+                    <div>
+                        <Button
+                            onClick={() =>
+                                router.push(
+                                    `${ROUTERS.SHOP_DETAIL}?shopId=${product?.owner._id}`
+                                )
+                            }
+                        >
+                            Xem Shop
+                        </Button>
+                    </div>
+                </BoxShopStyled>
+            </BoxInformationStyled>
             <BoxInformationStyled>
                 <h3>Thông tin chi tiết sản phẩm</h3>
                 <Descriptions
