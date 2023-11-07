@@ -1,22 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IProductRender } from "@/interfaces";
-import { useRecoilValue } from "recoil";
-import {
-    Button,
-    Card,
-    Col,
-    Image,
-    Pagination,
-    PaginationProps,
-    Row,
-    message,
-} from "antd";
+import { Card, Col, Image, Pagination, PaginationProps, Row } from "antd";
 import request, { TRequest } from "@/services/request";
-import UserAtom from "@/stores/UserStore";
 import { useRouter } from "next/router";
-import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
-import { API_ENDPOINT } from "@/constants/apis";
 import ROUTERS from "@/constants/routers";
 
 const { Meta } = Card;
@@ -62,7 +49,6 @@ type TProps = {
 
 export default function ViewProducts({ requestApi, filters, sort }: TProps) {
     const router = useRouter();
-    const user = useRecoilValue(UserAtom);
     const [loading, setLoading] = useState<boolean>(false);
     const [products, setProducts] = useState<IProductRender[]>([]);
     const [total, setTotal] = useState<number>(20);
@@ -98,19 +84,6 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
         }));
     };
 
-    const handleAddToCart = async (ownerProducts: string, product: string) => {
-        try {
-            const res = await request<any>("post", API_ENDPOINT.CART.ADD_TO_CART, {
-                ownerProducts: ownerProducts,
-                product: product,
-            });
-            message.success(res.data.message, 1);
-            PubSub.publishSync(PUBSUB_SUBSCRIBE_NAME.GET_CART);
-        } catch (error: any) {
-            message.error(error.response.data.message);
-        }
-    };
-
     useEffect(() => {
         getProducts();
     }, [query]);
@@ -137,18 +110,15 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
                                 <Image src={item.images[0]} preview={false} />
                                 <Meta
                                     title={item.name}
-                                    description={item.price.toLocaleString("vi")}
+                                    description={
+                                        <div>
+                                            {item.price.toLocaleString("vi")} đ - Đã bán{" "}
+                                            {item.sold}
+                                        </div>
+                                    }
                                 />
                                 <br />
                             </div>
-                            <Button
-                                style={{ width: "100%" }}
-                                type="primary"
-                                disabled={item.owner?._id === user._id}
-                                onClick={() => handleAddToCart(item.owner._id, item._id)}
-                            >
-                                Thêm vào giỏ hàng
-                            </Button>
                         </CardStyled>
                     </Col>
                 ))}

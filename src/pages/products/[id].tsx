@@ -96,13 +96,12 @@ const EvaluateStyled = styled.div`
     }
 `;
 
-const ButtonStyled = styled(Button)`
+const BottomStyled = styled.div`
     display: flex;
-    align-items: center;
+    flex-direction: column;
     position: absolute;
     bottom: 0;
-    height: 38px;
-    font-size: 16px;
+    font-size: 14px;
 
     @media only screen and (max-width: 1000px) {
         bottom: 0;
@@ -329,19 +328,25 @@ export default function DetailProduct() {
                         </div>
                     </EvaluateStyled>
                     <h2>{product?.price.toLocaleString("vi")} vnđ</h2>
-                    <ButtonStyled
-                        icon={<AiOutlineShoppingCart />}
-                        type="primary"
-                        disabled={product?.owner?._id === user._id}
-                        onClick={() =>
-                            handleAddToCart(
-                                product?.owner._id as string,
-                                product?._id as string
-                            )
-                        }
-                    >
-                        Thêm vào giỏ hàng
-                    </ButtonStyled>
+                    <BottomStyled>
+                        <div>{product?.quantity} sản phẩm hiện có</div>
+                        <Button
+                            icon={<AiOutlineShoppingCart />}
+                            type="primary"
+                            disabled={
+                                product?.owner?._id === user._id ||
+                                product?.quantity === 0
+                            }
+                            onClick={() =>
+                                handleAddToCart(
+                                    product?.owner._id as string,
+                                    product?._id as string
+                                )
+                            }
+                        >
+                            Thêm vào giỏ hàng
+                        </Button>
+                    </BottomStyled>
                 </BriefingInfoStyled>
             </ProductBriefingStyled>
             <BoxInformationStyled>

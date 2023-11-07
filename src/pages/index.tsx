@@ -62,7 +62,7 @@ export default function Home() {
             </CategoryStyled>
             <HeadingStyled>GỢI Ý HÔM NAY</HeadingStyled>
             <ViewProducts
-                requestApi={{ method: "post", api: API_ENDPOINT.PRODUCT.GET }}
+                requestApi={{ method: "post", api: API_ENDPOINT.PRODUCT.RECOMMENDATION }}
             />
         </Layout>
     );
