@@ -91,7 +91,15 @@ export interface IProduct {
     weight: number;
     betterCapacity: string;
     newness: number;
-    owner: string;
+    owner: {
+        _id: string;
+        email: string;
+        name: string;
+        avatar: string;
+        birthday: Date;
+        phone: string;
+        gender: boolean;
+    };
     sizeScreen: { _id: string; size: string };
     scanFrequency: { _id: string; scanFrequency: string };
     resolutionScreen: { _id: string; name: string };

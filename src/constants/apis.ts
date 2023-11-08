@@ -64,6 +64,7 @@ export const API_ENDPOINT = {
     SHIPPING: "shipping/",
     PAYMENT: "payment/",
     FINANCE: "finance/",
+    USER_DETAIL: "user/",
 };
 
 export const BASE_URL_PROVINCE_VIETNAM = process.env.NEXT_PUBLIC_PROVINCE_VIETNAM_URL;
