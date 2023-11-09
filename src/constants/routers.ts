@@ -14,6 +14,7 @@ const ROUTERS = {
         FAVORITES: "/account/favorites",
         BOUGHT: "/account/bought",
         STATISTICS: "/account/statistics",
+        ACCOUNTING: "/account/accounting",
     },
     CHECKOUT: "/checkout",
     PRODUCTS: "/products",
