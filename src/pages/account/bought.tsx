@@ -10,18 +10,24 @@ import useChangeSizeWindow from "@/hooks/useChangeSizeWindow";
 import ROUTERS from "@/constants/routers";
 import { useRouter } from "next/router";
 import { IProduct } from "@/interfaces";
+import { styled } from "styled-components";
 
 const { Meta } = Card;
 
 const getColumns = (width: number) => {
-    if (width > 1000) return 4;
-    if (width < 1000) return 2;
+    if (width > 1200) return 4;
+    if (width < 1200) return 2;
     return 1;
 };
 
 const getWidthImage = (width: number) => {
     return width < 500 ? 150 : 170;
 };
+
+const ImageBoxStyled = styled.div`
+    display: grid;
+    place-items: center;
+`;
 
 export default function Bought() {
     const user = useRecoilValue(UserAtom);
@@ -46,6 +52,7 @@ export default function Bought() {
 
     return (
         <List
+            style={{ maxWidth: "1100px" }}
             locale={{ emptyText: "Không có sản phẩm nào ở đây" }}
             grid={{ gutter: 4, column: getColumns(size.width) }}
             dataSource={bought}
@@ -55,11 +62,13 @@ export default function Bought() {
                         <div
                             onClick={() => router.push(`${ROUTERS.PRODUCTS}/${item._id}`)}
                         >
-                            <Image
-                                src={item.images[0]}
-                                preview={false}
-                                width={getWidthImage(size.width)}
-                            />
+                            <ImageBoxStyled>
+                                <Image
+                                    src={item.images[0]}
+                                    preview={false}
+                                    width={getWidthImage(size.width)}
+                                />
+                            </ImageBoxStyled>
                             <Meta
                                 title={item.name}
                                 description={item.price.toLocaleString("vi")}

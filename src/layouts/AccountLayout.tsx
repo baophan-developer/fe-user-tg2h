@@ -78,14 +78,15 @@ type TProps = {
 };
 
 const items = [
-    getItem(ROUTERS.ACCOUNT.HOME, "Quản lý tài khoản"),
-    getItem(ROUTERS.ACCOUNT.ADDRESS, "Quản lý địa chỉ"),
-    getItem(ROUTERS.ACCOUNT.PRODUCT, "Quản lý sản phẩm"),
-    getItem(ROUTERS.ACCOUNT.ORDER_BUY, "Quản lý đơn mua"),
-    getItem(ROUTERS.ACCOUNT.ORDER_REQUEST, "Quản lý đơn bán"),
-    getItem(ROUTERS.ACCOUNT.STATISTICS, "Thống kê doanh thu"),
-    getItem(ROUTERS.ACCOUNT.FAVORITES, "Sản phẩm yêu thích"),
-    getItem(ROUTERS.ACCOUNT.BOUGHT, "Sản phẩm đã mua"),
+    getItem(ROUTERS.ACCOUNT.HOME, "Tài khoản"),
+    getItem(ROUTERS.ACCOUNT.ADDRESS, "Địa chỉ"),
+    getItem(ROUTERS.ACCOUNT.PRODUCT, "Sản phẩm"),
+    getItem(ROUTERS.ACCOUNT.ORDER_BUY, "Đơn mua"),
+    getItem(ROUTERS.ACCOUNT.ORDER_REQUEST, "Đơn bán"),
+    getItem(ROUTERS.ACCOUNT.STATISTICS, "Doanh thu"),
+    getItem(ROUTERS.ACCOUNT.ACCOUNTING, "Tài chính"),
+    getItem(ROUTERS.ACCOUNT.FAVORITES, "Yêu thích"),
+    getItem(ROUTERS.ACCOUNT.BOUGHT, "Đã mua"),
 ];
 export default function AccountLayout({ children, title }: TProps) {
     const router = useRouter();
