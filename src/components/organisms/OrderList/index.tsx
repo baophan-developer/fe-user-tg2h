@@ -157,6 +157,10 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
 
     useEffect(() => {
         if (query.filter) getOrder();
+        PubSub.subscribe(PUBSUB_SUBSCRIBE_NAME.GET_ORDER, getOrder);
+        return () => {
+            PubSub.unsubscribe(PUBSUB_SUBSCRIBE_NAME.GET_ORDER);
+        };
     }, [query]);
 
     return (
