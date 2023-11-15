@@ -5,10 +5,10 @@ const endpoint = "http://localhost:8080";
 
 const SocketContext = createContext<any>(null);
 
+let socket = io(endpoint);
 const SocketProvider = ({ children }: { children: React.ReactNode }) => {
-    const socket = io(endpoint);
-
     useEffect(() => {
+        socket.connect();
         return () => {
             socket.disconnect();
         };

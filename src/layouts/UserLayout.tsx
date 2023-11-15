@@ -1,10 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import PubSub from "pubsub-js";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
 import { ShoppingCartOutlined } from "@ant-design/icons";
-import { Layout, Input, Badge, Popover, Avatar, Button, message } from "antd";
+import {
+    Layout,
+    Input,
+    Badge,
+    Popover,
+    Avatar,
+    Button,
+    message,
+    notification,
+} from "antd";
 import request from "@/services/request";
 import UserAtom from "@/stores/UserStore";
 import { API_ENDPOINT } from "@/constants/apis";
@@ -12,6 +21,7 @@ import ROUTERS from "@/constants/routers";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import Link from "next/link";
 import CartAtom from "@/stores/CartStore";
+import { useSocket } from "@/contexts/SocketContext";
 
 type TProps = {
     children: React.ReactNode;
@@ -94,11 +104,18 @@ export default function UserLayout({ children }: TProps) {
     const [cart, setCart] = useRecoilState(CartAtom);
     const router = useRouter();
 
+    // Notification real-time
+    const socket = useSocket();
+
     const handleLogout = async () => {
         try {
             const res = await request<any>("post", API_ENDPOINT.AUTH.LOGOUT);
             localStorage.removeItem("accessToken");
             message.success(res.data.message, 1);
+
+            // Emit event log out of user
+            socket.emit("userLogout", { socketId: socket.id, userId: user._id });
+
             router.push(ROUTERS.LOGIN);
         } catch (error: any) {
             message.error(error.response.data.message, 1);
@@ -129,6 +146,12 @@ export default function UserLayout({ children }: TProps) {
             PubSub.unsubscribe(PUBSUB_SUBSCRIBE_NAME.GET_CART);
         };
     }, []);
+
+    useEffect(() => {
+        if (user._id && socket.connected) {
+            socket.emit("userOnline", { socketId: socket.id, userId: user._id });
+        }
+    }, [socket, user]);
 
     return (
         <Layout>
