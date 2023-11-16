@@ -167,9 +167,14 @@ export default function UserLayout({ children }: TProps) {
         getCountNotification();
         PubSub.subscribe(PUBSUB_SUBSCRIBE_NAME.GET_INFO, getUserInfo);
         PubSub.subscribe(PUBSUB_SUBSCRIBE_NAME.GET_CART, getCart);
+        PubSub.subscribe(
+            PUBSUB_SUBSCRIBE_NAME.GET_COUNT_NOTIFICATION,
+            getCountNotification
+        );
         return () => {
             PubSub.unsubscribe(PUBSUB_SUBSCRIBE_NAME.GET_INFO);
             PubSub.unsubscribe(PUBSUB_SUBSCRIBE_NAME.GET_CART);
+            PubSub.unsubscribe(PUBSUB_SUBSCRIBE_NAME.GET_COUNT_NOTIFICATION);
         };
     }, []);
 
