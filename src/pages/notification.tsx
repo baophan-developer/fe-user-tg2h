@@ -5,6 +5,7 @@ import request from "@/services/request";
 import { API_ENDPOINT } from "@/constants/apis";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
+import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 
 interface INotification {
     _id: string;
@@ -57,6 +58,7 @@ export default function Notification() {
             await request<any>("put", API_ENDPOINT.NOTIFICATION.MAIN, {
                 notificationIds: [id],
             });
+            PubSub.publishSync(PUBSUB_SUBSCRIBE_NAME.GET_COUNT_NOTIFICATION);
             /** action is url router to order or messages box */
             action && router.push(action);
         } catch (error) {}
@@ -104,7 +106,7 @@ export default function Notification() {
                     size: "small",
                     total: total,
                     onChange: (page: number, pageSize: number) => {
-                        setPagination({ page: page, limit: pageSize });
+                        setPagination({ page: page - 1, limit: pageSize });
                     },
                 }}
             />

@@ -27,6 +27,7 @@ import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import Link from "next/link";
 import CartAtom from "@/stores/CartStore";
 import { useSocket } from "@/contexts/SocketContext";
+import { INotificationSocket } from "@/interfaces";
 
 type TProps = {
     children: React.ReactNode;
@@ -117,13 +118,14 @@ const NotificationStyled = styled.p`
 `;
 
 export default function UserLayout({ children }: TProps) {
+    const router = useRouter();
     const [user, setUser] = useRecoilState(UserAtom);
     const [cart, setCart] = useRecoilState(CartAtom);
-    const router = useRouter();
     const [countNotification, setCountNotification] = useState<number>(0);
 
     // Notification real-time
     const socket = useSocket();
+    const [api, contextHolder] = notification.useNotification();
 
     const handleLogout = async () => {
         try {
@@ -175,6 +177,7 @@ export default function UserLayout({ children }: TProps) {
             PubSub.unsubscribe(PUBSUB_SUBSCRIBE_NAME.GET_INFO);
             PubSub.unsubscribe(PUBSUB_SUBSCRIBE_NAME.GET_CART);
             PubSub.unsubscribe(PUBSUB_SUBSCRIBE_NAME.GET_COUNT_NOTIFICATION);
+            PubSub.unsubscribe(PUBSUB_SUBSCRIBE_NAME.GET_COUNT_NOTIFICATION);
         };
     }, []);
 
@@ -184,8 +187,21 @@ export default function UserLayout({ children }: TProps) {
         }
     }, [socket, user]);
 
+    useEffect(() => {
+        socket.on("notificationResponse", (data: INotificationSocket) => {
+            getCountNotification();
+            api.open({
+                message: data.title,
+                description: data.message,
+            });
+        });
+
+        return () => socket.off("notificationResponse");
+    }, []);
+
     return (
         <Layout>
+            {contextHolder}
             <NotificationHeaderStyled>
                 <div>
                     Kết nối <FacebookFilled /> <InstagramFilled />

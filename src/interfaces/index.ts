@@ -162,3 +162,12 @@ export interface IUser {
     address: IAddress[];
     favorites: IProduct[];
 }
+
+export interface ISocketRealtime {
+    userReceive: string;
+}
+
+export interface INotificationSocket extends ISocketRealtime {
+    title: string;
+    message: string;
+}
