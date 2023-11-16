@@ -9,6 +9,11 @@ export const API_ENDPOINT = {
         FORGOT_PASSWORD: "auth/forgot-password",
         RESET_PASSWORD: "auth/reset-password",
     },
+    NOTIFICATION: {
+        MAIN: "notification/",
+        GET_ALL: "notification/get-all",
+        CREATE: "notification/create",
+    },
     PROFILE: {
         GET: "profile/",
         UPDATE_PROFILE: "profile/update-profile",

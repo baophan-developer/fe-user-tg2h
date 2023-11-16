@@ -3,7 +3,12 @@ import PubSub from "pubsub-js";
 import styled from "styled-components";
 import { useRecoilState } from "recoil";
 import { useRouter } from "next/router";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import {
+    FacebookFilled,
+    InstagramFilled,
+    NotificationOutlined,
+    ShoppingCartOutlined,
+} from "@ant-design/icons";
 import {
     Layout,
     Input,
@@ -31,7 +36,7 @@ const { Header, Content } = Layout;
 const { Search } = Input;
 
 const HeaderStyled = styled(Header)`
-    padding: 1% 5%;
+    padding: 2px 10%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -51,14 +56,13 @@ const SearchStyled = styled(Search)`
 `;
 
 const BoxAvatarStyled = styled.div`
-    width: 200px;
+    gap: 20px;
     display: flex;
+    color: white;
     justify-content: space-between;
     align-items: center;
-    cursor: pointer;
 
     @media screen and (max-width: 500px) {
-        width: 90px;
         justify-content: space-evenly;
     }
 `;
@@ -73,12 +77,7 @@ const UserBoxStyled = styled(Popover)`
     align-items: center;
     gap: 0 10px;
     color: white;
-
-    @media screen and (max-width: 500px) {
-        & p {
-            display: none;
-        }
-    }
+    cursor: pointer;
 `;
 
 const ContentPopoverStyled = styled.div`
@@ -99,10 +98,29 @@ const ContentStyled = styled(Content)`
     }
 `;
 
+const NotificationHeaderStyled = styled.div`
+    padding: 4px 10%;
+    background-color: #434343;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+
+    @media only screen and (max-width: 500px) {
+        padding: 8px;
+    }
+`;
+
+const NotificationStyled = styled.p`
+    color: white;
+    cursor: pointer;
+`;
+
 export default function UserLayout({ children }: TProps) {
     const [user, setUser] = useRecoilState(UserAtom);
     const [cart, setCart] = useRecoilState(CartAtom);
     const router = useRouter();
+    const [countNotification, setCountNotification] = useState<number>(0);
 
     // Notification real-time
     const socket = useSocket();
@@ -136,9 +154,17 @@ export default function UserLayout({ children }: TProps) {
         } catch (error) {}
     };
 
+    const getCountNotification = async () => {
+        try {
+            const res = await request<any>("get", API_ENDPOINT.NOTIFICATION.MAIN);
+            setCountNotification(res.data.count);
+        } catch (error) {}
+    };
+
     useEffect(() => {
         getUserInfo();
         getCart();
+        getCountNotification();
         PubSub.subscribe(PUBSUB_SUBSCRIBE_NAME.GET_INFO, getUserInfo);
         PubSub.subscribe(PUBSUB_SUBSCRIBE_NAME.GET_CART, getCart);
         return () => {
@@ -155,30 +181,24 @@ export default function UserLayout({ children }: TProps) {
 
     return (
         <Layout>
-            <HeaderStyled>
-                <h2>
-                    <Link href={ROUTERS.HOME}>TG2H</Link>
-                </h2>
-                <SearchStyled
-                    placeholder="Nhập trên sản phẩm cần tìm kiếm."
-                    type="primary"
-                    enterButton
-                    allowClear
-                    onSearch={(value) =>
-                        router.push(`${ROUTERS.PRODUCTS}?search=${value}`)
-                    }
-                />
+            <NotificationHeaderStyled>
+                <div>
+                    Kết nối <FacebookFilled /> <InstagramFilled />
+                </div>
                 <BoxAvatarStyled>
                     <Badge
-                        count={cart.total}
-                        size="small"
+                        count={countNotification}
                         overflowCount={99}
+                        size="small"
                         showZero={false}
                     >
-                        <ShoppingCartStyled onClick={() => router.push(ROUTERS.CART)}>
-                            <ShoppingCartOutlined />
-                        </ShoppingCartStyled>
+                        <NotificationStyled
+                            onClick={() => router.push(ROUTERS.NOTIFICATION)}
+                        >
+                            <NotificationOutlined /> Thông báo
+                        </NotificationStyled>
                     </Badge>
+                    |
                     <UserBoxStyled
                         content={
                             <ContentPopoverStyled>
@@ -196,10 +216,37 @@ export default function UserLayout({ children }: TProps) {
                         trigger="hover"
                         placement="bottomRight"
                     >
-                        <Avatar size="large" src={user.avatar} alt={user.name} />
+                        <Avatar size="small" src={user.avatar} alt={user.name} />
                         <p>{user.name}</p>
                     </UserBoxStyled>
                 </BoxAvatarStyled>
+            </NotificationHeaderStyled>
+            <HeaderStyled>
+                <h2>
+                    <Link href={ROUTERS.HOME}>TG2H</Link>
+                </h2>
+                <SearchStyled
+                    placeholder="Nhập trên sản phẩm cần tìm kiếm."
+                    type="primary"
+                    enterButton
+                    allowClear
+                    onSearch={(value) =>
+                        router.push(`${ROUTERS.PRODUCTS}?search=${value}`)
+                    }
+                />
+                <Badge
+                    count={cart.total}
+                    size="small"
+                    overflowCount={99}
+                    showZero={false}
+                >
+                    <ShoppingCartStyled
+                        style={{ cursor: "pointer" }}
+                        onClick={() => router.push(ROUTERS.CART)}
+                    >
+                        <ShoppingCartOutlined />
+                    </ShoppingCartStyled>
+                </Badge>
             </HeaderStyled>
             <ContentStyled>{children}</ContentStyled>
         </Layout>
