@@ -271,6 +271,7 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                                 data={{
                                                     id: order._id,
                                                     idUserRequest: user._id,
+                                                    order: order,
                                                 }}
                                                 fields={[
                                                     {
@@ -284,6 +285,7 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                                 keyPubsub={
                                                     PUBSUB_SUBSCRIBE_NAME.GET_ORDER
                                                 }
+                                                isRealtime
                                             />
                                         )}
                                     {!order.refund &&

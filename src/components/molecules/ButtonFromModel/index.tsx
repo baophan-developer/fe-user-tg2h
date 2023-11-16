@@ -3,6 +3,9 @@ import { Button, ButtonProps, Form, FormItemProps, Modal, message } from "antd";
 import { FormCustom } from "@/components/templates";
 import request, { TRequest } from "@/services/request";
 import { isEqual } from "lodash";
+import { useSocket } from "@/contexts/SocketContext";
+import { IOrder } from "@/interfaces";
+import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 
 type TProps = {
     button: ButtonProps;
@@ -15,11 +18,13 @@ type TProps = {
         id?: any;
         idUserRequest?: any;
         initialValueForm?: any;
+        order?: IOrder;
     };
     fields?: FormItemProps[];
     width?: number | string;
     usingFormData?: boolean;
     funcHandleData: (value: any) => any;
+    isRealtime?: boolean;
 };
 
 export default function ButtonFormModel({
@@ -33,10 +38,13 @@ export default function ButtonFormModel({
     width,
     funcHandleData,
     usingFormData,
+    isRealtime,
 }: TProps) {
     const [form] = Form.useForm();
     const [open, setOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
+
+    const socket = useSocket();
 
     const onFinish = async (value: any) => {
         setLoading(true);
@@ -54,6 +62,28 @@ export default function ButtonFormModel({
                 : { id: data?.id, idUserRequest: data?.idUserRequest, ...newValue };
             const res = await request<any>(req.method, req.api, dataSend);
             message.success(res.data.message);
+            // Create notification realtime
+            if (isRealtime && data?.order) {
+                let userReceive: string;
+                let nameUserCancel: string;
+
+                if (data.idUserRequest === data.order.owner._id) {
+                    nameUserCancel = data.order.owner.name;
+                    userReceive = data?.order?.seller._id;
+                } else {
+                    nameUserCancel = data.order.seller.name;
+                    userReceive = data?.order?.owner._id;
+                }
+
+                // Create notification for seller is here
+                socket.emit("notification", {
+                    title: "Hủy đơn hàng",
+                    message: `Đơn hàng ${data.order.code} đã bị hủy bởi ${nameUserCancel}`,
+                    userReceive: userReceive,
+                });
+
+                PubSub.publishSync(PUBSUB_SUBSCRIBE_NAME.GET_COUNT_NOTIFICATION);
+            }
         } catch (error: any) {
             message.error(error.response?.data?.message);
             setLoading(false);
