@@ -250,6 +250,7 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                         Thành tiền:
                                         <p> {order.totalPayment.toLocaleString("vi")}</p>
                                     </span>
+                                    {/* Button for cancel order */}
                                     {order.statusOrder === EOrder.ORDERED &&
                                         !isStatistical && (
                                             <ButtonFormModel
@@ -288,8 +289,8 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                                 isRealtime
                                             />
                                         )}
-                                    {!order.refund &&
-                                        order.statusOrder === EOrder.REQUEST_REFUND &&
+                                    {/* Button for refund order */}
+                                    {order.statusOrder === EOrder.REQUEST_REFUND &&
                                         user._id === order.seller._id && (
                                             <ButtonModel
                                                 button={{
@@ -310,6 +311,7 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                                 }
                                             />
                                         )}
+                                    {/* Button for accept order */}
                                     {isAccept && (
                                         <div>
                                             <Button
