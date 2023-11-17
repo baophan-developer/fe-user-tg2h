@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Image, Input, List, Modal, message } from "antd";
 import { IOrder } from "@/interfaces";
 import { EOrder, EStatusShipping } from "@/enums/order-enums";
@@ -12,6 +12,7 @@ import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
 import dayjs from "dayjs";
+import { useSocket } from "@/contexts/SocketContext";
 
 const { TextArea } = Input;
 
@@ -126,12 +127,20 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
         filter: { ...filter },
     });
 
-    const acceptOrder = async (orderId: string) => {
+    const socket = useSocket();
+
+    const acceptOrder = async (order: IOrder) => {
         try {
             const res = await request<any>("post", API_ENDPOINT.ORDER.ACCEPT, {
-                orderId,
+                orderId: order._id,
             });
             message.success(res.data.message);
+            // Create notification for seller is here
+            socket.emit("notification", {
+                title: "Đơn hàng của bạn đã được duyệt.",
+                message: `Đơn hàng ${order.code} được duyệt bởi ${order.seller.name}`,
+                userReceive: order.owner._id,
+            });
             getOrder();
             setOpen(!open);
         } catch (error: any) {
@@ -262,6 +271,7 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                                 data={{
                                                     id: order._id,
                                                     idUserRequest: user._id,
+                                                    order: order,
                                                 }}
                                                 fields={[
                                                     {
@@ -275,6 +285,7 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                                 keyPubsub={
                                                     PUBSUB_SUBSCRIBE_NAME.GET_ORDER
                                                 }
+                                                isRealtime
                                             />
                                         )}
                                     {!order.refund &&
@@ -314,7 +325,7 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                                 cancelText="Hủy"
                                                 onCancel={() => setOpen(!open)}
                                                 onOk={() => {
-                                                    acceptOrder(order._id);
+                                                    acceptOrder(order);
                                                 }}
                                             >
                                                 Bạn đồng ý với đơn hàng?

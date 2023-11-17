@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Tabs } from "antd";
 import { EOrder } from "@/enums/order-enums";
 import useChangeSizeWindow from "@/hooks/useChangeSizeWindow";

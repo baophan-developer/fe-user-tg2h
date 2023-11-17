@@ -5,9 +5,14 @@ import request from "@/services/request";
 import { API_ENDPOINT } from "@/constants/apis";
 import ROUTERS from "@/constants/routers";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
+import { useSocket } from "@/contexts/SocketContext";
+import { useRecoilValue } from "recoil";
+import UserAtom from "@/stores/UserStore";
 
 export default function CheckoutSuccess() {
+    const socket = useSocket();
     const router = useRouter();
+    const user = useRecoilValue(UserAtom);
     /**
      * payment_success with status code 00
      * payment_cancel with status code 02
@@ -27,6 +32,14 @@ export default function CheckoutSuccess() {
                 message.success(res.data.message);
                 // remove query, prevent reload page will addition orders
                 router.replace("/checkout-success", undefined, { shallow: true });
+
+                // Create notification for seller is here
+                socket.emit("notification", {
+                    title: "Bạn có một đơn hàng mới",
+                    message: `Đơn hàng được đặt bởi ${user.name}`,
+                    userReceive: order.seller,
+                });
+
                 // remove ordered
                 localStorage.removeItem("order");
                 PubSub.publishSync(PUBSUB_SUBSCRIBE_NAME.GET_CART);

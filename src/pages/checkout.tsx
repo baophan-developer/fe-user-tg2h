@@ -26,6 +26,7 @@ import ROUTERS from "@/constants/routers";
 import CartAtom from "@/stores/CartStore";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import { createPayment } from "@/services/payment";
+import { useSocket } from "@/contexts/SocketContext";
 
 const { Header } = Layout;
 const { Search } = Input;
@@ -174,6 +175,8 @@ export default function Checkout() {
     const checkout = useRecoilValue(CheckoutAtom);
     const router = useRouter();
 
+    const socket = useSocket();
+
     // item and totalPayment
     const [items, setItems] = useState<IItemsForCalculator[]>([]);
     const [totalPayment, setTotalPayment] = useState<number>(0);
@@ -248,6 +251,14 @@ export default function Checkout() {
                     return createPayment(totalPayment);
                 }
                 const res = await request<any>("post", API_ENDPOINT.ORDER.CREATE, order);
+
+                // Create notification for seller is here
+                socket.emit("notification", {
+                    title: "Bạn có một đơn hàng mới",
+                    message: `Đơn hàng được đặt bởi ${user.name}`,
+                    userReceive: order.seller,
+                });
+
                 message.success(res.data.message);
                 PubSub.publishSync(PUBSUB_SUBSCRIBE_NAME.GET_CART);
                 router.push(ROUTERS.HOME);

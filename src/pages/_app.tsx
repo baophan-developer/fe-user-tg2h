@@ -5,6 +5,7 @@ import { PrivateRoutes } from "@/components/templates";
 import { RecoilRoot } from "recoil";
 import MainLayout from "@/layouts/MainLayout";
 import UserLayout from "@/layouts/UserLayout";
+import SocketProvider from "@/contexts/SocketContext";
 
 type TNextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: React.ReactElement) => React.ReactNode;
@@ -19,7 +20,9 @@ export default function App({ Component, pageProps }: TAppPropsWithLayout) {
     return (
         <MainLayout>
             <PrivateRoutes>
-                <RecoilRoot>{getLayout(<Component {...pageProps} />)}</RecoilRoot>
+                <SocketProvider>
+                    <RecoilRoot>{getLayout(<Component {...pageProps} />)}</RecoilRoot>
+                </SocketProvider>
             </PrivateRoutes>
         </MainLayout>
     );
