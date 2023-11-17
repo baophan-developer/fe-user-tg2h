@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Image, Input, List, Modal, message } from "antd";
+import { Button, Image, Input, List, Modal, message, notification } from "antd";
 import { IOrder } from "@/interfaces";
 import { EOrder, EStatusShipping } from "@/enums/order-enums";
 import styled from "styled-components";
@@ -119,7 +119,6 @@ interface IQuery {
 const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
     const size = useChangeSizeWindow();
     const user = useRecoilValue(UserAtom);
-    const [open, setOpen] = useState<boolean>(false);
     const [total, setTotal] = useState<number>(0);
 
     const [orders, setOrders] = useState<IListOrder[]>([]);
@@ -128,25 +127,6 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
     });
 
     const socket = useSocket();
-
-    const acceptOrder = async (order: IOrder) => {
-        try {
-            const res = await request<any>("post", API_ENDPOINT.ORDER.ACCEPT, {
-                orderId: order._id,
-            });
-            message.success(res.data.message);
-            // Create notification for seller is here
-            socket.emit("notification", {
-                title: "Đơn hàng của bạn đã được duyệt.",
-                message: `Đơn hàng ${order.code} được duyệt bởi ${order.seller.name}`,
-                userReceive: order.owner._id,
-            });
-            getOrder();
-            setOpen(!open);
-        } catch (error: any) {
-            message.error(error.response.data.message);
-        }
-    };
 
     const getOrder = async () => {
         try {
@@ -171,6 +151,12 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
             PubSub.unsubscribe(PUBSUB_SUBSCRIBE_NAME.GET_ORDER);
         };
     }, [query]);
+
+    useEffect(() => {
+        socket.on("notificationResponse", () => {
+            setQuery({ filter: { ...filter } });
+        });
+    }, []);
 
     return (
         <List
@@ -313,26 +299,24 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                         )}
                                     {/* Button for accept order */}
                                     {isAccept && (
-                                        <div>
-                                            <Button
-                                                type="primary"
-                                                onClick={() => setOpen(!open)}
-                                            >
-                                                Duyệt
-                                            </Button>
-                                            <Modal
-                                                title="Duyệt đơn hàng"
-                                                open={open}
-                                                okText="Đồng ý"
-                                                cancelText="Hủy"
-                                                onCancel={() => setOpen(!open)}
-                                                onOk={() => {
-                                                    acceptOrder(order);
-                                                }}
-                                            >
-                                                Bạn đồng ý với đơn hàng?
-                                            </Modal>
-                                        </div>
+                                        <ButtonModel
+                                            button={{
+                                                type: "primary",
+                                                children: "Xác nhận",
+                                            }}
+                                            req={{
+                                                method: "post",
+                                                api: API_ENDPOINT.ORDER.ACCEPT,
+                                                data: {
+                                                    orderId: order._id,
+                                                },
+                                            }}
+                                            title="Xác nhận đơn hàng"
+                                            children="Duyệt đơn hàng và thực hiện việc giao hàng."
+                                            keyPubsub={PUBSUB_SUBSCRIBE_NAME.GET_ORDER}
+                                            isRealtime
+                                            order={order}
+                                        />
                                     )}
                                 </div>
                             </FooterItemStyled>

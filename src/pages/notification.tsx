@@ -6,6 +6,7 @@ import { API_ENDPOINT } from "@/constants/apis";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
+import { useSocket } from "@/contexts/SocketContext";
 
 interface INotification {
     _id: string;
@@ -36,6 +37,7 @@ const ContainerStyled = styled.div`
 
 export default function Notification() {
     const router = useRouter();
+    const socket = useSocket();
     const [notifications, setNotifications] = useState<INotification[]>([]);
     const [total, setTotal] = useState<number>(100);
     const [pagination, setPagination] = useState<{ page: number; limit: number }>({
@@ -67,6 +69,12 @@ export default function Notification() {
     useEffect(() => {
         getAllNotifications();
     }, [pagination]);
+
+    useEffect(() => {
+        socket.on("notificationResponse", () => {
+            setPagination({ page: 0, limit: 10 });
+        });
+    }, []);
 
     return (
         <ContainerStyled>
@@ -108,6 +116,7 @@ export default function Notification() {
                     onChange: (page: number, pageSize: number) => {
                         setPagination({ page: page - 1, limit: pageSize });
                     },
+                    current: pagination?.page + 1 || 1,
                 }}
             />
         </ContainerStyled>

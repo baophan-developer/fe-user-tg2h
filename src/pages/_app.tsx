@@ -18,12 +18,12 @@ type TAppPropsWithLayout = AppProps & {
 export default function App({ Component, pageProps }: TAppPropsWithLayout) {
     const getLayout = Component.getLayout ?? ((page) => <UserLayout>{page}</UserLayout>);
     return (
-        <MainLayout>
-            <PrivateRoutes>
-                <SocketProvider>
+        <SocketProvider>
+            <MainLayout>
+                <PrivateRoutes>
                     <RecoilRoot>{getLayout(<Component {...pageProps} />)}</RecoilRoot>
-                </SocketProvider>
-            </PrivateRoutes>
-        </MainLayout>
+                </PrivateRoutes>
+            </MainLayout>
+        </SocketProvider>
     );
 }
