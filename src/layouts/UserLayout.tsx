@@ -183,6 +183,7 @@ export default function UserLayout({ children }: TProps) {
 
     useEffect(() => {
         if (user._id && socket.connected) {
+            console.log(socket.connected);
             socket.emit("userOnline", { socketId: socket.id, userId: user._id });
         }
     }, [socket, user]);

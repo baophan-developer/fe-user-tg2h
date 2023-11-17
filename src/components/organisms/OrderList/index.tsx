@@ -119,7 +119,6 @@ interface IQuery {
 const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
     const size = useChangeSizeWindow();
     const user = useRecoilValue(UserAtom);
-    const [open, setOpen] = useState<boolean>(false);
     const [total, setTotal] = useState<number>(0);
 
     const [orders, setOrders] = useState<IListOrder[]>([]);
@@ -169,7 +168,6 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                         ...prev,
                         pagination: { page: page - 1, limit: 10 },
                     })),
-                // current: query.filter?.pagination?.page + 1 || 1,
             }}
             locale={{ emptyText: "Không có đơn hàng nào" }}
             style={{ width: "100%" }}
