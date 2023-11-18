@@ -99,7 +99,7 @@ export default function AccountLayout({ children, title }: TProps) {
         <LayoutStyled>
             <HeaderStyled>
                 <BoxAvatarStyled
-                    onClick={() => size.width < 500 && setDisplayMenu(!displayMenu)}
+                    onClick={() => size.width <= 500 && setDisplayMenu(!displayMenu)}
                 >
                     <Avatar src={user?.avatar} alt={user?.name} size="large" />
                     <b>{user?.name}</b>
@@ -113,7 +113,7 @@ export default function AccountLayout({ children, title }: TProps) {
                         items={items}
                         onClick={({ key }) => {
                             router.push(key);
-                            size.width < 500 && setDisplayMenu(!displayMenu);
+                            size.width <= 500 && setDisplayMenu(!displayMenu);
                         }}
                         style={{ height: "100%" }}
                     />
