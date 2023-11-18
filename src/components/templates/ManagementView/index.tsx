@@ -15,8 +15,14 @@ const ActionStyled = styled.div`
 `;
 
 const ContainerStyled = styled.div<{ $width?: number }>`
+    width: ${(props) => props.$width && `${props.$width - 320}px`};
+
+    @media only screen and (max-width: 1300px) {
+        width: ${(props) => props.$width && `${props.$width - 270}px`};
+    }
+
     @media only screen and (max-width: 1000px) {
-        width: ${(props) => props.$width && `${props.$width - 530}px`};
+        width: ${(props) => props.$width && `${props.$width - 240}px`};
     }
 
     @media only screen and (max-width: 500px) {

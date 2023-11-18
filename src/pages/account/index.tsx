@@ -163,7 +163,7 @@ export default function Account() {
                     getInputGender(),
                 ]}
                 bottom={{
-                    item: { wrapperCol: { offset: size.width < 500 ? 0 : 5 } },
+                    item: { wrapperCol: { offset: size.width < 1000 ? 0 : 5 } },
                     buttons: [
                         {
                             htmlType: "submit",

@@ -29,6 +29,7 @@ import ROUTERS from "@/constants/routers";
 const { TextArea } = Input;
 
 const ProductBriefingStyled = styled.div`
+    min-height: 350px;
     padding: 20px;
     display: flex;
     gap: 0 40px;
@@ -90,6 +91,12 @@ const EvaluateStyled = styled.div`
     align-items: center;
     font-size: 16px;
 
+    @media only screen and (max-width: 900px) {
+        flex-direction: column;
+        align-items: flex-start;
+        line-height: 30px;
+    }
+
     @media only screen and (max-width: 500px) {
         flex-direction: column;
         align-items: flex-start;
@@ -112,6 +119,12 @@ const BottomStyled = styled.div`
         position: relative;
         bottom: 0;
     }
+`;
+
+const BottomItemStyled = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px;
 `;
 
 const BoxInformationStyled = styled.div`
@@ -281,7 +294,7 @@ export default function DetailProduct() {
                             <Image
                                 key={index}
                                 src={item}
-                                width={100}
+                                width={70}
                                 preview={false}
                                 onClick={() => carouselRef.current.goTo(index)}
                             />
@@ -301,58 +314,64 @@ export default function DetailProduct() {
                         </div>
                         <div>Lượt đánh giá {product?.reviews}</div>
                         <div>Lượt mua {product?.sold}</div>
-                        <div>
-                            {user._id !== product?.owner._id && (
-                                <Tooltip
-                                    title={`${
-                                        checkFavorites
-                                            ? "Xóa khỏi yêu thích"
-                                            : "Thêm vào yêu thích"
-                                    }`}
-                                >
-                                    <IConHeartStyled
-                                        style={{ color: "red", cursor: "pointer" }}
-                                        onClick={() => {
-                                            checkFavorites
-                                                ? handleAddOrRemoveProductToFavorites(
-                                                      API_ENDPOINT.PROFILE
-                                                          .REMOVE_PRODUCT_TO_FAVORITES
-                                                  )
-                                                : handleAddOrRemoveProductToFavorites(
-                                                      API_ENDPOINT.PROFILE
-                                                          .ADD_PRODUCT_TO_FAVORITES
-                                                  );
-                                        }}
-                                    >
-                                        {checkFavorites ? (
-                                            <AiFillHeart />
-                                        ) : (
-                                            <AiOutlineHeart />
-                                        )}
-                                    </IConHeartStyled>
-                                </Tooltip>
-                            )}
-                        </div>
                     </EvaluateStyled>
                     <h2>{product?.price.toLocaleString("vi")} vnđ</h2>
                     <BottomStyled>
                         <div>{product?.quantity} sản phẩm hiện có</div>
-                        <Button
-                            icon={<AiOutlineShoppingCart />}
-                            type="primary"
-                            disabled={
-                                product?.owner?._id === user._id ||
-                                product?.quantity === 0
-                            }
-                            onClick={() =>
-                                handleAddToCart(
-                                    product?.owner._id as string,
-                                    product?._id as string
-                                )
-                            }
-                        >
-                            Thêm vào giỏ hàng
-                        </Button>
+                        <BottomItemStyled>
+                            <Button
+                                icon={<AiOutlineShoppingCart />}
+                                type="primary"
+                                disabled={
+                                    product?.owner?._id === user._id ||
+                                    product?.quantity === 0
+                                }
+                                onClick={() =>
+                                    handleAddToCart(
+                                        product?.owner._id as string,
+                                        product?._id as string
+                                    )
+                                }
+                            >
+                                Thêm vào giỏ hàng
+                            </Button>
+                            <div>
+                                {user._id !== product?.owner._id && (
+                                    <Tooltip
+                                        title={`${
+                                            checkFavorites
+                                                ? "Xóa khỏi yêu thích"
+                                                : "Thêm vào yêu thích"
+                                        }`}
+                                    >
+                                        <IConHeartStyled
+                                            style={{
+                                                color: "red",
+                                                cursor: "pointer",
+                                                fontSize: "22px",
+                                            }}
+                                            onClick={() => {
+                                                checkFavorites
+                                                    ? handleAddOrRemoveProductToFavorites(
+                                                          API_ENDPOINT.PROFILE
+                                                              .REMOVE_PRODUCT_TO_FAVORITES
+                                                      )
+                                                    : handleAddOrRemoveProductToFavorites(
+                                                          API_ENDPOINT.PROFILE
+                                                              .ADD_PRODUCT_TO_FAVORITES
+                                                      );
+                                            }}
+                                        >
+                                            {checkFavorites ? (
+                                                <AiFillHeart />
+                                            ) : (
+                                                <AiOutlineHeart />
+                                            )}
+                                        </IConHeartStyled>
+                                    </Tooltip>
+                                )}
+                            </div>
+                        </BottomItemStyled>
                     </BottomStyled>
                 </BriefingInfoStyled>
             </ProductBriefingStyled>

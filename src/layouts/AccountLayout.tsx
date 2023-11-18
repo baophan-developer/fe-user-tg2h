@@ -56,7 +56,8 @@ const ContainerStyled = styled.div`
 
 const SiderStyled = styled.div<{ $left?: boolean }>`
     background-color: #fff;
-    width: 200px;
+    /* Fix temp */
+    width: 110px;
 
     @media only screen and (max-width: 500px) {
         width: 100vw;

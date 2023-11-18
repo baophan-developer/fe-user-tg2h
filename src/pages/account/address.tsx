@@ -29,7 +29,7 @@ const HeadingThreeStyled = styled.p`
 `;
 
 const ListItemStyled = styled(List.Item)`
-    @media only screen and (max-width: 500px) {
+    @media only screen and (max-width: 1000px) {
         display: flex;
         flex-direction: column;
         gap: 10px;
