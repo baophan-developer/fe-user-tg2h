@@ -20,6 +20,10 @@ const HeaderListStyled = styled.div`
     display: flex;
     justify-content: space-between;
     font-size: 14px;
+
+    @media only screen and (max-width: 500px) {
+        flex-direction: column;
+    }
 `;
 
 const handleColorStatusOrder = (statusShipping?: string) => {
@@ -62,18 +66,36 @@ const FooterItemStyled = styled.div`
     & div {
         display: flex;
         flex-direction: column;
-        gap: 20px;
-        font-size: 14px;
+        gap: 10px;
+    }
 
-        & span {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
+    @media only screen and (max-width: 500px) {
+        flex-direction: column;
+        gap: 10px;
 
-            & p {
-                color: red;
-                font-size: 20px;
+        & div {
+            & span {
+                justify-content: flex-start;
+                text-align: center;
             }
+        }
+    }
+`;
+
+const TotalPaymentStyled = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 14px;
+
+    & span {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+
+        & p {
+            color: red;
+            font-size: 20px;
         }
     }
 `;
@@ -232,10 +254,15 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                     )}
                                 </span>
                                 <div>
-                                    <span>
-                                        Thành tiền:
-                                        <p> {order.totalPayment.toLocaleString("vi")}</p>
-                                    </span>
+                                    <TotalPaymentStyled>
+                                        <span>
+                                            Thành tiền:
+                                            <p>
+                                                {" "}
+                                                {order.totalPayment.toLocaleString("vi")}
+                                            </p>
+                                        </span>
+                                    </TotalPaymentStyled>
                                     {/* Button for cancel order */}
                                     {order.statusOrder === EOrder.ORDERED &&
                                         !isStatistical && (
