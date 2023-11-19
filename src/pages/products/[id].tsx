@@ -25,6 +25,9 @@ import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import { DeleteOutlined, HeartOutlined } from "@ant-design/icons";
 import { getLayoutDescriptionProduct } from "@/configs/product.config";
 import ROUTERS from "@/constants/routers";
+import { useSocket } from "@/contexts/SocketContext";
+import dayjs from "dayjs";
+import { EVENTS } from "@/constants/events";
 
 const { TextArea } = Input;
 
@@ -166,12 +169,19 @@ const BoxShopStyled = styled.div`
     align-items: center;
 `;
 
+const DayStyled = styled.div`
+    margin-top: 5px;
+    font-size: 12px;
+`;
+
 interface IQuery {
     filter?: any;
     pagination?: any;
 }
 
 export default function DetailProduct() {
+    const socket = useSocket();
+
     const router = useRouter();
     const productId = router.query.id as string;
     const user = useRecoilValue(UserAtom);
@@ -222,6 +232,17 @@ export default function DetailProduct() {
                 ...value,
                 product: productId,
             });
+
+            // Create notification for seller is here
+            if (user._id !== product?.owner._id)
+                socket.emit(EVENTS.NOTIFICATION.EMIT, {
+                    title: "Đánh giá sản phẩm",
+                    message: `Người dùng ${user.name} đã đánh giá sản phẩm ${product?.name} của bạn.`,
+                    userReceive: product?.owner._id,
+                });
+
+            socket.emit(EVENTS.NOTIFICATION.EMIT, {});
+
             form.resetFields();
             message.success(res.data.message);
             getComment();
@@ -236,8 +257,9 @@ export default function DetailProduct() {
                 "delete",
                 `${API_ENDPOINT.COMMENTS.MAIN}/?id=${commentId}&productId=${productId}`
             );
+            socket.emit(EVENTS.NOTIFICATION.EMIT, {});
             message.success(res.data.message);
-            getComment();
+            // getComment();
         } catch (error: any) {
             message.error(error.response.data.message);
         }
@@ -279,6 +301,16 @@ export default function DetailProduct() {
             }
         }
     }, [user]);
+
+    // Catch comment realtime
+    useEffect(() => {
+        socket.on(EVENTS.NOTIFICATION.ON, () => {
+            setQuery((prev) => ({
+                ...prev,
+                filter: { ...prev?.filter, product: productId },
+            }));
+        });
+    }, [query]);
 
     return (
         <div>
@@ -462,11 +494,14 @@ export default function DetailProduct() {
                                     <Rate
                                         style={{ fontSize: "14px" }}
                                         disabled
-                                        defaultValue={item.rating}
+                                        value={item.rating}
                                     />
                                 }
                             />
                             {item.content}
+                            <DayStyled>
+                                {dayjs(item.createdAt).format("HH:mm DD-MM-YYYY")}
+                            </DayStyled>
                         </List.Item>
                     )}
                 />

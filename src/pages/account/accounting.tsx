@@ -24,7 +24,7 @@ const BoxInfoStyled = styled.div`
     justify-content: space-between;
     box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
 
-    @media only screen and (max-width: 500px) {
+    @media only screen and (max-width: 1000px) {
         flex-direction: column;
         gap: 40px;
     }
@@ -40,6 +40,14 @@ const BoxInfoLeftStyled = styled.div`
     & div {
         display: flex;
         align-items: flex-start;
+
+        @media only screen and (max-width: 1000px) {
+            justify-content: space-between;
+        }
+    }
+
+    @media only screen and (max-width: 1000px) {
+        width: 100%;
     }
 `;
 

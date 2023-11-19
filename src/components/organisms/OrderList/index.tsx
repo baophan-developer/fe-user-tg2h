@@ -13,6 +13,7 @@ import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
 import dayjs from "dayjs";
 import { useSocket } from "@/contexts/SocketContext";
+import { EVENTS } from "@/constants/events";
 
 const { TextArea } = Input;
 
@@ -175,7 +176,7 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
     }, [query]);
 
     useEffect(() => {
-        socket.on("notificationResponse", () => {
+        socket.on(EVENTS.NOTIFICATION.ON, () => {
             setQuery({ filter: { ...filter } });
         });
     }, []);
@@ -322,6 +323,8 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                                 keyPubsub={
                                                     PUBSUB_SUBSCRIBE_NAME.GET_ORDER
                                                 }
+                                                isRealtime
+                                                order={order}
                                             />
                                         )}
                                     {/* Button for accept order */}

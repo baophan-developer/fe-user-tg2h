@@ -27,6 +27,7 @@ import CartAtom from "@/stores/CartStore";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import { createPayment } from "@/services/payment";
 import { useSocket } from "@/contexts/SocketContext";
+import { EVENTS } from "@/constants/events";
 
 const { Header } = Layout;
 const { Search } = Input;
@@ -253,7 +254,7 @@ export default function Checkout() {
                 const res = await request<any>("post", API_ENDPOINT.ORDER.CREATE, order);
 
                 // Create notification for seller is here
-                socket.emit("notification", {
+                socket.emit(EVENTS.NOTIFICATION.EMIT, {
                     title: "Bạn có một đơn hàng mới",
                     message: `Đơn hàng được đặt bởi ${user.name}`,
                     userReceive: order.seller,

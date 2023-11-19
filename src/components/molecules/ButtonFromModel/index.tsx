@@ -6,6 +6,7 @@ import { isEqual } from "lodash";
 import { useSocket } from "@/contexts/SocketContext";
 import { IOrder } from "@/interfaces";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
+import { EVENTS } from "@/constants/events";
 
 type TProps = {
     button: ButtonProps;
@@ -76,7 +77,7 @@ export default function ButtonFormModel({
                 }
 
                 // Create notification for seller is here
-                socket.emit("notification", {
+                socket.emit(EVENTS.NOTIFICATION.EMIT, {
                     title: "Hủy đơn hàng",
                     message: `Đơn hàng ${data.order.code} đã bị hủy bởi ${nameUserCancel}`,
                     userReceive: userReceive,

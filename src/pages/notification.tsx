@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import { useSocket } from "@/contexts/SocketContext";
+import { EVENTS } from "@/constants/events";
 
 interface INotification {
     _id: string;
@@ -71,7 +72,7 @@ export default function Notification() {
     }, [pagination]);
 
     useEffect(() => {
-        socket.on("notificationResponse", () => {
+        socket.on(EVENTS.NOTIFICATION.ON, () => {
             setPagination({ page: 0, limit: 10 });
         });
     }, []);
