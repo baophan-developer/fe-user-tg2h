@@ -5,7 +5,16 @@ import { ViewProducts } from "@/components/templates";
 import { API_ENDPOINT } from "@/constants/apis";
 import { IUser } from "@/interfaces";
 import request from "@/services/request";
-import { Avatar } from "antd";
+import { Button, Image } from "antd";
+import { HomeOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
+
+const ContainerStyled = styled.div`
+    padding: 0 5%;
+
+    @media only screen and (max-width: 500px) {
+        padding: 0;
+    }
+`;
 
 const TitleStyled = styled.h2`
     font-weight: 400;
@@ -14,12 +23,14 @@ const TitleStyled = styled.h2`
 `;
 
 const ShopInfoStyled = styled.div`
-    padding: 30px;
+    padding: 20px;
     background-color: #ffff;
     display: flex;
 
     @media only screen and (max-width: 500px) {
-        padding: 20px;
+        padding: 30px 5px;
+        flex-direction: column;
+        gap: 50px;
     }
 `;
 
@@ -28,10 +39,35 @@ const BoxAvatarStyled = styled.div`
     height: auto;
     display: flex;
     align-items: center;
+
+    @media only screen and (max-width: 500px) {
+        justify-content: center;
+    }
 `;
 
 const InfoStyled = styled.div`
+    padding: 0 10px;
     line-height: 25px;
+    width: 100%;
+
+    & h2 {
+        font-weight: 500;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+`;
+
+const InfoItemStyled = styled.div`
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    @media only screen and (max-width: 500px) {
+        padding-left: 0;
+    }
 `;
 
 export default function ShopDetail() {
@@ -50,21 +86,36 @@ export default function ShopDetail() {
 
     useEffect(() => {
         if (router.query.shopId) getDetailInfoUser(router.query.shopId as string);
-    }, []);
+    }, [router.query.shopId]);
 
     return (
-        <div>
+        <ContainerStyled>
             <ShopInfoStyled>
                 <BoxAvatarStyled>
-                    <Avatar
-                        style={{ width: "60px", height: "60px" }}
+                    <Image
                         src={shop?.avatar}
+                        width={200}
+                        height={200}
+                        preview={false}
+                        style={{ objectFit: "fill" }}
                     />
                 </BoxAvatarStyled>
                 <InfoStyled>
-                    <h4>{shop?.name}</h4>
-                    <p>Email: {shop?.email}</p>
-                    <p>Số điện thoại: {shop?.phone}</p>
+                    <h2>
+                        {shop?.name} <Button>Chat ngay</Button>
+                    </h2>
+                    <div>
+                        <InfoItemStyled>
+                            <MailOutlined /> {shop?.email}
+                        </InfoItemStyled>
+                        <InfoItemStyled>
+                            <PhoneOutlined /> {shop?.phone}
+                        </InfoItemStyled>
+                        <InfoItemStyled>
+                            <HomeOutlined />
+                            {shop?.address[0].address}
+                        </InfoItemStyled>
+                    </div>
                 </InfoStyled>
             </ShopInfoStyled>
             <div>
@@ -76,6 +127,6 @@ export default function ShopDetail() {
                     />
                 )}
             </div>
-        </div>
+        </ContainerStyled>
     );
 }
