@@ -8,6 +8,7 @@ export interface IComment {
     product: string;
     rating: number;
     content: string;
+    createdAt: string;
 }
 
 export interface IItemOrder {

@@ -28,6 +28,7 @@ import Link from "next/link";
 import CartAtom from "@/stores/CartStore";
 import { useSocket } from "@/contexts/SocketContext";
 import { INotificationSocket } from "@/interfaces";
+import { EVENTS } from "@/constants/events";
 
 type TProps = {
     children: React.ReactNode;
@@ -183,21 +184,21 @@ export default function UserLayout({ children }: TProps) {
 
     useEffect(() => {
         if (user._id && socket.connected) {
-            console.log(socket.connected);
             socket.emit("userOnline", { socketId: socket.id, userId: user._id });
         }
     }, [socket, user]);
 
     useEffect(() => {
-        socket.on("notificationResponse", (data: INotificationSocket) => {
+        socket.on(EVENTS.NOTIFICATION.ON, (data: INotificationSocket) => {
             getCountNotification();
-            api.open({
-                message: data.title,
-                description: data.message,
-            });
+            data.title &&
+                api.open({
+                    message: data.title,
+                    description: data.message,
+                });
         });
 
-        return () => socket.off("notificationResponse");
+        return () => socket.off(EVENTS.NOTIFICATION.ON);
     }, []);
 
     return (

@@ -8,6 +8,7 @@ import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
 import { useSocket } from "@/contexts/SocketContext";
 import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
+import { EVENTS } from "@/constants/events";
 
 export default function CheckoutSuccess() {
     const socket = useSocket();
@@ -34,7 +35,7 @@ export default function CheckoutSuccess() {
                 router.replace("/checkout-success", undefined, { shallow: true });
 
                 // Create notification for seller is here
-                socket.emit("notification", {
+                socket.emit(EVENTS.NOTIFICATION.EMIT, {
                     title: "Bạn có một đơn hàng mới",
                     message: `Đơn hàng được đặt bởi ${user.name}`,
                     userReceive: order.seller,

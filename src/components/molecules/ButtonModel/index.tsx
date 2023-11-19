@@ -3,6 +3,7 @@ import { Button, ButtonProps, Modal, message } from "antd";
 import request, { TRequest } from "@/services/request";
 import { useSocket } from "@/contexts/SocketContext";
 import { IOrder } from "@/interfaces";
+import { EVENTS } from "@/constants/events";
 
 type TProps = {
     title: React.ReactNode;
@@ -35,7 +36,7 @@ export default function ButtonModel({
 
             if (isRealtime && order)
                 // Create notification for seller is here
-                socket.emit("notification", {
+                socket.emit(EVENTS.NOTIFICATION.EMIT, {
                     title: "Đơn hàng của bạn đã được duyệt.",
                     message: `Đơn hàng ${order.code} được duyệt bởi ${order.seller.name}`,
                     userReceive: order.owner._id,
