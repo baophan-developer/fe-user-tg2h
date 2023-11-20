@@ -19,21 +19,34 @@ const ChatBoxEmptyStyled = styled.span`
 const ChatBoxContainerStyled = styled.div`
     border-radius: 1rem;
     display: grid;
-    grid-template-rows: 14vh 50vh 13vh;
+    grid-template-rows: 10vh 60vh 10vh;
+
+    @media only screen and (max-height: 500px) {
+        grid-template-rows: 16vh 70vh 7vh;
+    }
+
+    @media only screen and (max-width: 500px) {
+        grid-template-rows: 7vh 60vh 7vh;
+    }
 `;
 
 const ChatHeaderStyled = styled.div`
     padding: 1rem 1rem 0rem 1rem;
     display: flex;
     flex-direction: column;
+    border-bottom: 1px solid #d9d9d9;
+
+    @media only screen and (max-width: 500px) {
+        padding: 10px;
+    }
 `;
 
 const ChatBodyStyled = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    padding: 1.5rem;
-    overflow: auto;
+    padding: 1rem;
+    overflow-y: scroll;
 `;
 
 const MessageStyled = styled.div<{ $isOwner: boolean }>`
@@ -65,7 +78,6 @@ const ChatSenderStyled = styled.div`
     align-items: center;
     gap: 1rem;
     padding: 0.8rem;
-    border-radius: 1rem;
     align-self: end;
 `;
 
@@ -73,7 +85,6 @@ const SendStyled = styled.div`
     padding: 8px 20px;
     background-color: #242d49;
     font-size: 16px;
-    border-radius: 6px;
     color: white;
 
     &:hover {
@@ -147,7 +158,11 @@ export default function ChatBox({ chat, currentUserId }: TProps) {
 
     // scroll
     useEffect(() => {
-        scroll.current?.scrollIntoView({ behavior: "smooth" });
+        scroll.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "end",
+            inline: "nearest",
+        });
     }, [messages]);
 
     return (
@@ -161,7 +176,7 @@ export default function ChatBox({ chat, currentUserId }: TProps) {
                     </ChatHeaderStyled>
 
                     {/* Chat box messages */}
-                    <ChatBodyStyled className="chat-body">
+                    <ChatBodyStyled>
                         {messages.map((mess, index) => (
                             <MessageStyled
                                 ref={scroll}

@@ -12,11 +12,15 @@ const ChatStyled = styled.div`
     position: relative;
     display: grid;
     grid-template-columns: 22% auto;
-    gap: 1rem;
+    gap: 0;
     background-color: white;
 
-    @media screen and (max-width: 768px) {
-        grid-template-columns: 18% auto;
+    @media screen and (max-width: 1200px) {
+        grid-template-columns: 25% auto;
+    }
+
+    @media screen and (max-width: 500px) {
+        grid-template-columns: 13% auto;
     }
 `;
 
@@ -24,17 +28,33 @@ const LeftSideStyled = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    border-right: 1px solid #d9d9d9;
 `;
 
 const ChatContainerStyled = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    border-radius: 1rem;
     padding: 1rem;
     height: auto;
-    min-height: 80vh;
+    min-height: 70vh;
     overflow: auto;
+
+    @media only screen and (max-width: 1000px) {
+        padding: 0.5rem;
+
+        & h2 {
+            padding: 0.5rem;
+        }
+    }
+
+    @media only screen and (max-width: 500px) {
+        padding: 2px;
+
+        & h2 {
+            display: none;
+        }
+    }
 `;
 
 const ChatListStyled = styled.div`

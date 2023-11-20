@@ -16,10 +16,16 @@ const ConversationStyled = styled.div`
     }
 
     @media only screen and (max-width: 1000px) {
+        padding: 5px;
+    }
+
+    @media only screen and (max-width: 500px) {
+        justify-content: center;
+        padding: 5px;
+
         & p {
             display: none;
         }
-        justify-content: center;
     }
 `;
 
