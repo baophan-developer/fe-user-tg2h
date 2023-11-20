@@ -14,6 +14,10 @@ const ChatStyled = styled.div`
     grid-template-columns: 22% auto;
     gap: 1rem;
     background-color: white;
+
+    @media screen and (max-width: 768px) {
+        grid-template-columns: 18% auto;
+    }
 `;
 
 const LeftSideStyled = styled.div`

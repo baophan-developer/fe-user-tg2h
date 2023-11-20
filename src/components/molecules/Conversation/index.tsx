@@ -4,12 +4,22 @@ import { Avatar } from "antd";
 import { IChat, IUser } from "@/interfaces";
 
 const ConversationStyled = styled.div`
+    display: flex;
     border-radius: 0.5rem;
     padding: 10px;
+    align-items: center;
+    gap: 10px;
 
     &:hover {
         background: #80808038;
         cursor: pointer;
+    }
+
+    @media only screen and (max-width: 1000px) {
+        & p {
+            display: none;
+        }
+        justify-content: center;
     }
 `;
 
@@ -28,7 +38,7 @@ export default function Conversation({ chat, currentUserId }: TProps) {
 
     return (
         <ConversationStyled>
-            <Avatar src={user?.avatar} /> {user?.name}
+            <Avatar src={user?.avatar} /> <p>{user?.name}</p>
         </ConversationStyled>
     );
 }

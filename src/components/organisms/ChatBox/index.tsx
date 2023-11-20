@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { Avatar, Button, Input } from "antd";
+import { Avatar, Input } from "antd";
 import { format } from "timeago.js";
 import request from "@/services/request";
 import { IChat, IMessage, IUser } from "@/interfaces";
 import { API_ENDPOINT } from "@/constants/apis";
-import css from "styled-jsx/css";
 import { SendOutlined } from "@ant-design/icons";
+import { useSocket } from "@/contexts/SocketContext";
+import { EVENTS } from "@/constants/events";
 
 const ChatBoxEmptyStyled = styled.span`
     display: flex;
@@ -18,7 +19,7 @@ const ChatBoxEmptyStyled = styled.span`
 const ChatBoxContainerStyled = styled.div`
     border-radius: 1rem;
     display: grid;
-    grid-template-rows: 14vh 60vh 13vh;
+    grid-template-rows: 14vh 50vh 13vh;
 `;
 
 const ChatHeaderStyled = styled.div`
@@ -43,7 +44,7 @@ const MessageStyled = styled.div<{ $isOwner: boolean }>`
 
     color: white;
     padding: 0.7rem;
-    max-width: 28rem;
+    max-width: 20rem;
     width: fit-content;
     display: flex;
     flex-direction: column;
@@ -87,9 +88,13 @@ type TProps = {
 };
 
 export default function ChatBox({ chat, currentUserId }: TProps) {
+    const socket = useSocket();
+    /** The user's receiver */
     const [user, setUser] = useState<IUser | null>(null);
     const [messages, setMessages] = useState<IMessage[]>([]);
     const [content, setContent] = useState<string>("");
+
+    const scroll = useRef<any>();
 
     useEffect(() => {
         if (chat) {
@@ -109,6 +114,42 @@ export default function ChatBox({ chat, currentUserId }: TProps) {
         chat && getMessages();
     }, [chat]);
 
+    const handleSendMess = async () => {
+        try {
+            if (!content) return;
+
+            const message = {
+                chatId: chat?._id,
+                senderId: currentUserId,
+                content: content,
+            };
+
+            // Send to save database
+            const res = await request<any>("post", API_ENDPOINT.MESSAGE, message);
+            setContent("");
+            setMessages((prev) => [...prev, res.data]);
+
+            // Send message to socket server
+            const receiverId = user?._id;
+            if (receiverId !== null)
+                socket.emit(EVENTS.MESSAGE.EMIT, { ...message, receiverId });
+        } catch (error: any) {}
+    };
+
+    useEffect(() => {
+        if (chat?._id)
+            socket.on(EVENTS.MESSAGE.ON, () => {
+                getMessages();
+            });
+
+        return () => socket.off(EVENTS.MESSAGE.ON);
+    }, [chat]);
+
+    // scroll
+    useEffect(() => {
+        scroll.current?.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
+
     return (
         <ChatBoxContainerStyled>
             {chat ? (
@@ -123,6 +164,7 @@ export default function ChatBox({ chat, currentUserId }: TProps) {
                     <ChatBodyStyled className="chat-body">
                         {messages.map((mess, index) => (
                             <MessageStyled
+                                ref={scroll}
                                 key={index}
                                 $isOwner={mess.senderId === currentUserId}
                             >
@@ -140,7 +182,7 @@ export default function ChatBox({ chat, currentUserId }: TProps) {
                             onChange={(e) => setContent(e.target.value)}
                             placeholder="Aa"
                         />
-                        <SendStyled>
+                        <SendStyled onClick={handleSendMess}>
                             <SendOutlined />
                         </SendStyled>
                     </ChatSenderStyled>
