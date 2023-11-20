@@ -73,6 +73,7 @@ export default function Chat() {
     const user = useRecoilValue(UserAtom);
     const [chats, setChats] = useState<IChat[]>([]);
     const [currentChat, setCurrentChat] = useState<IChat>();
+    const [isActive, setIsActive] = useState<string>();
 
     const getChats = async () => {
         try {
@@ -96,8 +97,18 @@ export default function Chat() {
                     <h2>Tin nhắn</h2>
                     <ChatListStyled>
                         {chats.map((chat, index) => (
-                            <div key={index} onClick={() => setCurrentChat(chat)}>
-                                <Conversation chat={chat} currentUserId={user._id} />
+                            <div
+                                key={index}
+                                onClick={() => {
+                                    setCurrentChat(chat);
+                                    setIsActive(chat._id);
+                                }}
+                            >
+                                <Conversation
+                                    chat={chat}
+                                    currentUserId={user._id}
+                                    active={chat._id === isActive}
+                                />
                             </div>
                         ))}
                     </ChatListStyled>

@@ -3,12 +3,14 @@ import styled from "styled-components";
 import { Avatar } from "antd";
 import { IChat, IUser } from "@/interfaces";
 
-const ConversationStyled = styled.div`
+const ConversationStyled = styled.div<{ $active?: boolean }>`
     display: flex;
     border-radius: 0.5rem;
     padding: 10px;
     align-items: center;
     gap: 10px;
+
+    background-color: ${(props) => props.$active && "#80808038"};
 
     &:hover {
         background: #80808038;
@@ -32,9 +34,10 @@ const ConversationStyled = styled.div`
 type TProps = {
     chat: IChat;
     currentUserId: string;
+    active?: boolean;
 };
 
-export default function Conversation({ chat, currentUserId }: TProps) {
+export default function Conversation({ chat, currentUserId, active }: TProps) {
     const [user, setUser] = useState<IUser | null>(null);
 
     useEffect(() => {
@@ -43,7 +46,7 @@ export default function Conversation({ chat, currentUserId }: TProps) {
     }, [chat, currentUserId]);
 
     return (
-        <ConversationStyled>
+        <ConversationStyled $active={active}>
             <Avatar src={user?.avatar} /> <p>{user?.name}</p>
         </ConversationStyled>
     );
