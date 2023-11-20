@@ -231,6 +231,12 @@ export default function UserLayout({ children }: TProps) {
                                 >
                                     Tài khoản của tôi
                                 </Button>
+                                <Button
+                                    type="text"
+                                    onClick={() => router.push(ROUTERS.CHAT)}
+                                >
+                                    Tin nhắn
+                                </Button>
                                 <Button type="text" onClick={handleLogout}>
                                     Đăng xuất
                                 </Button>

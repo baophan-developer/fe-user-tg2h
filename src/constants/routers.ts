@@ -20,6 +20,7 @@ const ROUTERS = {
     PRODUCTS: "/products",
     SHOP_DETAIL: "/shop-detail",
     NOTIFICATION: "/notification",
+    CHAT: "/chat",
 };
 
 export default ROUTERS;

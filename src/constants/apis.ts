@@ -53,6 +53,11 @@ export const API_ENDPOINT = {
         MAIN: "comment/",
         ADD: "comment/add",
     },
+    CHAT: {
+        MAIN: "chat/",
+        FIND_CHAT: "chat/find",
+    },
+    MESSAGE: "message/",
     BOUGHT: "bought/",
     SIZE_SCREEN: "size-screen/",
     SCAN_FREQUENCY_SCREEN: "scan-frequency-screen/",
