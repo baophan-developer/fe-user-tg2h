@@ -142,8 +142,13 @@ export default function ChatBox({ chat, currentUserId }: TProps) {
 
             // Send message to socket server
             const receiverId = user?._id;
+            const userSend = chat?.members.filter((user) => user._id !== receiverId)[0];
             if (receiverId !== null)
-                socket.emit(EVENTS.MESSAGE.EMIT, { ...message, receiverId });
+                socket.emit(EVENTS.MESSAGE.EMIT, {
+                    ...message,
+                    receiverId,
+                    userSend: userSend?.name,
+                });
         } catch (error: any) {}
     };
 
