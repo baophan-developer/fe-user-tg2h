@@ -98,6 +98,7 @@ export default function Chat() {
                 `${API_ENDPOINT.CHAT.MAIN}/${currentChat?._id}`
             );
             getChats();
+            socket.emit(EVENTS.NOTIFICATION.EMIT, {});
             message.success(res.data.message);
         } catch (error: any) {}
     };
