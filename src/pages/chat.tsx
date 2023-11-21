@@ -7,6 +7,9 @@ import { Conversation } from "@/components/molecules";
 import { IChat } from "@/interfaces";
 import { ChatBox } from "@/components/organisms";
 import styled from "styled-components";
+import { useSocket } from "@/contexts/SocketContext";
+import { EVENTS } from "@/constants/events";
+import { message } from "antd";
 
 const ChatStyled = styled.div`
     position: relative;
@@ -70,6 +73,7 @@ const RightSideStyled = styled.div`
 `;
 
 export default function Chat() {
+    const socket = useSocket();
     const user = useRecoilValue(UserAtom);
     const [chats, setChats] = useState<IChat[]>([]);
     const [currentChat, setCurrentChat] = useState<IChat>();
@@ -82,12 +86,33 @@ export default function Chat() {
                 `${API_ENDPOINT.CHAT.MAIN}/${user._id}`
             );
             setChats(res.data);
+            setCurrentChat(res.data[0]);
+            setIsActive(res.data[0]?._id);
+        } catch (error: any) {}
+    };
+
+    const handleDeleteChat = async () => {
+        try {
+            const res = await request<any>(
+                "delete",
+                `${API_ENDPOINT.CHAT.MAIN}/${currentChat?._id}`
+            );
+            getChats();
+            message.success(res.data.message);
         } catch (error: any) {}
     };
 
     useEffect(() => {
-        user._id && getChats();
+        if (user._id) {
+            getChats();
+        }
     }, [user]);
+
+    useEffect(() => {
+        socket.on(EVENTS.NOTIFICATION.ON, () => {
+            getChats();
+        });
+    }, []);
 
     return (
         <ChatStyled>
@@ -118,7 +143,11 @@ export default function Chat() {
             {/* Right side */}
             <RightSideStyled>
                 {/* Chat body */}
-                <ChatBox chat={currentChat} currentUserId={user._id} />
+                <ChatBox
+                    chat={currentChat}
+                    currentUserId={user._id}
+                    handleDeleteChat={handleDeleteChat}
+                />
             </RightSideStyled>
         </ChatStyled>
     );

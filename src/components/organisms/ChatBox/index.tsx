@@ -1,13 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { Avatar, Input } from "antd";
+import { Avatar, Input, Modal, message } from "antd";
 import { format } from "timeago.js";
 import request from "@/services/request";
 import { IChat, IMessage, IUser } from "@/interfaces";
 import { API_ENDPOINT } from "@/constants/apis";
-import { SendOutlined } from "@ant-design/icons";
+import { DeleteOutlined, SendOutlined } from "@ant-design/icons";
 import { useSocket } from "@/contexts/SocketContext";
 import { EVENTS } from "@/constants/events";
+import { useRouter } from "next/router";
+import ROUTERS from "@/constants/routers";
 
 const ChatBoxEmptyStyled = styled.span`
     display: flex;
@@ -31,9 +33,10 @@ const ChatBoxContainerStyled = styled.div`
 `;
 
 const ChatHeaderStyled = styled.div`
-    padding: 1rem 1rem 0rem 1rem;
+    padding: 1rem 1rem 1rem 1rem;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
     border-bottom: 1px solid #d9d9d9;
 
     @media only screen and (max-width: 500px) {
@@ -93,17 +96,32 @@ const SendStyled = styled.div`
     }
 `;
 
+const ActionStyled = styled.div`
+    cursor: pointer;
+`;
+
+const DeleteButtonStyled = styled.div`
+    font-size: 20px;
+
+    &:hover {
+        cursor: pointer;
+    }
+`;
+
 type TProps = {
     chat: IChat | undefined;
     currentUserId: string;
+    handleDeleteChat: () => Promise<any>;
 };
 
-export default function ChatBox({ chat, currentUserId }: TProps) {
+export default function ChatBox({ chat, currentUserId, handleDeleteChat }: TProps) {
     const socket = useSocket();
+    const router = useRouter();
     /** The user's receiver */
     const [user, setUser] = useState<IUser | null>(null);
     const [messages, setMessages] = useState<IMessage[]>([]);
     const [content, setContent] = useState<string>("");
+    const [isChat, setIsChat] = useState<boolean>(false);
 
     const scroll = useRef<any>();
 
@@ -123,6 +141,8 @@ export default function ChatBox({ chat, currentUserId }: TProps) {
 
     useEffect(() => {
         chat && getMessages();
+        if (chat) setIsChat(true);
+        else setIsChat(false);
     }, [chat]);
 
     const handleSendMess = async () => {
@@ -172,12 +192,28 @@ export default function ChatBox({ chat, currentUserId }: TProps) {
 
     return (
         <ChatBoxContainerStyled>
-            {chat ? (
+            {isChat ? (
                 <>
-                    <ChatHeaderStyled className="chat-header">
-                        <div>
+                    <ChatHeaderStyled>
+                        <ActionStyled
+                            onClick={() =>
+                                router.push(`${ROUTERS.SHOP_DETAIL}?shopId=${user?._id}`)
+                            }
+                        >
                             <Avatar size={"large"} src={user?.avatar} /> {user?.name}
-                        </div>
+                        </ActionStyled>
+                        <DeleteButtonStyled
+                            onClick={() =>
+                                Modal.confirm({
+                                    title: "Bạn có muốn xóa tất cả tin nhắn",
+                                    onOk: handleDeleteChat,
+                                    okText: "Xác nhận",
+                                    cancelText: "Hủy",
+                                })
+                            }
+                        >
+                            <DeleteOutlined />
+                        </DeleteButtonStyled>
                     </ChatHeaderStyled>
 
                     {/* Chat box messages */}
