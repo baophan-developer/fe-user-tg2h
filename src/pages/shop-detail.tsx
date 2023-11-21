@@ -7,6 +7,9 @@ import { IUser } from "@/interfaces";
 import request from "@/services/request";
 import { Button, Image } from "antd";
 import { HomeOutlined, MailOutlined, PhoneOutlined } from "@ant-design/icons";
+import { useRecoilValue } from "recoil";
+import UserAtom from "@/stores/UserStore";
+import ROUTERS from "@/constants/routers";
 
 const ContainerStyled = styled.div`
     padding: 0 5%;
@@ -72,6 +75,7 @@ const InfoItemStyled = styled.div`
 
 export default function ShopDetail() {
     const router = useRouter();
+    const user = useRecoilValue(UserAtom);
     const [shop, setShop] = useState<IUser>();
 
     const getDetailInfoUser = async (shopId: string) => {
@@ -82,6 +86,16 @@ export default function ShopDetail() {
             );
             setShop(res.data.item);
         } catch (error: any) {}
+    };
+
+    const handleChat = async () => {
+        try {
+            await request<any>("post", API_ENDPOINT.CHAT.MAIN, {
+                senderId: user._id,
+                receiverId: shop?._id,
+            });
+            router.push(ROUTERS.CHAT);
+        } catch (error) {}
     };
 
     useEffect(() => {
@@ -102,7 +116,7 @@ export default function ShopDetail() {
                 </BoxAvatarStyled>
                 <InfoStyled>
                     <h2>
-                        {shop?.name} <Button>Chat ngay</Button>
+                        {shop?.name} <Button onClick={handleChat}>Chat ngay</Button>
                     </h2>
                     <div>
                         <InfoItemStyled>
