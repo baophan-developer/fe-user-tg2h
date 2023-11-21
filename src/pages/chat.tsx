@@ -79,15 +79,17 @@ export default function Chat() {
     const [currentChat, setCurrentChat] = useState<IChat>();
     const [isActive, setIsActive] = useState<string>();
 
-    const getChats = async () => {
+    const getChats = async (isSetup: boolean = true) => {
         try {
             const res = await request<any>(
                 "get",
                 `${API_ENDPOINT.CHAT.MAIN}/${user._id}`
             );
             setChats(res.data);
-            setCurrentChat(res.data[0]);
-            setIsActive(res.data[0]?._id);
+            if (isSetup) {
+                setCurrentChat(res.data[0]);
+                setIsActive(res.data[0]?._id);
+            }
         } catch (error: any) {}
     };
 
@@ -98,7 +100,12 @@ export default function Chat() {
                 `${API_ENDPOINT.CHAT.MAIN}/${currentChat?._id}`
             );
             getChats();
-            socket.emit(EVENTS.NOTIFICATION.EMIT, {});
+
+            const receiver = currentChat?.members.filter(
+                (mem) => mem._id !== user._id
+            )[0];
+            socket.emit("deleteChat", { receiverId: receiver?._id });
+
             message.success(res.data.message);
         } catch (error: any) {}
     };
@@ -111,6 +118,10 @@ export default function Chat() {
 
     useEffect(() => {
         socket.on(EVENTS.NOTIFICATION.ON, () => {
+            getChats(false);
+        });
+
+        socket.on("deleteChatResponse", () => {
             getChats();
         });
     }, []);
