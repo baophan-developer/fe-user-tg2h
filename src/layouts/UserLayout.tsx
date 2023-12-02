@@ -164,6 +164,15 @@ export default function UserLayout({ children }: TProps) {
         } catch (error) {}
     };
 
+    const handleSearch = (value: string) => {
+        // regex special characters
+        const specialCharacterPattern = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/;
+
+        if (!String(value).match(specialCharacterPattern)) {
+            router.push(`${ROUTERS.PRODUCTS}?search=${value}`);
+        }
+    };
+
     useEffect(() => {
         getUserInfo();
         getCart();
@@ -259,9 +268,7 @@ export default function UserLayout({ children }: TProps) {
                     type="primary"
                     enterButton
                     allowClear
-                    onSearch={(value) =>
-                        router.push(`${ROUTERS.PRODUCTS}?search=${value}`)
-                    }
+                    onSearch={(value) => handleSearch(value)}
                 />
                 <Badge
                     count={cart.total}
