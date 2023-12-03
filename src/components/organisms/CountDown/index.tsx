@@ -15,7 +15,7 @@ const Container = styled.div`
         font-weight: 550;
     }
 
-    @media only screen and (max-width: 930px) {
+    @media only screen and (max-width: 600px) {
         flex-direction: column;
         padding: 5px 20px 15px;
     }
@@ -36,10 +36,11 @@ const TimerStyled = styled.div`
 `;
 
 type TProps = {
+    title?: String;
     deadline: string;
 };
 
-export default function CountDown({ deadline }: TProps) {
+export default function CountDown({ title, deadline }: TProps) {
     const [days, setDays] = useState(0);
     const [hours, setHours] = useState(0);
     const [minutes, setMinutes] = useState(0);
@@ -62,7 +63,7 @@ export default function CountDown({ deadline }: TProps) {
 
     return (
         <Container>
-            <p>GIẢM GIÁ CÒN</p>
+            <p>{title || "GIẢM GIÁ CÒN"}</p>
             <TimerStyled>
                 <div>{days}</div>
                 <p>Ngày</p>

@@ -6,6 +6,7 @@ import { ViewProducts } from "@/components/templates";
 import request from "@/services/request";
 import { useRouter } from "next/router";
 import ROUTERS from "@/constants/routers";
+import { TopSale } from "@/components/organisms";
 
 const HeadingStyled = styled.h2`
     width: 100%;
@@ -51,6 +52,7 @@ export default function Home() {
 
     return (
         <Layout>
+            <TopSale />
             <HeadingTopStyled>Top những sản phẩm bán chạy</HeadingTopStyled>
             <ViewProducts
                 requestApi={{ method: "post", api: API_ENDPOINT.PRODUCT.SOLD_HIGH }}

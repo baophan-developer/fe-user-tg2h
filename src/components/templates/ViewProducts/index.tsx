@@ -63,7 +63,7 @@ type TProps = {
 
 export const discount = (price: number, percent: number | undefined): string => {
     if (!percent) return price.toLocaleString("vi") + " đ";
-    return (price - price / percent).toLocaleString("vi") + ` đ`;
+    return (price - (price / 100) * percent).toLocaleString("vi") + ` đ`;
 };
 
 export default function ViewProducts({ requestApi, filters, sort, pagination }: TProps) {
