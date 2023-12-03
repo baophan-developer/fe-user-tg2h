@@ -129,12 +129,14 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
                 )}
             </Row>
             <PaginationStyled>
-                <Pagination
-                    defaultCurrent={query.pagination.page + 1}
-                    defaultPageSize={query.pagination.limit}
-                    total={total}
-                    onChange={handleChangePagination}
-                />
+                {total > 20 && (
+                    <Pagination
+                        defaultCurrent={query.pagination.page + 1}
+                        defaultPageSize={query.pagination.limit}
+                        total={total}
+                        onChange={handleChangePagination}
+                    />
+                )}
             </PaginationStyled>
         </div>
     );

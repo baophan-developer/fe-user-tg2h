@@ -33,7 +33,7 @@ export default function Home() {
     const getCategory = async () => {
         try {
             const res = await request<any>("get", API_ENDPOINT.CATEGORY);
-            setCategory(res.data.list);
+            setCategory([{ _id: "All", name: "Tất cả" }, ...res.data.list]);
         } catch (error) {}
     };
 
