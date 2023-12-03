@@ -79,7 +79,7 @@ export default function ViewProducts({ requestApi, filters, sort, pagination }: 
         },
         pagination: {
             page: 0,
-            limit: 0,
+            limit: 18,
         },
     });
 
