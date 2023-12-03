@@ -32,6 +32,7 @@
         "sheetjs-style": "^0.15.8",
         "socket.io-client": "^4.7.2",
         "styled-components": "^6.0.8",
+        "timeago.js": "^4.0.2",
         "typescript": "5.2.2",
         "xlsx": "^0.18.5"
     },

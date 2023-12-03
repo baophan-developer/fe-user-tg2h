@@ -1,3 +1,15 @@
+export interface IMessage {
+    chatId: string;
+    senderId: string;
+    content: string;
+    createdAt: string;
+}
+
+export interface IChat {
+    _id: string;
+    members: IUser[];
+}
+
 export interface IComment {
     _id: string;
     user: {

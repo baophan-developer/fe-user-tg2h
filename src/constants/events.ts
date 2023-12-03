@@ -3,4 +3,8 @@ export const EVENTS = {
         ON: "notificationResponse",
         EMIT: "notification",
     },
+    MESSAGE: {
+        ON: "messageResponse",
+        EMIT: "message",
+    },
 };
