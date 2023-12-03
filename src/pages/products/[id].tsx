@@ -28,11 +28,13 @@ import ROUTERS from "@/constants/routers";
 import { useSocket } from "@/contexts/SocketContext";
 import dayjs from "dayjs";
 import { EVENTS } from "@/constants/events";
+import { discount } from "@/components/templates/ViewProducts";
+import { CountDown } from "@/components/organisms";
 
 const { TextArea } = Input;
 
 const ProductBriefingStyled = styled.div`
-    min-height: 350px;
+    min-height: 500px;
     padding: 20px;
     display: flex;
     gap: 0 40px;
@@ -199,6 +201,23 @@ const QuantityStyled = styled.span`
     }
 `;
 
+const PriceStyled = styled.div`
+    /* margin-top: 10px; */
+    padding: 5px 20px;
+    background-color: #f1f1f1;
+`;
+
+const PriceItemStyled = styled.div`
+    display: flex;
+    gap: 10px;
+`;
+
+const DiscountStyled = styled.p<{ $discount?: any }>`
+    display: ${(props) => !props.$discount && "none"};
+    text-decoration: ${(props) => props.$discount && "line-through"};
+    font-size: 18px;
+`;
+
 interface IQuery {
     filter?: any;
     pagination?: any;
@@ -362,7 +381,7 @@ export default function DetailProduct() {
                     <h2>{product?.name}</h2>
                     <EvaluateStyled>
                         <RatingStyled>
-                            <p>{product?.rating}</p>
+                            <p>{product?.rating.toFixed(1)}</p>
                             <Rate
                                 value={product?.rating}
                                 disabled
@@ -380,8 +399,44 @@ export default function DetailProduct() {
                         </QuantityStyled>
                     </EvaluateStyled>
                     <div>
-                        <h2>{product?.price.toLocaleString("vi")} vnđ</h2>
+                        {product?.discount &&
+                            Date.parse(product?.discount?.start) < Date.now() && (
+                                <>
+                                    <CountDown deadline={product?.discount?.end} />
+                                </>
+                            )}
+
+                        {product?.discount &&
+                            Date.parse(product?.discount?.start) > Date.now() && (
+                                <div>
+                                    Giảm giá bắt đầu từ:{" "}
+                                    {dayjs(product.discount.start).format(
+                                        "HH:mm DD-MM-YYYY"
+                                    )}
+                                </div>
+                            )}
                     </div>
+                    <PriceStyled>
+                        <PriceItemStyled>
+                            <DiscountStyled $discount={product?.discount}>
+                                {product?.price.toLocaleString("vi") + " đ"}
+                            </DiscountStyled>
+                            <p
+                                style={{
+                                    fontSize: "22px",
+                                    color: "red",
+                                    fontWeight: "500",
+                                }}
+                            >
+                                {product &&
+                                    discount(product?.price, product?.discount?.percent)}
+                            </p>
+                        </PriceItemStyled>
+                        <div>
+                            {product?.discount &&
+                                `Mã giảm giá: ${product?.discount?.code}`}
+                        </div>
+                    </PriceStyled>
                     <BottomStyled>
                         <div>{product?.quantity} sản phẩm hiện có</div>
                         <BottomItemStyled>

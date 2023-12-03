@@ -57,7 +57,7 @@ type TProps = {
     sort?: any;
 };
 
-const discount = (price: number, percent: number | undefined): string => {
+export const discount = (price: number, percent: number | undefined): string => {
     if (!percent) return price.toLocaleString("vi") + " đ";
     return (price - price / percent).toLocaleString("vi") + ` đ`;
 };
@@ -157,6 +157,7 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
                                                     }}
                                                     value={item.rating}
                                                     disabled
+                                                    allowHalf
                                                 />
                                             </PriceStyled>
                                             <span>

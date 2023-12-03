@@ -132,8 +132,8 @@ export interface IProduct {
         code: string;
         amount: number;
         percent: number;
-        start: Date;
-        end: Date;
+        start: string;
+        end: string;
         status: boolean;
     };
     reviews: number;
