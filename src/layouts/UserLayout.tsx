@@ -102,7 +102,7 @@ const ContentStyled = styled(Content)`
 
 const NotificationHeaderStyled = styled.div`
     padding: 4px 10%;
-    background-color: #434343;
+    background-color: #001529;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -267,7 +267,6 @@ export default function UserLayout({ children }: TProps) {
                     placeholder="Nhập trên sản phẩm cần tìm kiếm."
                     type="primary"
                     enterButton
-                    // allowClear
                     onSearch={(value) => handleSearch(value)}
                 />
                 <Badge
