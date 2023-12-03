@@ -9,8 +9,8 @@ import ROUTERS from "@/constants/routers";
 const { Meta } = Card;
 
 const CardStyled = styled(Card)`
-    width: 240px;
-    height: 370px;
+    width: 200px;
+    height: 350px;
 
     @media only screen and (max-width: 500px) {
         width: 200px;
@@ -20,7 +20,7 @@ const CardStyled = styled(Card)`
 const PaginationStyled = styled.div`
     margin-top: 20px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
 `;
 
 const EmptyStyled = styled.div`
@@ -55,6 +55,10 @@ type TProps = {
     requestApi: { method: TRequest; api: string };
     filters?: any;
     sort?: any;
+    pagination?: {
+        page?: number;
+        limit?: number;
+    };
 };
 
 export const discount = (price: number, percent: number | undefined): string => {
@@ -62,11 +66,11 @@ export const discount = (price: number, percent: number | undefined): string => 
     return (price - price / percent).toLocaleString("vi") + ` đ`;
 };
 
-export default function ViewProducts({ requestApi, filters, sort }: TProps) {
+export default function ViewProducts({ requestApi, filters, sort, pagination }: TProps) {
     const router = useRouter();
     const [loading, setLoading] = useState<boolean>(false);
     const [products, setProducts] = useState<IProductRender[]>([]);
-    const [total, setTotal] = useState<number>(20);
+    const [total, setTotal] = useState<number>(0);
     const [query, setQuery] = useState<IQuery>({
         filters: {
             status: true,
@@ -75,7 +79,7 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
         },
         pagination: {
             page: 0,
-            limit: 20,
+            limit: 0,
         },
     });
 
@@ -108,8 +112,12 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
             ...prev,
             filters: { status: true, approve: true, ...filters },
             sort: { ...sort },
+            pagination: {
+                page: pagination?.page || 0,
+                limit: pagination?.limit || 18,
+            },
         }));
-    }, [filters, sort]);
+    }, [filters, sort, pagination]);
 
     return (
         <div>
@@ -185,6 +193,7 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
                         defaultPageSize={query.pagination.limit}
                         total={total}
                         onChange={handleChangePagination}
+                        size="small"
                     />
                 )}
             </PaginationStyled>

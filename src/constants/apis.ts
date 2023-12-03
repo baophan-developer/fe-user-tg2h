@@ -29,6 +29,8 @@ export const API_ENDPOINT = {
         GET: "product",
         CREATE: "product/create",
         RECOMMENDATION: "/recommendation",
+        RATING_HIGH: "product/rating-high",
+        SOLD_HIGH: "product/sold-high",
     },
     CART: {
         GET: "session-cart/",

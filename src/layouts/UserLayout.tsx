@@ -38,7 +38,7 @@ const { Header, Content } = Layout;
 const { Search } = Input;
 
 const HeaderStyled = styled(Header)`
-    padding: 2px 10%;
+    padding: 2px 9%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -93,7 +93,7 @@ const ContentPopoverStyled = styled.div`
 `;
 
 const ContentStyled = styled(Content)`
-    padding: 1% 5%;
+    padding: 1% 9%;
 
     @media only screen and (max-width: 500px) {
         padding: 1% 0;
@@ -101,7 +101,7 @@ const ContentStyled = styled(Content)`
 `;
 
 const NotificationHeaderStyled = styled.div`
-    padding: 4px 10%;
+    padding: 4px 9%;
     background-color: #001529;
     display: flex;
     justify-content: space-between;
