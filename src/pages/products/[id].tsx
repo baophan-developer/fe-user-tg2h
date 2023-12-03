@@ -481,7 +481,7 @@ export default function DetailProduct() {
                             />
                         </Form.Item>
                         <Form.Item name="rating">
-                            <Rate />
+                            <Rate style={{ color: "red", fontSize: "16px" }} />
                         </Form.Item>
                         <Form.Item>
                             <Button htmlType="submit" type="primary">
