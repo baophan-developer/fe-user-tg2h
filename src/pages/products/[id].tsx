@@ -174,6 +174,31 @@ const DayStyled = styled.div`
     font-size: 12px;
 `;
 
+const RatingStyled = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    & p {
+        text-decoration: underline 1px;
+        color: red;
+    }
+`;
+
+const QuantityStyled = styled.span`
+    display: flex;
+    gap: 6px;
+
+    :nth-child(1) {
+        text-decoration: underline 1px;
+    }
+
+    :nth-child(2) {
+        color: #767676;
+    }
+`;
+
 interface IQuery {
     filter?: any;
     pagination?: any;
@@ -336,18 +361,27 @@ export default function DetailProduct() {
                 <BriefingInfoStyled>
                     <h2>{product?.name}</h2>
                     <EvaluateStyled>
-                        <div>
+                        <RatingStyled>
+                            <p>{product?.rating}</p>
                             <Rate
                                 value={product?.rating}
                                 disabled
-                                style={{ fontSize: "16px" }}
+                                style={{ fontSize: "14px", color: "red" }}
                                 allowHalf
                             />
-                        </div>
-                        <div>Lượt đánh giá {product?.reviews}</div>
-                        <div>Lượt mua {product?.sold}</div>
+                        </RatingStyled>
+                        <QuantityStyled>
+                            <p>{product?.reviews}</p>
+                            <p>Lượt đánh giá</p>
+                        </QuantityStyled>
+                        <QuantityStyled>
+                            <p>{product?.sold}</p>
+                            <p>Đã bán</p>
+                        </QuantityStyled>
                     </EvaluateStyled>
-                    <h2>{product?.price.toLocaleString("vi")} vnđ</h2>
+                    <div>
+                        <h2>{product?.price.toLocaleString("vi")} vnđ</h2>
+                    </div>
                     <BottomStyled>
                         <div>{product?.quantity} sản phẩm hiện có</div>
                         <BottomItemStyled>
@@ -492,7 +526,7 @@ export default function DetailProduct() {
                                 }
                                 description={
                                     <Rate
-                                        style={{ fontSize: "14px" }}
+                                        style={{ fontSize: "14px", color: "red" }}
                                         disabled
                                         value={item.rating}
                                     />

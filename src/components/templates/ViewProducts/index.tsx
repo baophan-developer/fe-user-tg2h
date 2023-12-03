@@ -150,7 +150,11 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
                                                     )}
                                                 </p>
                                                 <Rate
-                                                    style={{ margin: "10px 0" }}
+                                                    style={{
+                                                        margin: "10px 0",
+                                                        color: "red",
+                                                        fontSize: "14px",
+                                                    }}
                                                     value={item.rating}
                                                     disabled
                                                 />
