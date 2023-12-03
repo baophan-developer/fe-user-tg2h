@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IProductRender } from "@/interfaces";
-import { Card, Col, Image, Pagination, PaginationProps, Row } from "antd";
+import { Card, Col, Image, Pagination, PaginationProps, Rate, Row } from "antd";
 import request, { TRequest } from "@/services/request";
 import { useRouter } from "next/router";
 import ROUTERS from "@/constants/routers";
@@ -10,6 +10,7 @@ const { Meta } = Card;
 
 const CardStyled = styled(Card)`
     width: 240px;
+    height: 370px;
 
     @media only screen and (max-width: 500px) {
         width: 200px;
@@ -32,6 +33,15 @@ const EmptyStyled = styled.div`
     }
 `;
 
+const PriceStyled = styled.div`
+    text-align: center;
+    font-size: 18px;
+`;
+
+const DiscountStyled = styled.p<{ $discount?: any }>`
+    text-decoration: ${(props) => props.$discount && "line-through"};
+`;
+
 interface IQuery {
     filters?: any;
     sort?: any;
@@ -45,6 +55,11 @@ type TProps = {
     requestApi: { method: TRequest; api: string };
     filters?: any;
     sort?: any;
+};
+
+const discount = (price: number, percent: number | undefined): string => {
+    if (!percent) return price.toLocaleString("vi") + " đ";
+    return (price - price / percent).toLocaleString("vi") + ` đ`;
 };
 
 export default function ViewProducts({ requestApi, filters, sort }: TProps) {
@@ -107,13 +122,43 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
                                     router.push(`${ROUTERS.PRODUCTS}/${item._id}`)
                                 }
                             >
-                                <Image src={item.images[0]} preview={false} />
+                                <Image
+                                    loading="eager"
+                                    src={item.images[0]}
+                                    preview={false}
+                                />
                                 <Meta
+                                    style={{ marginTop: "20px" }}
                                     title={item.name}
                                     description={
                                         <div>
-                                            {item.price.toLocaleString("vi")} đ - Đã bán{" "}
-                                            {item.sold}
+                                            <PriceStyled>
+                                                <DiscountStyled $discount={item.discount}>
+                                                    {item.discount &&
+                                                        item.price.toLocaleString("vi") +
+                                                            " đ"}
+                                                </DiscountStyled>
+                                                <p
+                                                    style={{
+                                                        fontWeight: "500",
+                                                        color: "red",
+                                                    }}
+                                                >
+                                                    {discount(
+                                                        item.price,
+                                                        item.discount?.percent
+                                                    )}
+                                                </p>
+                                                <Rate
+                                                    style={{ margin: "10px 0" }}
+                                                    value={item.rating}
+                                                    disabled
+                                                />
+                                            </PriceStyled>
+                                            <span>
+                                                <p>Lượt mua {item.sold}</p>
+                                                <p>Lượt đánh giá giá {item.reviews}</p>
+                                            </span>
                                         </div>
                                     }
                                 />

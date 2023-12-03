@@ -267,7 +267,7 @@ export default function UserLayout({ children }: TProps) {
                     placeholder="Nhập trên sản phẩm cần tìm kiếm."
                     type="primary"
                     enterButton
-                    allowClear
+                    // allowClear
                     onSearch={(value) => handleSearch(value)}
                 />
                 <Badge
