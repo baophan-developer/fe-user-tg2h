@@ -15,14 +15,14 @@ const ActionStyled = styled.div`
 `;
 
 const ContainerStyled = styled.div<{ $width?: number }>`
-    width: ${(props) => props.$width && `${props.$width - 320}px`};
+    width: ${(props) => props.$width && `${props.$width - 540}px`};
 
     @media only screen and (max-width: 1300px) {
-        width: ${(props) => props.$width && `${props.$width - 270}px`};
+        width: ${(props) => props.$width && `${props.$width - 360}px`};
     }
 
     @media only screen and (max-width: 1000px) {
-        width: ${(props) => props.$width && `${props.$width - 240}px`};
+        width: ${(props) => props.$width && `${props.$width - 170}px`};
     }
 
     @media only screen and (max-width: 500px) {

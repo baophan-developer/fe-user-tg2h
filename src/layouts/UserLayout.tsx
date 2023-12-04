@@ -95,6 +95,10 @@ const ContentPopoverStyled = styled.div`
 const ContentStyled = styled(Content)`
     padding: 1% 9%;
 
+    @media only screen and (max-width: 1000px) {
+        padding: 1%;
+    }
+
     @media only screen and (max-width: 500px) {
         padding: 1% 0;
     }
