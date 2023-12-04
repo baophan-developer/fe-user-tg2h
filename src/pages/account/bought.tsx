@@ -4,8 +4,6 @@ import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
 import UserLayout from "@/layouts/UserLayout";
 import AccountLayout from "@/layouts/AccountLayout";
-import request from "@/services/request";
-import { API_ENDPOINT } from "@/constants/apis";
 import useChangeSizeWindow from "@/hooks/useChangeSizeWindow";
 import ROUTERS from "@/constants/routers";
 import { useRouter } from "next/router";

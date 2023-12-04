@@ -22,7 +22,7 @@ import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
-import { DeleteOutlined, HeartOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, DeleteOutlined, HeartOutlined } from "@ant-design/icons";
 import { getLayoutDescriptionProduct } from "@/configs/product.config";
 import ROUTERS from "@/constants/routers";
 import { useSocket } from "@/contexts/SocketContext";
@@ -217,6 +217,18 @@ const DiscountStyled = styled.p<{ $discount?: any }>`
     display: ${(props) => !props.$discount && "none"};
     text-decoration: ${(props) => props.$discount && "line-through"};
     font-size: 18px;
+`;
+
+const NameUserCommentStyled = styled.div`
+    font-weight: 550;
+    display: flex;
+    gap: 20px;
+
+    :nth-child(2) {
+        font-size: 14px;
+        font-weight: 400;
+        color: #a0d911;
+    }
 `;
 
 interface IQuery {
@@ -567,7 +579,17 @@ export default function DetailProduct() {
                                 avatar={<Avatar src={item.user.avatar} />}
                                 title={
                                     <CommentStyled>
-                                        <div>{item.user.name}</div>
+                                        <NameUserCommentStyled>
+                                            <p>{item.user.name}</p>
+                                            {product &&
+                                                item.user.bought.includes(
+                                                    product?._id
+                                                ) && (
+                                                    <p>
+                                                        Đã mua <CheckCircleOutlined />
+                                                    </p>
+                                                )}
+                                        </NameUserCommentStyled>
                                         <div>
                                             {item.user._id === user._id && (
                                                 <DeleteCommentStyled

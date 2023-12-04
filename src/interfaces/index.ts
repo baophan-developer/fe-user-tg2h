@@ -16,6 +16,7 @@ export interface IComment {
         _id: string;
         name: string;
         avatar: string;
+        bought: string[];
     };
     product: string;
     rating: number;
