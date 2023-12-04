@@ -61,7 +61,6 @@ export const API_ENDPOINT = {
         FIND_CHAT: "chat/find",
     },
     MESSAGE: "message/",
-    BOUGHT: "bought/",
     SIZE_SCREEN: "size-screen/",
     SCAN_FREQUENCY_SCREEN: "scan-frequency-screen/",
     RESOLUTION_SCREEN: "resolution-screen/",

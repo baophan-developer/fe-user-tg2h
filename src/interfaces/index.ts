@@ -174,6 +174,7 @@ export interface IUser {
     avatar: string;
     address: IAddress[];
     favorites: IProduct[];
+    bought: IProduct[];
 }
 
 export interface ISocketRealtime {
