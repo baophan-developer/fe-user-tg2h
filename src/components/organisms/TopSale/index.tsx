@@ -112,7 +112,10 @@ export default function TopSale() {
         <ContainerStyled>
             <Carousel autoplay autoplaySpeed={3000} ref={carouselRef} dots={false}>
                 {products.map((item) => (
-                    <div onClick={() => router.push(`${ROUTERS.PRODUCTS}/${item._id}`)}>
+                    <div
+                        key={item._id}
+                        onClick={() => router.push(`${ROUTERS.PRODUCTS}/${item._id}`)}
+                    >
                         <ItemCarouselStyled>
                             <Image src={item.images[0]} preview={false} width={"30%"} />
                             <InfoStyled>
