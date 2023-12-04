@@ -251,7 +251,7 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                     </p>
                                     <p>
                                         {order.refund &&
-                                            "Trạng thái hoàn tiền: Đã hoàn tiền"}
+                                            "Trạng thái trả hàng: Đã trả hàng"}
                                     </p>
                                     {order.statusOrder === EOrder.CANCEL && (
                                         <p>Lý do hủy đơn: {order.reasonCancel}</p>
@@ -308,11 +308,12 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                         )}
                                     {/* Button for refund order */}
                                     {order.statusOrder === EOrder.REQUEST_REFUND &&
-                                        user._id === order.seller._id && (
+                                        user._id === order.seller._id &&
+                                        !order.refund && (
                                             <ButtonModel
                                                 button={{
                                                     type: "primary",
-                                                    children: "Xác nhận hoàn tiền",
+                                                    children: "Xác nhận trả hàng",
                                                 }}
                                                 req={{
                                                     method: "post",
@@ -322,8 +323,8 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                                         orderId: order._id,
                                                     },
                                                 }}
-                                                title="Xác nhận hoàn tiền"
-                                                children="Bạn có muốn hoàn tiền cho khách hàng ?"
+                                                title="Xác nhận trả hàng"
+                                                children="Bạn có muốn trả hàng và hoàn tiền cho cho khách hàng ?"
                                                 keyPubsub={
                                                     PUBSUB_SUBSCRIBE_NAME.GET_ORDER
                                                 }
@@ -379,30 +380,26 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                             />
                                         )}
                                     {/* Button request refund */}
-                                    {!isSeller &&
-                                        order.statusOrder === EOrder.FINISH &&
-                                        order.payment.name === "VNPAY" && (
-                                            <ButtonModel
-                                                button={{
-                                                    type: "primary",
-                                                    children: "Yêu cầu hoàn tiền",
-                                                }}
-                                                req={{
-                                                    method: "post",
-                                                    api: API_ENDPOINT.ORDER.REFUND,
-                                                    data: {
-                                                        orderId: order._id,
-                                                    },
-                                                }}
-                                                title="Xác nhận yêu cầu hoàn tiền"
-                                                children="Bạn muốn hoàn trả đơn và yêu cầu hoàn lại tiền đã thanh toán trước đó ?"
-                                                keyPubsub={
-                                                    PUBSUB_SUBSCRIBE_NAME.GET_ORDER
-                                                }
-                                                isRealtime
-                                                order={order}
-                                            />
-                                        )}
+                                    {!isSeller && order.statusOrder === EOrder.FINISH && (
+                                        <ButtonModel
+                                            button={{
+                                                type: "primary",
+                                                children: "Yêu cầu trả hàng",
+                                            }}
+                                            req={{
+                                                method: "post",
+                                                api: API_ENDPOINT.ORDER.REFUND,
+                                                data: {
+                                                    orderId: order._id,
+                                                },
+                                            }}
+                                            title="Xác nhận yêu cầu trả hàng"
+                                            children="Bạn muốn hoàn trả đơn và yêu cầu hoàn lại tiền đã thanh toán trước đó ?"
+                                            keyPubsub={PUBSUB_SUBSCRIBE_NAME.GET_ORDER}
+                                            isRealtime
+                                            order={order}
+                                        />
+                                    )}
                                 </div>
                             </FooterItemStyled>
                         }

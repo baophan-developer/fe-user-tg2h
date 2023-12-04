@@ -57,7 +57,7 @@ export default function OrdersView({ filter, isAccept, isSeller }: TProps) {
                 },
                 {
                     key: EOrder.REQUEST_REFUND,
-                    label: "Yêu cầu hoàn tiền",
+                    label: "Trả hàng",
                     children: (
                         <OrderList
                             filter={{ ...filter, statusOrder: EOrder.REQUEST_REFUND }}
