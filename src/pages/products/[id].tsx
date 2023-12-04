@@ -30,6 +30,7 @@ import dayjs from "dayjs";
 import { EVENTS } from "@/constants/events";
 import { discount } from "@/components/templates/ViewProducts";
 import { CountDown } from "@/components/organisms";
+import Newness from "@/components/organisms/Newness";
 
 const { TextArea } = Input;
 
@@ -437,6 +438,7 @@ export default function DetailProduct() {
                                 `Mã giảm giá: ${product?.discount?.code}`}
                         </div>
                     </PriceStyled>
+                    {product && <Newness newness={product?.newness} />}
                     <BottomStyled>
                         <div>{product?.quantity} sản phẩm hiện có</div>
                         <BottomItemStyled>
