@@ -183,15 +183,17 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
 
     return (
         <List
-            pagination={{
-                total: total,
-                size: "small",
-                onChange: (page) =>
-                    setQuery((prev) => ({
-                        ...prev,
-                        pagination: { page: page - 1, limit: 10 },
-                    })),
-            }}
+            pagination={
+                total > 10 && {
+                    total: total,
+                    size: "small",
+                    onChange: (page) =>
+                        setQuery((prev) => ({
+                            ...prev,
+                            pagination: { page: page - 1, limit: 10 },
+                        })),
+                }
+            }
             locale={{ emptyText: "Không có đơn hàng nào" }}
             style={{ width: "100%" }}
             dataSource={orders}

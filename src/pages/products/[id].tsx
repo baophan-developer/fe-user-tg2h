@@ -549,7 +549,7 @@ export default function DetailProduct() {
                             <TextArea
                                 showCount
                                 maxLength={1000}
-                                style={{ height: 120, resize: "none" }}
+                                style={{ height: 50, resize: "none" }}
                                 placeholder="Đánh giá"
                             />
                         </Form.Item>
@@ -567,16 +567,18 @@ export default function DetailProduct() {
                 <List
                     locale={{ emptyText: "Không có đánh giá nào ở đây." }}
                     dataSource={comments}
-                    pagination={{
-                        total: total,
-                        size: "small",
-                        onChange(page) {
-                            setQuery((prev) => ({
-                                ...prev,
-                                pagination: { ...prev?.pagination, page: page - 1 },
-                            }));
-                        },
-                    }}
+                    pagination={
+                        total > 10 && {
+                            total: total,
+                            size: "small",
+                            onChange(page) {
+                                setQuery((prev) => ({
+                                    ...prev,
+                                    pagination: { ...prev?.pagination, page: page - 1 },
+                                }));
+                            },
+                        }
+                    }
                     renderItem={(item) => (
                         <List.Item>
                             <List.Item.Meta
