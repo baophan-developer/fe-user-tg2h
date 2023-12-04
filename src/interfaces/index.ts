@@ -54,6 +54,7 @@ export interface IOrder {
     createdAt: string;
     updatedAt: string;
     dayReceiveOrder: Date;
+    received: boolean;
 }
 
 export interface ICartItemProduct {

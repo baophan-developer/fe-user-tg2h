@@ -45,7 +45,9 @@ export const API_ENDPOINT = {
         CALCULATOR: "order/calculator-payment",
         ACCEPT: "order/accept-order",
         CANCEL: "order/cancel-order",
+        RECEIVED_ORDER: "order/confirm-received-order",
         REFUND: "order/refund",
+        CONFIRM_REFUND: "order/refund-confirm",
     },
     DISCOUNT: {
         MAIN: "discount/",
