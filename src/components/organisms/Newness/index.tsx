@@ -37,36 +37,46 @@ const ItemStyled = styled.div<{ $newness?: number | string }>`
 export default function Newness({ newness }: TPops) {
     switch (newness) {
         case 100:
-            return <ItemStyled $newness={newness}>Hoàn toàn mới 100% (New)</ItemStyled>;
+            return (
+                <ItemStyled $newness={newness}>
+                    Tình trạng: Hoàn toàn mới 100% (New)
+                </ItemStyled>
+            );
         case 90:
             return (
                 <ItemStyled $newness={newness}>
-                    Mới 90% - 99% (Like new/New in box)
+                    Tình trạng: Mới 90% - 99% (Like new/New in box)
                 </ItemStyled>
             );
         case 80:
             return (
                 <ItemStyled $newness={newness}>
-                    Rất tốt 80% - 89% (Excellent/Like new)
+                    Tình trạng: Rất tốt 80% - 89% (Excellent/Like new)
                 </ItemStyled>
             );
         case 70:
             return (
-                <ItemStyled $newness={newness}>Tốt 70% - 79% (Good/Very good)</ItemStyled>
+                <ItemStyled $newness={newness}>
+                    Tình trạng: Tốt 70% - 79% (Good/Very good)
+                </ItemStyled>
             );
         case 60:
             return (
                 <ItemStyled $newness={newness}>
-                    Khá 60% - 69% (Fair / Acceptable)
+                    Tình trạng: Khá 60% - 69% (Fair / Acceptable)
                 </ItemStyled>
             );
         case 50:
             return (
                 <ItemStyled $newness={newness}>
-                    Đã Sử Dụng 50% - 59% (Poor / For Parts or Not Working)
+                    Tình trạng: Đã Sử Dụng 50% - 59% (Poor / For Parts or Not Working)
                 </ItemStyled>
             );
         default:
-            return <ItemStyled $newness={newness}>Hoàn toàn mới 100% (New)</ItemStyled>;
+            return (
+                <ItemStyled $newness={newness}>
+                    Tình trạng: Hoàn toàn mới 100% (New)
+                </ItemStyled>
+            );
     }
 }

@@ -15,9 +15,13 @@ const Container = styled.div`
         font-weight: 550;
     }
 
-    @media only screen and (max-width: 600px) {
+    @media only screen and (max-width: 800px) {
         flex-direction: column;
         padding: 5px 20px 15px;
+    }
+
+    @media only screen and (max-width: 500px) {
+        width: 375px;
     }
 `;
 

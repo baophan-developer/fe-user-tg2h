@@ -35,7 +35,7 @@ import Newness from "@/components/organisms/Newness";
 const { TextArea } = Input;
 
 const ProductBriefingStyled = styled.div`
-    min-height: 500px;
+    min-height: 550px;
     padding: 20px;
     display: flex;
     gap: 0 40px;
@@ -206,6 +206,10 @@ const PriceStyled = styled.div`
     /* margin-top: 10px; */
     padding: 5px 20px;
     background-color: #f1f1f1;
+
+    @media only screen and (max-width: 500px) {
+        width: 375px;
+    }
 `;
 
 const PriceItemStyled = styled.div`
