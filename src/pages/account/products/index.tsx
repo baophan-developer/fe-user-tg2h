@@ -39,7 +39,7 @@ const columns: ColumnsType<IProduct> = [
     {
         title: "STT",
         dataIndex: "key",
-        width: 50,
+        width: 40,
         fixed: "left",
     },
     {
@@ -90,17 +90,19 @@ const columns: ColumnsType<IProduct> = [
                 {record.approve ? "Đã duyệt" : "Đang chờ duyệt"}
             </PendingStyled>
         ),
-        width: 100,
+        width: 120,
     },
     {
         title: "Kho",
         dataIndex: "quantity",
         sorter: true,
+        width: 100,
     },
     {
         title: "Đã bán",
         dataIndex: "sold",
         sorter: true,
+        width: 100,
     },
     {
         title: "Rao bán",

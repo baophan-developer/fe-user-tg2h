@@ -14,22 +14,6 @@ const ActionStyled = styled.div`
     margin-bottom: 10px;
 `;
 
-const ContainerStyled = styled.div<{ $width?: number }>`
-    width: ${(props) => props.$width && `${props.$width - 540}px`};
-
-    @media only screen and (max-width: 1300px) {
-        width: ${(props) => props.$width && `${props.$width - 360}px`};
-    }
-
-    @media only screen and (max-width: 1000px) {
-        width: ${(props) => props.$width && `${props.$width - 170}px`};
-    }
-
-    @media only screen and (max-width: 500px) {
-        width: 95vw;
-    }
-`;
-
 type TProps = {
     /** create is props for component ButtonFormModel */
     create: {
@@ -141,7 +125,7 @@ export default function ManagementView({
     }, [filters]);
 
     return (
-        <ContainerStyled $width={size.width}>
+        <div>
             <ActionStyled>
                 <ButtonFormModel
                     title={create.title}
@@ -149,7 +133,7 @@ export default function ManagementView({
                     req={{ method: create.request.method, api: create.request.api }}
                     fields={create.fields}
                     keyPubsub={pubsub}
-                    width={`${size.width < 1000 ? "100vw" : "50%"}`}
+                    width={`${size.width < 1000 ? "100vw" : "60%"}`}
                     funcHandleData={create.func}
                     usingFormData={create.usingFormData}
                 />
@@ -163,6 +147,6 @@ export default function ManagementView({
                 pagination={{ total: total }}
                 scroll={{ x: "max-content" }}
             />
-        </ContainerStyled>
+        </div>
     );
 }
