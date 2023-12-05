@@ -540,7 +540,7 @@ export default function DetailProduct() {
                     items={product && getLayoutDescriptionProduct(product)}
                 />
                 <h3>Mô tả sản phẩm</h3>
-                <p>{product?.desc}</p>
+                <p style={{ whiteSpace: "pre-wrap" }}>{product?.desc}</p>
             </BoxInformationStyled>
             <BoxInformationStyled>
                 <div>
