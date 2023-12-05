@@ -67,8 +67,11 @@ export const getInputDescProduct = (textAreaProps?: TextAreaProps): FormItemProp
         name: "desc",
         label: "Mô tả chi tiết sản phẩm",
         rules: [
-            { min: 50, message: "Mô tả chi tiết sản phẩm ít nhất 50 ký tự." },
-            { max: 1000, message: "Mô tả chi tiết nhận vào tối đa 1000 ký tự." },
+            { min: 10000, message: "Mô tả chi tiết sản phẩm ít nhất 1000 ký tự." },
+            {
+                max: 999999999,
+                message: "Mô tả chi tiết nhận vào tối đa 999999999 ký tự.",
+            },
         ],
         children: (
             <Input.TextArea
