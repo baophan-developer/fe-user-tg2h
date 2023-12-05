@@ -383,28 +383,32 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                             />
                                         )}
                                     {/* Button request refund */}
-                                    {!isSeller && order.statusOrder === EOrder.FINISH && (
-                                        <ButtonModel
-                                            button={{
-                                                type: "primary",
-                                                children: "Yêu cầu trả hàng",
-                                            }}
-                                            req={{
-                                                method: "post",
-                                                api: API_ENDPOINT.ORDER.REFUND,
-                                                data: {
-                                                    orderId: order._id,
-                                                },
-                                            }}
-                                            title="Xác nhận yêu cầu trả hàng"
-                                            children="Bạn muốn hoàn trả đơn và yêu cầu hoàn lại tiền đã thanh toán trước đó ?"
-                                            keyPubsub={PUBSUB_SUBSCRIBE_NAME.GET_ORDER}
-                                            createNotification={{
-                                                action: "request_refund",
-                                                data: order,
-                                            }}
-                                        />
-                                    )}
+                                    {!isSeller &&
+                                        order.statusOrder === EOrder.FINISH &&
+                                        !order.received && (
+                                            <ButtonModel
+                                                button={{
+                                                    type: "primary",
+                                                    children: "Yêu cầu trả hàng",
+                                                }}
+                                                req={{
+                                                    method: "post",
+                                                    api: API_ENDPOINT.ORDER.REFUND,
+                                                    data: {
+                                                        orderId: order._id,
+                                                    },
+                                                }}
+                                                title="Xác nhận yêu cầu trả hàng"
+                                                children="Bạn muốn hoàn trả đơn và yêu cầu hoàn lại tiền đã thanh toán trước đó ?"
+                                                keyPubsub={
+                                                    PUBSUB_SUBSCRIBE_NAME.GET_ORDER
+                                                }
+                                                createNotification={{
+                                                    action: "request_refund",
+                                                    data: order,
+                                                }}
+                                            />
+                                        )}
                                 </div>
                             </FooterItemStyled>
                         }
