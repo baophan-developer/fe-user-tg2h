@@ -14,6 +14,7 @@ import UserAtom from "@/stores/UserStore";
 import dayjs from "dayjs";
 import { useSocket } from "@/contexts/SocketContext";
 import { EVENTS } from "@/constants/events";
+import { actionOrders } from "@/components/molecules/ButtonModel";
 
 const { TextArea } = Input;
 
@@ -328,8 +329,10 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                                 keyPubsub={
                                                     PUBSUB_SUBSCRIBE_NAME.GET_ORDER
                                                 }
-                                                isRealtime
-                                                order={order}
+                                                createNotification={{
+                                                    action: "confirm_refund",
+                                                    data: order,
+                                                }}
                                             />
                                         )}
                                     {/* Button for accept order */}
@@ -349,8 +352,6 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                             title="Xác nhận đơn hàng"
                                             children="Duyệt đơn hàng và thực hiện việc giao hàng."
                                             keyPubsub={PUBSUB_SUBSCRIBE_NAME.GET_ORDER}
-                                            isRealtime
-                                            order={order}
                                         />
                                     )}
                                     {/* Button confirm received */}
@@ -375,8 +376,10 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                                 keyPubsub={
                                                     PUBSUB_SUBSCRIBE_NAME.GET_ORDER
                                                 }
-                                                isRealtime
-                                                order={order}
+                                                createNotification={{
+                                                    action: "confirm_order",
+                                                    data: order,
+                                                }}
                                             />
                                         )}
                                     {/* Button request refund */}
@@ -396,8 +399,10 @@ const OrderList = ({ filter, isAccept, isSeller, isStatistical }: TProps) => {
                                             title="Xác nhận yêu cầu trả hàng"
                                             children="Bạn muốn hoàn trả đơn và yêu cầu hoàn lại tiền đã thanh toán trước đó ?"
                                             keyPubsub={PUBSUB_SUBSCRIBE_NAME.GET_ORDER}
-                                            isRealtime
-                                            order={order}
+                                            createNotification={{
+                                                action: "request_refund",
+                                                data: order,
+                                            }}
                                         />
                                     )}
                                 </div>
