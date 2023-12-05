@@ -11,14 +11,6 @@ import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
 import ROUTERS from "@/constants/routers";
 
-const ContainerStyled = styled.div`
-    padding: 0 5%;
-
-    @media only screen and (max-width: 500px) {
-        padding: 0;
-    }
-`;
-
 const TitleStyled = styled.h2`
     font-weight: 400;
     text-align: center;
@@ -103,7 +95,7 @@ export default function ShopDetail() {
     }, [router.query.shopId]);
 
     return (
-        <ContainerStyled>
+        <div>
             <ShopInfoStyled>
                 <BoxAvatarStyled>
                     <Image
@@ -141,6 +133,6 @@ export default function ShopDetail() {
                     />
                 )}
             </div>
-        </ContainerStyled>
+        </div>
     );
 }
