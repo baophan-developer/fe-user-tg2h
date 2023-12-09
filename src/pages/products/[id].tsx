@@ -22,17 +22,20 @@ import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
 import PUBSUB_SUBSCRIBE_NAME from "@/constants/pubsub";
-import { DeleteOutlined, HeartOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, DeleteOutlined, HeartOutlined } from "@ant-design/icons";
 import { getLayoutDescriptionProduct } from "@/configs/product.config";
 import ROUTERS from "@/constants/routers";
 import { useSocket } from "@/contexts/SocketContext";
 import dayjs from "dayjs";
 import { EVENTS } from "@/constants/events";
+import { discount } from "@/components/templates/ViewProducts";
+import { CountDown } from "@/components/organisms";
+import Newness from "@/components/organisms/Newness";
 
 const { TextArea } = Input;
 
 const ProductBriefingStyled = styled.div`
-    min-height: 350px;
+    min-height: 550px;
     padding: 20px;
     display: flex;
     gap: 0 40px;
@@ -172,6 +175,64 @@ const BoxShopStyled = styled.div`
 const DayStyled = styled.div`
     margin-top: 5px;
     font-size: 12px;
+`;
+
+const RatingStyled = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+
+    & p {
+        text-decoration: underline 1px;
+        color: red;
+    }
+`;
+
+const QuantityStyled = styled.span`
+    display: flex;
+    gap: 6px;
+
+    :nth-child(1) {
+        text-decoration: underline 1px;
+    }
+
+    :nth-child(2) {
+        color: #767676;
+    }
+`;
+
+const PriceStyled = styled.div`
+    /* margin-top: 10px; */
+    padding: 5px 20px;
+    background-color: #f1f1f1;
+
+    @media only screen and (max-width: 500px) {
+        width: 375px;
+    }
+`;
+
+const PriceItemStyled = styled.div`
+    display: flex;
+    gap: 10px;
+`;
+
+const DiscountStyled = styled.p<{ $discount?: any }>`
+    display: ${(props) => !props.$discount && "none"};
+    text-decoration: ${(props) => props.$discount && "line-through"};
+    font-size: 18px;
+`;
+
+const NameUserCommentStyled = styled.div`
+    font-weight: 550;
+    display: flex;
+    gap: 20px;
+
+    :nth-child(2) {
+        font-size: 14px;
+        font-weight: 400;
+        color: #a0d911;
+    }
 `;
 
 interface IQuery {
@@ -336,18 +397,64 @@ export default function DetailProduct() {
                 <BriefingInfoStyled>
                     <h2>{product?.name}</h2>
                     <EvaluateStyled>
-                        <div>
+                        <RatingStyled>
+                            <p>{product?.rating.toFixed(1)}</p>
                             <Rate
                                 value={product?.rating}
                                 disabled
-                                style={{ fontSize: "16px" }}
+                                style={{ fontSize: "14px", color: "red" }}
                                 allowHalf
                             />
-                        </div>
-                        <div>Lượt đánh giá {product?.reviews}</div>
-                        <div>Lượt mua {product?.sold}</div>
+                        </RatingStyled>
+                        <QuantityStyled>
+                            <p>{product?.reviews}</p>
+                            <p>Lượt đánh giá</p>
+                        </QuantityStyled>
+                        <QuantityStyled>
+                            <p>{product?.sold}</p>
+                            <p>Đã bán</p>
+                        </QuantityStyled>
                     </EvaluateStyled>
-                    <h2>{product?.price.toLocaleString("vi")} vnđ</h2>
+                    <div>
+                        {product?.discount &&
+                            Date.parse(product?.discount?.start) < Date.now() && (
+                                <>
+                                    <CountDown deadline={product?.discount?.end} />
+                                </>
+                            )}
+
+                        {product?.discount &&
+                            Date.parse(product?.discount?.start) > Date.now() && (
+                                <div>
+                                    Giảm giá bắt đầu từ:{" "}
+                                    {dayjs(product.discount.start).format(
+                                        "HH:mm DD-MM-YYYY"
+                                    )}
+                                </div>
+                            )}
+                    </div>
+                    <PriceStyled>
+                        <PriceItemStyled>
+                            <DiscountStyled $discount={product?.discount}>
+                                {product?.price.toLocaleString("vi") + " đ"}
+                            </DiscountStyled>
+                            <p
+                                style={{
+                                    fontSize: "22px",
+                                    color: "red",
+                                    fontWeight: "500",
+                                }}
+                            >
+                                {product &&
+                                    discount(product?.price, product?.discount?.percent)}
+                            </p>
+                        </PriceItemStyled>
+                        <div>
+                            {product?.discount &&
+                                `Mã giảm giá: ${product?.discount?.code}`}
+                        </div>
+                    </PriceStyled>
+                    {product && <Newness newness={product?.newness} />}
                     <BottomStyled>
                         <div>{product?.quantity} sản phẩm hiện có</div>
                         <BottomItemStyled>
@@ -433,7 +540,7 @@ export default function DetailProduct() {
                     items={product && getLayoutDescriptionProduct(product)}
                 />
                 <h3>Mô tả sản phẩm</h3>
-                <p>{product?.desc}</p>
+                <p style={{ whiteSpace: "pre-wrap" }}>{product?.desc}</p>
             </BoxInformationStyled>
             <BoxInformationStyled>
                 <div>
@@ -442,12 +549,12 @@ export default function DetailProduct() {
                             <TextArea
                                 showCount
                                 maxLength={1000}
-                                style={{ height: 120, resize: "none" }}
+                                style={{ height: 50, resize: "none" }}
                                 placeholder="Đánh giá"
                             />
                         </Form.Item>
                         <Form.Item name="rating">
-                            <Rate />
+                            <Rate style={{ color: "red", fontSize: "16px" }} />
                         </Form.Item>
                         <Form.Item>
                             <Button htmlType="submit" type="primary">
@@ -460,23 +567,35 @@ export default function DetailProduct() {
                 <List
                     locale={{ emptyText: "Không có đánh giá nào ở đây." }}
                     dataSource={comments}
-                    pagination={{
-                        total: total,
-                        size: "small",
-                        onChange(page) {
-                            setQuery((prev) => ({
-                                ...prev,
-                                pagination: { ...prev?.pagination, page: page - 1 },
-                            }));
-                        },
-                    }}
+                    pagination={
+                        total > 10 && {
+                            total: total,
+                            size: "small",
+                            onChange(page) {
+                                setQuery((prev) => ({
+                                    ...prev,
+                                    pagination: { ...prev?.pagination, page: page - 1 },
+                                }));
+                            },
+                        }
+                    }
                     renderItem={(item) => (
                         <List.Item>
                             <List.Item.Meta
                                 avatar={<Avatar src={item.user.avatar} />}
                                 title={
                                     <CommentStyled>
-                                        <div>{item.user.name}</div>
+                                        <NameUserCommentStyled>
+                                            <p>{item.user.name}</p>
+                                            {product &&
+                                                item.user.bought.includes(
+                                                    product?._id
+                                                ) && (
+                                                    <p>
+                                                        Đã mua <CheckCircleOutlined />
+                                                    </p>
+                                                )}
+                                        </NameUserCommentStyled>
                                         <div>
                                             {item.user._id === user._id && (
                                                 <DeleteCommentStyled
@@ -492,7 +611,7 @@ export default function DetailProduct() {
                                 }
                                 description={
                                     <Rate
-                                        style={{ fontSize: "14px" }}
+                                        style={{ fontSize: "14px", color: "red" }}
                                         disabled
                                         value={item.rating}
                                     />

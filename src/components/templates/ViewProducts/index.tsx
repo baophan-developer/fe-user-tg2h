@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { IProductRender } from "@/interfaces";
-import { Card, Col, Image, Pagination, PaginationProps, Row } from "antd";
+import { Card, Col, Image, Pagination, PaginationProps, Rate, Row } from "antd";
 import request, { TRequest } from "@/services/request";
 import { useRouter } from "next/router";
 import ROUTERS from "@/constants/routers";
@@ -9,7 +9,8 @@ import ROUTERS from "@/constants/routers";
 const { Meta } = Card;
 
 const CardStyled = styled(Card)`
-    width: 240px;
+    width: 200px;
+    height: 350px;
 
     @media only screen and (max-width: 500px) {
         width: 200px;
@@ -19,7 +20,7 @@ const CardStyled = styled(Card)`
 const PaginationStyled = styled.div`
     margin-top: 20px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
 `;
 
 const EmptyStyled = styled.div`
@@ -30,6 +31,15 @@ const EmptyStyled = styled.div`
     & h1 {
         font-weight: 400;
     }
+`;
+
+const PriceStyled = styled.div`
+    text-align: center;
+    font-size: 18px;
+`;
+
+const DiscountStyled = styled.p<{ $discount?: any }>`
+    text-decoration: ${(props) => props.$discount && "line-through"};
 `;
 
 interface IQuery {
@@ -45,13 +55,22 @@ type TProps = {
     requestApi: { method: TRequest; api: string };
     filters?: any;
     sort?: any;
+    pagination?: {
+        page?: number;
+        limit?: number;
+    };
 };
 
-export default function ViewProducts({ requestApi, filters, sort }: TProps) {
+export const discount = (price: number, percent: number | undefined): string => {
+    if (!percent) return price.toLocaleString("vi") + " đ";
+    return (price - (price / 100) * percent).toLocaleString("vi") + ` đ`;
+};
+
+export default function ViewProducts({ requestApi, filters, sort, pagination }: TProps) {
     const router = useRouter();
     const [loading, setLoading] = useState<boolean>(false);
     const [products, setProducts] = useState<IProductRender[]>([]);
-    const [total, setTotal] = useState<number>(20);
+    const [total, setTotal] = useState<number>(0);
     const [query, setQuery] = useState<IQuery>({
         filters: {
             status: true,
@@ -60,7 +79,7 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
         },
         pagination: {
             page: 0,
-            limit: 20,
+            limit: 18,
         },
     });
 
@@ -93,8 +112,12 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
             ...prev,
             filters: { status: true, approve: true, ...filters },
             sort: { ...sort },
+            pagination: {
+                page: pagination?.page || 0,
+                limit: pagination?.limit || 18,
+            },
         }));
-    }, [filters, sort]);
+    }, [filters, sort, pagination]);
 
     return (
         <div>
@@ -107,13 +130,48 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
                                     router.push(`${ROUTERS.PRODUCTS}/${item._id}`)
                                 }
                             >
-                                <Image src={item.images[0]} preview={false} />
+                                <Image
+                                    loading="eager"
+                                    src={item.images[0]}
+                                    preview={false}
+                                />
                                 <Meta
+                                    style={{ marginTop: "20px" }}
                                     title={item.name}
                                     description={
                                         <div>
-                                            {item.price.toLocaleString("vi")} đ - Đã bán{" "}
-                                            {item.sold}
+                                            <PriceStyled>
+                                                <DiscountStyled $discount={item.discount}>
+                                                    {item.discount &&
+                                                        item.price.toLocaleString("vi") +
+                                                            " đ"}
+                                                </DiscountStyled>
+                                                <p
+                                                    style={{
+                                                        fontWeight: "500",
+                                                        color: "red",
+                                                    }}
+                                                >
+                                                    {discount(
+                                                        item.price,
+                                                        item.discount?.percent
+                                                    )}
+                                                </p>
+                                                <Rate
+                                                    style={{
+                                                        margin: "10px 0",
+                                                        color: "red",
+                                                        fontSize: "14px",
+                                                    }}
+                                                    value={item.rating}
+                                                    disabled
+                                                    allowHalf
+                                                />
+                                            </PriceStyled>
+                                            <span>
+                                                <p>Lượt mua {item.sold}</p>
+                                                <p>Lượt đánh giá giá {item.reviews}</p>
+                                            </span>
                                         </div>
                                     }
                                 />
@@ -129,12 +187,15 @@ export default function ViewProducts({ requestApi, filters, sort }: TProps) {
                 )}
             </Row>
             <PaginationStyled>
-                <Pagination
-                    defaultCurrent={query.pagination.page + 1}
-                    defaultPageSize={query.pagination.limit}
-                    total={total}
-                    onChange={handleChangePagination}
-                />
+                {total > 20 && (
+                    <Pagination
+                        defaultCurrent={query.pagination.page + 1}
+                        defaultPageSize={query.pagination.limit}
+                        total={total}
+                        onChange={handleChangePagination}
+                        size="small"
+                    />
+                )}
             </PaginationStyled>
         </div>
     );

@@ -40,7 +40,7 @@ export default function Notification() {
     const router = useRouter();
     const socket = useSocket();
     const [notifications, setNotifications] = useState<INotification[]>([]);
-    const [total, setTotal] = useState<number>(100);
+    const [total, setTotal] = useState<number>(0);
     const [pagination, setPagination] = useState<{ page: number; limit: number }>({
         page: 0,
         limit: 10,
@@ -111,14 +111,16 @@ export default function Notification() {
                         </Button>
                     </List.Item>
                 )}
-                pagination={{
-                    size: "small",
-                    total: total,
-                    onChange: (page: number, pageSize: number) => {
-                        setPagination({ page: page - 1, limit: pageSize });
-                    },
-                    current: pagination?.page + 1 || 1,
-                }}
+                pagination={
+                    total > 10 && {
+                        size: "small",
+                        total: total,
+                        onChange: (page: number, pageSize: number) => {
+                            setPagination({ page: page - 1, limit: pageSize });
+                        },
+                        current: pagination?.page + 1 || 1,
+                    }
+                }
             />
         </ContainerStyled>
     );

@@ -1,7 +1,6 @@
 import React from "react";
 import { Tabs } from "antd";
 import { EOrder } from "@/enums/order-enums";
-import useChangeSizeWindow from "@/hooks/useChangeSizeWindow";
 import { OrderList } from "@/components/organisms";
 
 type TProps = {
@@ -11,11 +10,8 @@ type TProps = {
 };
 
 export default function OrdersView({ filter, isAccept, isSeller }: TProps) {
-    const size = useChangeSizeWindow();
-
     return (
         <Tabs
-            style={{ width: size.width < 500 ? "390px" : "100%" }}
             defaultActiveKey="all"
             items={[
                 {
@@ -61,7 +57,7 @@ export default function OrdersView({ filter, isAccept, isSeller }: TProps) {
                 },
                 {
                     key: EOrder.REQUEST_REFUND,
-                    label: "Yêu cầu hoàn tiền",
+                    label: "Trả hàng",
                     children: (
                         <OrderList
                             filter={{ ...filter, statusOrder: EOrder.REQUEST_REFUND }}

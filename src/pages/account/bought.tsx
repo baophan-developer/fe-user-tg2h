@@ -4,8 +4,6 @@ import { useRecoilValue } from "recoil";
 import UserAtom from "@/stores/UserStore";
 import UserLayout from "@/layouts/UserLayout";
 import AccountLayout from "@/layouts/AccountLayout";
-import request from "@/services/request";
-import { API_ENDPOINT } from "@/constants/apis";
 import useChangeSizeWindow from "@/hooks/useChangeSizeWindow";
 import ROUTERS from "@/constants/routers";
 import { useRouter } from "next/router";
@@ -35,19 +33,8 @@ export default function Bought() {
     const router = useRouter();
     const [bought, setBought] = useState<IProduct[]>([]);
 
-    const getBought = async () => {
-        try {
-            const res = await request<any>("post", API_ENDPOINT.BOUGHT, {
-                filters: {
-                    owner: user._id,
-                },
-            });
-            setBought(res.data.item.products);
-        } catch (error) {}
-    };
-
     useEffect(() => {
-        user && getBought();
+        user && setBought(user.bought);
     }, [user]);
 
     return (

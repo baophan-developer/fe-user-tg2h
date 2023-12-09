@@ -4,6 +4,14 @@ import request, { TRequest } from "@/services/request";
 import { useSocket } from "@/contexts/SocketContext";
 import { IOrder } from "@/interfaces";
 import { EVENTS } from "@/constants/events";
+import { useRecoilValue } from "recoil";
+import UserAtom from "@/stores/UserStore";
+
+export const actionOrders = {
+    CONFIRM_ORDER: "confirm_order",
+    REQUEST_REFUND: "request_refund",
+    CONFIRM_REFUND: "confirm_refund",
+};
 
 type TProps = {
     title: React.ReactNode;
@@ -11,8 +19,10 @@ type TProps = {
     req: { method: TRequest; api: string; data?: any };
     children?: React.ReactNode;
     keyPubsub?: string;
-    isRealtime?: boolean;
-    order?: IOrder;
+    createNotification?: {
+        data: any;
+        action: "confirm_order" | "request_refund" | "confirm_refund";
+    };
 };
 
 export default function ButtonModel({
@@ -21,11 +31,11 @@ export default function ButtonModel({
     children,
     req,
     keyPubsub,
-    isRealtime,
-    order,
+    createNotification,
 }: TProps) {
-    const [open, setOpen] = useState<boolean>(false);
     const socket = useSocket();
+    const user = useRecoilValue(UserAtom);
+    const [open, setOpen] = useState<boolean>(false);
 
     const handleApi = async () => {
         try {
@@ -34,13 +44,35 @@ export default function ButtonModel({
             message.success(res.data.message);
             setOpen(false);
 
-            if (isRealtime && order)
-                // Create notification for seller is here
-                socket.emit(EVENTS.NOTIFICATION.EMIT, {
-                    title: "Đơn hàng của bạn đã được duyệt.",
-                    message: `Đơn hàng ${order.code} được duyệt bởi ${order.seller.name}`,
-                    userReceive: order.owner._id,
-                });
+            if (createNotification)
+                switch (createNotification.action) {
+                    case actionOrders.CONFIRM_ORDER:
+                        socket.emit("notification", {
+                            title: "Xác nhận đã nhận hàng",
+                            message: `Đơn hàng ${createNotification.data.code} đã được xác nhận, đã nhận hàng từ người dùng ${user.name}`,
+                            userReceive: createNotification.data.seller._id,
+                        });
+                        break;
+
+                    case actionOrders.REQUEST_REFUND:
+                        socket.emit("notification", {
+                            title: "Yêu cầu trả hàng",
+                            message: `Đơn hàng ${createNotification.data.code} được yêu cầu hoàn trả từ người dùng ${user.name}`,
+                            userReceive: createNotification.data.seller._id,
+                        });
+                        break;
+
+                    case actionOrders.CONFIRM_REFUND:
+                        socket.emit("notification", {
+                            title: "Xác nhận hoàn trả",
+                            message: `Đơn hàng ${createNotification.data.code} được xác nhận yêu cầu hoàn trả từ người bán ${createNotification.data.seller.name}`,
+                            userReceive: createNotification.data.owner._id,
+                        });
+                        break;
+
+                    default:
+                        break;
+                }
         } catch (error: any) {
             message.error(error.response.data.message);
         }

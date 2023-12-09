@@ -6,6 +6,7 @@ import { ViewProducts } from "@/components/templates";
 import request from "@/services/request";
 import { useRouter } from "next/router";
 import ROUTERS from "@/constants/routers";
+import { TopSale } from "@/components/organisms";
 
 const HeadingStyled = styled.h2`
     width: 100%;
@@ -21,6 +22,14 @@ const CategoryStyled = styled.div`
     align-items: center;
 `;
 
+const HeadingTopStyled = styled.div`
+    background-color: white;
+    margin: 7px;
+    padding: 15px 10px;
+    border-radius: 5px;
+    font-size: 18px;
+`;
+
 interface ICategory {
     _id: string;
     name: string;
@@ -33,7 +42,7 @@ export default function Home() {
     const getCategory = async () => {
         try {
             const res = await request<any>("get", API_ENDPOINT.CATEGORY);
-            setCategory(res.data.list);
+            setCategory([{ _id: "All", name: "Tất cả" }, ...res.data.list]);
         } catch (error) {}
     };
 
@@ -43,8 +52,17 @@ export default function Home() {
 
     return (
         <Layout>
+            <TopSale />
+            <HeadingTopStyled>Top những sản phẩm bán chạy</HeadingTopStyled>
+            <ViewProducts
+                requestApi={{ method: "post", api: API_ENDPOINT.PRODUCT.SOLD_HIGH }}
+            />
+            <HeadingTopStyled>Top những sản phẩm có xếp hạng cao</HeadingTopStyled>
+            <ViewProducts
+                requestApi={{ method: "post", api: API_ENDPOINT.PRODUCT.RATING_HIGH }}
+            />
             <CategoryStyled>
-                <Card title="Danh mục Laptop" style={{ width: "90%" }}>
+                <Card title="Danh mục Laptop" style={{ width: "100%" }}>
                     {category.map((item, index) => (
                         <Card.Grid
                             key={index}

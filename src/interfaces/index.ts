@@ -16,6 +16,7 @@ export interface IComment {
         _id: string;
         name: string;
         avatar: string;
+        bought: string[];
     };
     product: string;
     rating: number;
@@ -53,6 +54,7 @@ export interface IOrder {
     createdAt: string;
     updatedAt: string;
     dayReceiveOrder: Date;
+    received: boolean;
 }
 
 export interface ICartItemProduct {
@@ -132,8 +134,8 @@ export interface IProduct {
         code: string;
         amount: number;
         percent: number;
-        start: Date;
-        end: Date;
+        start: string;
+        end: string;
         status: boolean;
     };
     reviews: number;
@@ -174,6 +176,7 @@ export interface IUser {
     avatar: string;
     address: IAddress[];
     favorites: IProduct[];
+    bought: IProduct[];
 }
 
 export interface ISocketRealtime {

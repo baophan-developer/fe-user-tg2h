@@ -3,6 +3,7 @@ import {
     Input,
     InputNumber,
     InputNumberProps,
+    Radio,
     Select,
     Space,
     Switch,
@@ -66,13 +67,17 @@ export const getInputDescProduct = (textAreaProps?: TextAreaProps): FormItemProp
         name: "desc",
         label: "Mô tả chi tiết sản phẩm",
         rules: [
-            { min: 50, message: "Mô tả chi tiết sản phẩm ít nhất 50 ký tự." },
-            { max: 1000, message: "Mô tả chi tiết nhận vào tối đa 1000 ký tự." },
+            // { min: 0, message: "Mô tả chi tiết sản phẩm ít nhất 1000 ký tự." },
+            {
+                max: 999999999,
+                message: "Mô tả chi tiết nhận vào tối đa 999999999 ký tự.",
+            },
         ],
         children: (
             <Input.TextArea
                 {...textAreaProps}
                 placeholder="Nhập mô tả chi tiết sản phẩm"
+                spellCheck="false"
             />
         ),
     };
@@ -273,24 +278,47 @@ export const getInputBetterCapacityProduct = (
     };
 };
 
-export const getInputNewnessProduct = (
-    inputNumberProps?: InputNumberProps
-): FormItemProps => {
+const RadioCustomStyled = styled(Radio.Group)`
+    width: 100%;
+
+    & .ant-radio-wrapper {
+        width: 100%;
+        margin-bottom: 10px;
+        border: 2px solid #dad5d5;
+        border-radius: 4px;
+        padding: 10px;
+    }
+
+    & .ant-radio-wrapper-checked {
+        border: 2px solid #1677ff;
+        background-color: #1677ff;
+        color: white;
+        font-weight: 550;
+    }
+
+    & .ant-radio {
+        position: absolute;
+        left: -9999px;
+        overflow: hidden;
+    }
+`;
+
+export const getInputNewnessProduct = (): FormItemProps => {
     return {
         name: "newness",
-        label: "Nhập độ mới sản phẩm sản phẩm",
-        rules: [{ required: true, message: "Độ mới sản phẩm sản phẩm là bắt buộc." }],
+        label: "Tình trạng sản phẩm",
+        rules: [{ required: true, message: "Tình trạng sản phẩm là bắt buộc." }],
         children: (
-            <InputNumber
-                {...inputNumberProps}
-                min={70}
-                max={100}
-                type="number"
-                controls={false}
-                style={{ width: "100%" }}
-                placeholder="Nhập độ mới sản phẩm sản phẩm"
-                suffix={<SuffixStyled>%</SuffixStyled>}
-            />
+            <RadioCustomStyled>
+                <Radio value={100}>Hoàn toàn mới 100% (New) </Radio>
+                <Radio value={90}>Mới 90% - 99% (Like new/New in box)</Radio>
+                <Radio value={80}>Rất tốt 80% - 89% (Excellent/Like new)</Radio>
+                <Radio value={70}>Tốt 70% - 79% (Good/Very good)</Radio>
+                <Radio value={60}>Khá 60% - 69% (Fair / Acceptable)</Radio>
+                <Radio value={50}>
+                    Đã Sử Dụng 50% - 59% (Poor / For Parts or Not Working)
+                </Radio>
+            </RadioCustomStyled>
         ),
     };
 };

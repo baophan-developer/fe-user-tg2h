@@ -38,7 +38,7 @@ const { Header, Content } = Layout;
 const { Search } = Input;
 
 const HeaderStyled = styled(Header)`
-    padding: 2px 10%;
+    padding: 2px 9%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -93,7 +93,11 @@ const ContentPopoverStyled = styled.div`
 `;
 
 const ContentStyled = styled(Content)`
-    padding: 1% 5%;
+    padding: 1% 9%;
+
+    @media only screen and (max-width: 1000px) {
+        padding: 1%;
+    }
 
     @media only screen and (max-width: 500px) {
         padding: 1% 0;
@@ -101,8 +105,8 @@ const ContentStyled = styled(Content)`
 `;
 
 const NotificationHeaderStyled = styled.div`
-    padding: 4px 10%;
-    background-color: #434343;
+    padding: 4px 9%;
+    background-color: #001529;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -267,7 +271,6 @@ export default function UserLayout({ children }: TProps) {
                     placeholder="Nhập trên sản phẩm cần tìm kiếm."
                     type="primary"
                     enterButton
-                    allowClear
                     onSearch={(value) => handleSearch(value)}
                 />
                 <Badge

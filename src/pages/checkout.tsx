@@ -201,10 +201,11 @@ export default function Checkout() {
         } catch (error) {}
     };
 
-    const handleApplyDiscount = async (code: string) => {
+    const handleApplyDiscount = async (code: string, productId: string) => {
         try {
             const res = await request<any>("post", API_ENDPOINT.DISCOUNT.APPLY, {
                 code: code,
+                productId: productId,
             });
             const newItems = items.map((item) => {
                 if (!item.product.discount) return item;
@@ -366,7 +367,10 @@ export default function Checkout() {
                                             enterButton="Áp dụng"
                                             allowClear
                                             onSearch={(value) =>
-                                                handleApplyDiscount(value)
+                                                handleApplyDiscount(
+                                                    value,
+                                                    item.product._id
+                                                )
                                             }
                                         />
                                     )}

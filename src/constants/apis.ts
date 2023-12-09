@@ -29,6 +29,9 @@ export const API_ENDPOINT = {
         GET: "product",
         CREATE: "product/create",
         RECOMMENDATION: "/recommendation",
+        RATING_HIGH: "product/rating-high",
+        SOLD_HIGH: "product/sold-high",
+        TOP_SALE: "product/top-sale",
     },
     CART: {
         GET: "session-cart/",
@@ -42,7 +45,9 @@ export const API_ENDPOINT = {
         CALCULATOR: "order/calculator-payment",
         ACCEPT: "order/accept-order",
         CANCEL: "order/cancel-order",
+        RECEIVED_ORDER: "order/confirm-received-order",
         REFUND: "order/refund",
+        CONFIRM_REFUND: "order/refund-confirm",
     },
     DISCOUNT: {
         MAIN: "discount/",
@@ -58,7 +63,6 @@ export const API_ENDPOINT = {
         FIND_CHAT: "chat/find",
     },
     MESSAGE: "message/",
-    BOUGHT: "bought/",
     SIZE_SCREEN: "size-screen/",
     SCAN_FREQUENCY_SCREEN: "scan-frequency-screen/",
     RESOLUTION_SCREEN: "resolution-screen/",

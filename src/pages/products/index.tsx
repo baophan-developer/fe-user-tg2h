@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Layout, Select } from "antd";
 import { ViewProducts } from "@/components/templates";
@@ -35,19 +35,32 @@ const SelectStyled = styled.div`
 
 export default function CategoryProduct() {
     const router = useRouter();
-    const [filters, setFilter] = useState<any>({});
+    const [query, setQuery] = useState<any>(null);
     const [sort, setSort] = useState<{ price: 1 | -1 }>();
 
     const handleChangeFilter = (value: any, att: string) => {
         if (value.length === 0) {
-            setFilter((prev: any) => ({ ...prev, [att]: undefined }));
+            setQuery((prev: any) => ({ ...prev, [att]: undefined }));
             return;
         }
-        setFilter((prev: any) => ({
+        setQuery((prev: any) => ({
             ...prev,
             [att]: { $in: value },
         }));
     };
+
+    useEffect(() => {
+        if (router.query.category !== "All") {
+            setQuery({
+                category: router.query.category,
+                name: { $regex: router.query.search || "", $options: "i" },
+            });
+        } else {
+            setQuery({
+                name: { $regex: router.query.search || "", $options: "i" },
+            });
+        }
+    }, [router.query]);
 
     return (
         <Layout>
@@ -131,15 +144,15 @@ export default function CategoryProduct() {
                     />
                 </ActionStyled>
             </FilterStyled>
-            <ViewProducts
-                requestApi={{ method: "post", api: API_ENDPOINT.PRODUCT.GET }}
-                filters={{
-                    category: router.query.category,
-                    name: { $regex: router.query.search || "", $options: "i" },
-                    ...filters,
-                }}
-                sort={sort}
-            />
+            {query && (
+                <ViewProducts
+                    requestApi={{ method: "post", api: API_ENDPOINT.PRODUCT.GET }}
+                    filters={{
+                        ...query,
+                    }}
+                    sort={sort}
+                />
+            )}
         </Layout>
     );
 }
